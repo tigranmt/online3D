@@ -5,11 +5,7 @@ var rootMap = {
     "STL": "/Stl/StlView"
 }
 
- $.loadUserData = function() {
-   
- }
 
- 
  
 //list of supported extensions
 var supportedExtensions = ["STL"];

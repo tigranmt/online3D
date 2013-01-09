@@ -29,12 +29,41 @@
     
     _this.loadUserData = function() {
      
+        var div = $("#savedModelsDiv");
+        if(div.length === 0) {
+           jQuery('<div/>', {
+                id: 'savedModelsDiv',
+            }).appendTo($("#body"));
+           
+           div = $("#savedModelsDiv");
+           div.html("<ol  id='savedModelList class='rectangle-list' data-bind='foreach: savedmodels'>" + 
+                        "<li data-bind='attr:{id:$index}'>" +                 
+                            "<a href='' data-bind='text: name'></a>" + 
+                        "</li>" +      
+                    "</ol>");
+        }
+        
+        
         $.ajax({                     
-            url: 'GetSavedModels/',                     
-            type: 'GET',
+            url: 'GetSavedModels/',    
             success: function (data) {
-                for(d in data)
-                    alert(d.toString());
+               
+                function SavedModel(name, vertexCount, linkTo) {
+                    this.name = name;
+                    this.vertexCount = vertexCount;
+                    this.link = linkTo;
+                }
+                var view = new (function SaveModelsViewModel() {
+                    this.savedmodels = [];
+                });
+
+
+                for(var i=0;i<data.length; i++)
+                {
+                    view.savedmodels.push(new SavedModel(data[i].ModelName, data[i].VertexCount, data[i].ID));
+                }
+
+                ko.applyBindings(view, $("#savedModelList")[0]);
             },
             error: function() {
                 toastr.error('Failed load user models', 'Error');
@@ -80,8 +109,7 @@
             success: function (data) {
                 toastr.success('Signed as ' + userName, "Done!");
                 _this.logedIn(true);
-                _this.closeUserAuth();
-                _this.loadUserData();
+                _this.closeUserAuth();               
             }
            
         });

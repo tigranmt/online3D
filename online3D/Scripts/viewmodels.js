@@ -1,12 +1,16 @@
-﻿var MenuItem_Access = function (id, text, callback) {
+﻿var MenuItem = function (id, text, callback) {
     var self = this;
     self.id = id;
     self.text = text;
-    self.callback = callback;    
+    self.callback = callback;
     self.itemVisible = ko.computed(function () {
-        if (self.id === "logOutButton") {
+        if (self.id === "logOutButton" ||
+               self.id === "viewSavedModelsButton" ||
+               self.id === "shareButton") {
             return userAccess.logedIn();
-           
+        }
+        else if (self.id === "logInButton") {
+            return !userAccess.logedIn();
         }
         else {
             return true;
@@ -34,7 +38,17 @@ var viewmodels = new (function () {
                                { id: "edgesBtn", alt: "Show edges", src: "/Content/Images/meshs.png", callback: function () { stlscene.graphics.showEdges(); } }
                   ];
 
+
+
    
+
+    var logInCallback = function () {
+        userAccess.showUserAuth();
+    };
+
+    var viewSavedModelsCallback = function () {
+        userAccess.loadUserData();
+    };  
 
     var shareCallback = function () {
         stlscene.graphics.sendContentToServer();
@@ -44,8 +58,10 @@ var viewmodels = new (function () {
         userAccess.logOut();
     };
 
-    _this.access_menu = [new MenuItem_Access("shareButton", "Share", shareCallback),
-                         new MenuItem_Access("logOutButton", "Log out", logOutCallback)];
+    _this.access_menu = [new MenuItem("logInButton", "Log In", logInCallback),
+                          new MenuItem("viewSavedModelsButton", "View saved models", viewSavedModelsCallback),
+                          new MenuItem("shareButton", "Share", shareCallback),
+                          new MenuItem("logOutButton", "Log out", logOutCallback), ];
 
     _this.save_menu = [{ id: "saveButton", text: "Save", callback: function () { /*save clicked*/ } }];
 
