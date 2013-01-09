@@ -1,0 +1,45 @@
+﻿var stlscene = new (function()  {
+
+    var _this = this;
+    _this.graphics = new init();
+});
+
+(function () {
+
+
+  if ($("#bag").length !== 0) //load a data from the server
+        stlscene.graphics.loadFromServer($("#bag").text())
+    else {
+        stlscene.graphics.loadFileData(); //load data from local file
+    }
+
+    /**
+    * the menu
+    */
+    var $menu = $('#ldd_menu');
+
+    /**
+    * for each list element,
+    * we show the submenu when hovering and
+    * expand the span element (title) to 510px
+    */
+    $menu.children('li').each(function () {
+        var $this = $(this);
+        var $span = $this.children('span');
+        $span.data('width', $span.width());
+
+        $this.bind('mouseenter', function () {
+            $menu.find('.ldd_submenu').stop(true, true).hide();
+            $span.stop().animate({ 'width': '100px' }, 300, function () {
+                $this.find('.ldd_submenu').slideDown(300);
+            });
+        }).bind('mouseleave', function () {
+            $this.find('.ldd_submenu').stop(true, true).hide();
+            $span.stop().animate({ 'width': $span.data('width') + 'px' }, 300);
+        });
+    });
+
+
+
+    ko.applyBindings(viewmodels); //view models to UI
+})();

@@ -1,0 +1,112 @@
+﻿<div class="menubox">		
+	<ul id="ldd_menu" class="ldd_menu">
+		<li id="access_menu">
+			<span>Access</span>
+			<div class="ldd_submenu">
+				<ul id="access_ul" data-bind="foreach: access_menu">
+					<li class="ldd_heading"><a data-bind="attr:{id:id}, text:text, click: function(e) { callback(); }, visible: itemVisible" href="#" ></a></li>
+				</ul>				
+			</div>
+		</li>
+		<li id="save_menu">
+			<span>Save</span>
+			<div class="ldd_submenu">
+				<ul id="save_ul" data-bind="foreach: save_menu">
+					<li class="ldd_heading"><a data-bind="attr:{id:id}, text:text, click: function(e) { callback(); }" ></a></li>
+				</ul>
+				
+			</div>
+		</li>
+        <li id="view_menu">
+			<span>View</span>
+			<div class="ldd_submenu">
+				<ul id="view_ul" data-bind="foreach: view_menu">
+                    <li class="ldd_heading"><a data-bind="attr:{id:id}, text:text, click: function(e) { callback(); }" ></a></li>                   			
+				</ul>
+				
+			</div>
+		</li>
+		
+	</ul>
+</div>
+
+
+ <div id='login-box' class='login-popup'>
+        <a href="#" class="close"><img class="btn_close" src="@Url.Content("~/Content/Images/close.png")" title="Close Window" alt="Close" /></a>
+          <form method="post" class="signin" action="#">
+                <fieldset class="textbox">
+            	    <label class="username">
+                        <span>Username</span>
+                        <input id="username" name="username" class="username" value="" type="text" autocomplete="on" placeholder="Username"/>
+                    </label>
+                
+                    <label class="password">
+                        <span>Password</span>
+                        <input id="password" name="password" class="password" value="" type="password" placeholder="Password"/>
+                    </label>
+                
+                    <button class="submit_button" type="button">Sign in</button>
+                
+                   @* <p>
+                        <a class="forgot" href="#">Forgot your password? Write to </a>
+                    </p>*@
+                
+                </fieldset>
+          </form>
+</div>
+
+@*hiddent field for holding the model(s) unique ID that has to be loaded *@
+@if ((@ViewBag.ID) != null) {
+    <p id="bag" style="visibility:hidden">@(ViewBag.ID)</p>
+}
+
+
+<div id="3DArea">
+</div>
+
+<div id="basicPanel" class="basicPanel">
+    
+    <div id="innerbasicPanel" data-bind="foreach: navigation">
+        <a class="toolboxbotton" data-bind="click: function(e) { callback(); }, 
+                            event: { mouseover: 
+                                                function(e) 
+                                                { 
+                                                   return false;
+                                                } 
+                                    }, attr:{alt:alt}">
+            <img class="imageOnButton" data-bind="attr:{id:id, src:src}" />
+        </a>
+    </div>
+</div>
+
+<div id="toolsPanel" > 
+    <div id="tools" data-bind="foreach: tools">
+        <a class="toolboxbotton" data-bind="click: function(e) { callback(); }, 
+                            event: { mouseover: 
+                                                function(e) 
+                                                {                                                    
+                                                   return false;
+                                                } 
+                                    }, attr:{alt:alt}">
+            <img class="imageOnButton" data-bind="attr:{id:id, src:src}" />
+        </a>
+    </div>
+</div>
+
+
+
+<div id="fileInfo" class="fileInfo" >
+    <ol  id="infoList" class="rectangle-list" data-bind="foreach: {data : modelsInformation}">
+             <li data-bind="attr:{id:$index}">
+                <img class="listImage" data-bind="attr:{src:src(), id:$index}, event:{mouseover:imageover.bind($data), mouseout:imageout.bind($data)}" />
+                <a href=""  data-bind="text: fileName, event:{mouseover:over.bind($data), mouseout:out.bind($data), click:click.bind($data)}, 
+                                style:{ 'backgroundColor': isVisible() === true ? 'transparent' : 'rgba(250, 34, 86, 0.45)' }"></a>
+             </li>
+     
+            <li id="fsize"   style="padding-left:0.4em" data-bind="text: fileSize"/>
+            <li id="fcount"  style="padding-left:0.4em" data-bind="text: faceCount"/>
+            <li id="vcount"  style="padding-left:0.4em" data-bind="text: vertexCount"/>        
+     
+    </ol>
+</div>
+<div id="progress" ></div>
