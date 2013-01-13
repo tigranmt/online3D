@@ -6,6 +6,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
+using System.Collections;
 
 namespace online3D.Models
 {
@@ -35,6 +36,7 @@ namespace online3D.Models
             mi.VertexCount = bson["VertexCount"].AsInt32;
             mi.Color = bson["Color"].AsInt32;
             mi.User = bson["User"].AsString;
+            mi.ModelImage = bson["ModelImage"].AsString;
 
             if (verticesToo)
             {
@@ -69,6 +71,7 @@ namespace online3D.Models
             bson["VertexCount"] = mi.VertexCount;
             bson["Color"] = mi.Color;
             bson["User"] = mi.User;
+            bson["ModelImage"] = mi.ModelImage;
 
             var array = BsonArrayFromEnumerable(mi.Vertices);
 
@@ -210,7 +213,7 @@ namespace online3D.Models
         /// </summary>
         /// <param name="username">Name fo the user whom models hat to be found</param>
         /// <returns></returns>
-        public IEnumerable<ModelInfo> ReadUserModelCollection(string username)
+        public IEnumerable ReadUserModelCollection(string username)
         {
             var db = GetDataBase();
             
@@ -226,7 +229,8 @@ namespace online3D.Models
                 userModels.AddRange(dbModels.Where(m => m.User == username));
             }
 
-            return userModels;
+            var group = userModels.GroupBy(g=>g.ID);
+            return group;
         }
     }
 }

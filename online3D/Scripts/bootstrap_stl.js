@@ -39,7 +39,25 @@
         });
     });
 
+    /**** BINDINGS ***/
+    var access_Menu = $("#access_ul")[0];
+    ko.applyBindings(viewmodels, access_Menu); 
+    
+    var save_Menu = $("#save_ul")[0];
+    ko.applyBindings(viewmodels, save_Menu); 
+
+    var view_Menu = $("#view_ul")[0];
+    ko.applyBindings(viewmodels, view_Menu); 
+
+    var basicPanel = $("#basicPanel")[0];
+    ko.applyBindings(viewmodels, basicPanel); 
+
+    var tools = $("#toolsPanel")[0];
+    ko.applyBindings(viewmodels, tools); 
+
+    /***************************/
 
 
-    ko.applyBindings(viewmodels); //view models to UI
+
+   
 })();

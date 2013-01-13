@@ -12,7 +12,8 @@
          });
     };
 
-    _this.logOut = function() {
+
+      _this.logOut = function() {
             $.ajax({                     
             url: '../Account/LogOut/',                     
             type: 'POST',
@@ -27,49 +28,71 @@
         });
     }
     
-    _this.loadUserData = function() {
+  
+    /*_this.loadUserData = function() {
      
-        var div = $("#savedModelsDiv");
+        var div = $("#accordion");
         if(div.length === 0) {
            jQuery('<div/>', {
-                id: 'savedModelsDiv',
+                id: 'accordion',               
             }).appendTo($("#body"));
            
-           div = $("#savedModelsDiv");
-           div.html("<ol  id='savedModelList class='rectangle-list' data-bind='foreach: savedmodels'>" + 
-                        "<li data-bind='attr:{id:$index}'>" +                 
-                            "<a href='' data-bind='text: name'></a>" + 
-                        "</li>" +      
-                    "</ol>");
+           div = $("#accordion");          
+           div.html("<ul id='sessionList' data-bind='foreach: sessions'>" + 			                    
+			            "<li class='content' data-bind='foreach:sessionModels'>" + 
+                            "<h1 data-bind='text:name'></h1>" + 
+				            "<em class='bullet'></em><span data-bind='text:vertexCount'></span> " + 	
+		                "</li>" +
+                    "</ul>"
+                   );
         }
-        
-        
         $.ajax({                     
             url: 'GetSavedModels/',    
             success: function (data) {
                
-                function SavedModel(name, vertexCount, linkTo) {
+                var ModelsView = function(sessions) {
+                    this.sessions = sessions;
+                }     
+
+                var SessionViewModel = function(name, index, models) {
+                    this.sessionModels = models;
+                    this.sessionname = name;
+                    this.id = "tab-" + index;
+                    this.href = "#tab-" + index;
+                }
+
+                var SavedModel = function(name, vertexCount, linkTo) {
                     this.name = name;
-                    this.vertexCount = vertexCount;
+                    this.vertexCount = "Verices " + vertexCount;
                     this.link = linkTo;
                 }
-                var view = new (function SaveModelsViewModel() {
-                    this.savedmodels = [];
-                });
 
-
+                
+                var sessions = new Array();
                 for(var i=0;i<data.length; i++)
                 {
-                    view.savedmodels.push(new SavedModel(data[i].ModelName, data[i].VertexCount, data[i].ID));
-                }
+                    var sessionModels = new Array();
+                    for(var j=0;j<data[i].length;j++) {        
+                        var model = data[i][j];                
+                        sessionModels.push(new SavedModel(model.ModelName, model.VertexCount, model.ID));
+                    }
 
-                ko.applyBindings(view, $("#savedModelList")[0]);
+                    sessions.push(new SessionViewModel(i, i, sessionModels));
+                }               
+
+                var view = new ModelsView(sessions);
+                ko.applyBindings(view, $("#accordion")[0]);
+
+              
+              
             },
             error: function() {
                 toastr.error('Failed load user models', 'Error');
             }
         });
-    };
+    };*/
+
+  
     
     _this.showUserAuth = function () {
         var loginBox = $("#login-box");
@@ -107,9 +130,17 @@
             data: JSON.stringify(loginInfo),
             dataType: 'json',
             success: function (data) {
-                toastr.success('Signed as ' + userName, "Done!");
-                _this.logedIn(true);
-                _this.closeUserAuth();               
+                if(!data){
+                   toastr.error('Incorrect UserName or Password', 'Error!');
+                }
+                else {
+                    toastr.success('Signed as ' + userName, "Done!");
+                    _this.logedIn(true);
+                    _this.closeUserAuth();               
+                }
+            },
+            error: function(data) {
+              toastr.error('Failed to login', 'Error!');
             }
            
         });

@@ -2,7 +2,7 @@
 
     //Web gl members
     this.glScene = undefined;
-    this.glRender = undefined;
+    this.glRenderer = undefined;
     this.glCamera = undefined;
     this.sceneTracker = undefined;
     this.stlLoader = undefined;
@@ -51,6 +51,10 @@
 
         return point;
 
+    }
+
+    init.prototype.takeScreenshot = function () {
+        return THREEx.Screenshot.toDataURL(_this.glRenderer);
     }
 
     //renders
@@ -131,7 +135,7 @@
             NEAR = 0.1, FAR = 1000;
 
         // create a WebGL renderer, camera       
-        this.glRenderer = new THREE.WebGLRenderer();
+        this.glRenderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
 
 
 
@@ -432,7 +436,7 @@ init.prototype.loadMeshesInformation = function () {
     , this.isComposedMesh);
 
     //ctor object
-    var infos = (function (infos) {
+    var infos = new (function (infos) {
         this.modelsInformation = infos;
 
     })(infoViewModels);
@@ -589,8 +593,13 @@ init.prototype.sendContentToServer = function () {
                 ID: unique,
                 Vertices: verticesSplit,
                 VertexCount: verticesCount,
-                Color: mesh.color
+                Color: mesh.color,
             };
+
+
+            if(index === 1) {
+                modelInfo. ModelImage =  _this.takeScreenshot();            
+            }
 
             $.ajax({
                 url: "SaveModel/",
@@ -757,7 +766,7 @@ init.prototype.lookFrom = function (vector, offset, axis, bounds) {
 
     var diag = new THREE.Vector3();
     diag = diag.sub(bounds.max, bounds.min);
-    var radius = diag.length();
+    var radius = diag.length() / 2;
 
     // Compute offset needed to move the camera back that much needed to center AABB (approx: better if from BB front face)
     offset = radius / Math.tan(Math.PI / 180.0 * this.glCamera.fov * 0.5);
@@ -772,6 +781,8 @@ init.prototype.lookFrom = function (vector, offset, axis, bounds) {
 
     if (axis === "z" || axis === undefined) {
         this.glCamera.position.set(center.x, center.y, newPos.z);
+      
+
     }
     else if (axis === "x")
         this.glCamera.position.set(newPos.x, center.y, center.z);

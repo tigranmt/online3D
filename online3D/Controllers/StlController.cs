@@ -7,6 +7,7 @@ using ModelViewer3D.Helpers;
 using online3D.Models;
 using MongoDB.Bson.Serialization;
 using online3D.Helpers;
+using System.Drawing;
 
 namespace ModelViewer3D.Controllers
 {
@@ -28,7 +29,7 @@ namespace ModelViewer3D.Controllers
         [AuthenticationRequiered(Users="sweden")]
         public ActionResult SaveModel(ModelInfo model)
         {
-
+           
             IData access = new MongoDataAccess();
             model.User = User.Identity.Name;
 
@@ -63,8 +64,15 @@ namespace ModelViewer3D.Controllers
                 return Json(false);
             MongoDataAccess access = new MongoDataAccess();
 
-            var models = access.ReadUserModelCollection(username);
-            return Json(models, JsonRequestBehavior.AllowGet);
+            try
+            {
+                var models = access.ReadUserModelCollection(username);
+                return Json(models, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(false);
+            }
         }
 
 
@@ -104,15 +112,6 @@ namespace ModelViewer3D.Controllers
             return Json(tempModel, JsonRequestBehavior.AllowGet);
         }
 
-       
-        public ActionResult  LoadModel(string id)
-        {
-            //generate default STL view, but add also ViewBag information
-            var view = StlView() as ViewResult;
-            view.ViewBag.ID = id;
-            return view;
-          
-        }
         
 
     }

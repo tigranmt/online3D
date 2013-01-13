@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Collections;
 
 namespace online3D.Models
 {
@@ -10,6 +11,6 @@ namespace online3D.Models
         bool SaveModel(ModelInfo mi);
         ModelInfo ReadModel(string collectionID, string modelID);
         IEnumerable<ModelInfo> ReadModelCollection(string collectionID,bool verticesToo =true);
-        IEnumerable<ModelInfo> ReadUserModelCollection(string usename);
+        IEnumerable ReadUserModelCollection(string usename);
     }
 }

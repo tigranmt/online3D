@@ -93,6 +93,7 @@
   <ItemGroup>
     <Content Include="Binaries\MongoDB.Bson.dll" />
     <Content Include="Binaries\MongoDB.Driver.dll" />
+    <Content Include="Content\accordion.css" />
     <Content Include="Content\Images\alphabutton.png" />
     <Content Include="Content\Images\backvs.png" />
     <Content Include="Content\Images\bg.png" />
@@ -147,6 +148,7 @@
     <Content Include="Scripts\jquery.percentageloader-0.1.min.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\less-1.3.0.min.js" />
+    <Content Include="Scripts\screenshot.js" />
     <Content Include="Scripts\userlogin.js" />
     <Content Include="Scripts\stl_model_loader.js" />
     <Content Include="Scripts\modernizr-1.7.min.js" />

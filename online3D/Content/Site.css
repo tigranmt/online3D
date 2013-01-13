@@ -33,23 +33,12 @@ body
     background: #EFEFEF url(Images/bg.png) repeat center top;   
 }
 
-/*#canvas, .stlbody
+#savedModelsList 
 {
-    background-image: linear-gradient(bottom, rgb(112,120,112) 24%, rgb(207,203,207) 66%);
-    background-image: -o-linear-gradient(bottom, rgb(112,120,112) 24%, rgb(207,203,207) 66%);
-    background-image: -moz-linear-gradient(bottom, rgb(112,120,112) 24%, rgb(207,203,207) 66%);
-    background-image: -webkit-linear-gradient(bottom, rgb(112,120,112) 24%, rgb(207,203,207) 66%);
-    background-image: -ms-linear-gradient(bottom, rgb(112,120,112) 24%, rgb(207,203,207) 66%);
-}*/
-
-#innerbasicPanel 
-{   
-  /*  position:relative;
-    top:20px;
-    left:2px;
-    right:2px;    */
+    position:absolute;
+    top:200px;
+    left:200px;
 }
-
 
 #basicPanel
 {

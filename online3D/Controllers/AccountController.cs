@@ -16,7 +16,10 @@ namespace online3D.Controllers
         public ActionResult LogOn(UserModel user)
         {
             if (!IsValid(user))
-                return View(new EmptyResult());
+            {
+                this.Response.Clear();
+                return Json(false);
+            }
             else
             {
                 AuthUser(user);
@@ -35,7 +38,7 @@ namespace online3D.Controllers
 
         private bool IsValid(UserModel user)
         {
-            if (user.Password != "sweden" && user.UserName != "sweden")
+            if (user.Password != "sweden" || user.UserName != "sweden")
                 return false;
 
             return true;

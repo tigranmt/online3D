@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Drawing;
 
 namespace online3D.Models
 {   
@@ -18,6 +19,7 @@ namespace online3D.Models
         public int VertexCount { get; set; }
         public int Color { get; set; }
         public string User { get; set; }
+        public string ModelImage{get;set;}
 
 
         /// <summary>
