@@ -34,6 +34,11 @@ namespace ModelViewer3D
 
         protected void Application_Start()
         {
+            //leave only Razor engine
+            ViewEngines.Engines.Clear();
+            ViewEngines.Engines.Add(
+                    new RazorViewEngine());
+
             AreaRegistration.RegisterAllAreas();
 
             RegisterGlobalFilters(GlobalFilters.Filters);

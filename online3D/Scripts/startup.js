@@ -6,7 +6,7 @@ var rootMap = {
 }
 
 
- 
+
 //list of supported extensions
 var supportedExtensions = ["STL"];
 
@@ -39,8 +39,8 @@ function openFileDialog() {
 
 
 /*adds specified file to store*/
-function addToStore(fileData, nextcall) {  
-   return window.indexedFiles.addFile(fileData, nextcall);
+function addToStore(fileData, nextcall) {
+    return window.indexedFiles.addFile(fileData, nextcall);
 }
 
 
@@ -50,16 +50,16 @@ function showProgress(show) {
 
     $("#db_progress").css({ visibility: visibilityProgress });
     $("#intro_text").css({ visibility: visibilityRest });
-    $("#selectfile_button").css({ visibility: visibilityRest });        
+    $("#selectfile_button").css({ visibility: visibilityRest });
 }
 
 /*
 Load files in sequence
 */
-function loadFiles(files) {
+function LoadFiles(files) {
 
     //check if WebGL is supported here (may be not the best place to checck this...)
-    if (!compatibilityChecks())
+    if (!CompatibilityChecks())
         return;
 
     if (files.length == 0)
@@ -69,7 +69,7 @@ function loadFiles(files) {
     if (files) {
 
         showProgress(true);
-        
+
         var index = files.length;
 
         var runLoad = function () {
@@ -136,20 +136,20 @@ function loadFiles(files) {
 
 
 //load file from drop event
-function loadFileFromDrop(event) {
+function LoadFileFromDrop(event) {
     var files = event.dataTransfer.files;
     // var file = files[0];
 
     if (extensionIsOk(files))
-        loadFiles(files);
+        LoadFiles(files);
 }
 
-function loadFileFromDisk(event) {
+function LoadFileFromDisk(event) {
     var files = event.target.files;
     // var file = files[0];
 
     if (extensionIsOk(files))
-        loadFiles(files);
+        LoadFiles(files);
 }
 
 var onDragEnter = function (event) {
@@ -171,10 +171,10 @@ var onDragLeave = function (event) {
 var onDrop = function (event) {
     event.preventDefault();
     event.stopPropagation();
-    loadFileFromDrop(event);
+    LoadFileFromDrop(event);
 };
 
-function setupDragDropEvents() {
+function SetupDragDropEvents() {
 
 
     if (!Modernizr.draganddrop) {
@@ -189,11 +189,11 @@ function setupDragDropEvents() {
 
 };
 
-function setupFileLoadEvents() {
-    $("#fileLoader").bind("change", loadFileFromDisk);
+function SetupFileLoadEvents() {
+    $("#fileLoader").bind("change", LoadFileFromDisk);
 };
 
-function compatibilityChecks() {
+function CompatibilityChecks() {
     if (!Modernizr.webgl) {
         toastr.error('WebGL is not supproted in this browser', 'Error');
         return undefined;
@@ -210,10 +210,26 @@ function compatibilityChecks() {
     return true;
 }
 
+function LoadSampleModelPreview() {
+    $.ajax({
+        url: '../Stl/GetSavedModelPreview/tmpCFDD',
+        success: function (data) {
+            data.ModelName = "View sample " + data.ModelName;
+            ko.applyBindings(data, $("#sample_preview")[0]);
+        },
+        error: function () {
+
+        }
+    });
+}
+
 $(function Init() {
-    if (compatibilityChecks()) {
-        setupDragDropEvents();
-        setupFileLoadEvents();
+    if (CompatibilityChecks()) {
+        SetupDragDropEvents();
+        SetupFileLoadEvents();
+        LoadSampleModelPreview();
+        LoadSampleModelPreview();
+
     }
 });
 

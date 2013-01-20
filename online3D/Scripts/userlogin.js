@@ -13,7 +13,7 @@
     };
 
 
-      _this.logOut = function() {
+    _this.logOut = function() {
             $.ajax({                     
             url: '../Account/LogOut/',                     
             type: 'POST',

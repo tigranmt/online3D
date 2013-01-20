@@ -8,6 +8,7 @@ namespace online3D.Models
     public static class VerticesHolder
     {
         private static Dictionary<string, List<Vertex>> internalData = new Dictionary<string, List<Vertex>>();
+        private static Dictionary<string, string> modelImages = new Dictionary<string, string>();
         public static int AddModel(ModelInfo mi)
         {
             List<Vertex> temp = null;
@@ -16,6 +17,9 @@ namespace online3D.Models
                 internalData[key] = new List<Vertex>();
 
             internalData[key].AddRange(mi.Vertices);
+
+            if (!string.IsNullOrEmpty(mi.ModelImage))
+                modelImages[key] = mi.ModelImage;
 
             return internalData[key].Count;
         }
@@ -29,10 +33,25 @@ namespace online3D.Models
             return internalData[key];
         }
 
-        public static void Remove(ModelInfo mi)
+        public static string GetImageData(ModelInfo mi)
+        {
+            var key = KeyFromModel(mi);
+            if (!modelImages.ContainsKey(key))
+                return string.Empty;
+
+            return modelImages[key];
+        }
+
+        public static void RemoveVerticesData(ModelInfo mi)
         {
             var key = KeyFromModel(mi);
             internalData.Remove(key);
+        }
+
+        public static void RemoveImageData(ModelInfo mi)
+        {
+            var key = KeyFromModel(mi);
+            modelImages.Remove(key);
         }
 
         private static string KeyFromModel(ModelInfo mi)

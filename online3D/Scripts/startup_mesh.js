@@ -8,9 +8,9 @@
 
 
   if ($("#bag").length !== 0) //load a data from the server
-        stlscene.graphics.loadFromServer($("#bag").text())
+        stlscene.graphics.LoadFromServer($("#bag").text())
     else {
-        stlscene.graphics.loadFileData(); //load data from local file
+        stlscene.graphics.LoadFileData(); //load data from local file
     }
 
     /**

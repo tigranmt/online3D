@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using ModelViewer3D.Helpers;
 using online3D.Helpers;
+using online3D.Models;
 
 namespace ModelViewer3D.Controllers
 {
@@ -17,8 +18,6 @@ namespace ModelViewer3D.Controllers
         {
             return View("IntroView");
         }
-
-        
 
     }
 }

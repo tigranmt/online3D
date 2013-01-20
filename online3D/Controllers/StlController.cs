@@ -14,22 +14,62 @@ namespace ModelViewer3D.Controllers
     [Layout("StlLayout")]
     public class StlController : Controller
     {
-      
-        //
-        // GET: /Stl/
-       
+
+        /// <summary>
+        /// Default view
+        /// </summary>
+        /// <returns></returns>
         public ActionResult StlView()
         {
             return View("StlView");
         }
 
 
-        
+        private string GetUserName()
+        {
+            string userName = User.Identity.Name;
+            if (string.IsNullOrEmpty(userName))
+                userName = "sample";
+
+            return userName;
+        }
+
+        /// <summary>
+        /// Loads STL view and sets to bag the complete HTTP path to the model, that
+        /// sequentially will be loaded after vis ajax call.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult LoadModel(string id)
+        {
+            try
+            {
+                var userName = GetUserName();
+                MongoDataAccess access = new MongoDataAccess();
+                var models = access.ReadModelCollection(id, false).Where(m => m.User == userName);
+                ViewBag.ID = models.First().ID;
+            }
+            catch(Exception ex)
+            {
+                return Json(false);
+            }
+
+            return StlView();
+        }
+
+
+     
+
+        /// <summary>
+        /// Saves model in the base
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
-        [AuthenticationRequiered(Users="sweden")]
+        [AuthenticationRequiered(Users = "sweden")]
         public ActionResult SaveModel(ModelInfo model)
         {
-           
+
             IData access = new MongoDataAccess();
             model.User = User.Identity.Name;
 
@@ -43,8 +83,10 @@ namespace ModelViewer3D.Controllers
             if (savedCount == model.VertexCount)
             {
                 model.Vertices = VerticesHolder.GetVertices(model);
+                model.ModelImage = VerticesHolder.GetImageData(model);
                 bool saveResult = access.SaveModel(model);
-                VerticesHolder.Remove(model);
+                VerticesHolder.RemoveVerticesData(model);
+                VerticesHolder.RemoveImageData(model);
 
                 if (!saveResult)
                     return Json(false);
@@ -54,7 +96,27 @@ namespace ModelViewer3D.Controllers
         }
 
 
+        [HttpGet]
+        public JsonResult GetSavedModelPreview(string id)
+        {
+            try
+            {
+                var userName = GetUserName();
+                MongoDataAccess access = new MongoDataAccess();
+                var models = access.ReadModelCollection(id, false).Where(m => m.User == userName);
+                return Json(models.First(), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(false);
+            }
+           
+        }
 
+        /// <summary>
+        /// Get user's saved models
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Authorize]
         public JsonResult GetSavedModels()
@@ -76,12 +138,20 @@ namespace ModelViewer3D.Controllers
         }
 
 
-        [HttpGet]       
-        public JsonResult  GetModels(string id, int modelIndex, int packetIndex)
+        /// <summary>
+        /// Get specified model's packet
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="modelIndex"></param>
+        /// <param name="packetIndex"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public JsonResult GetModels(string id, int modelIndex, int packetIndex)
         {
-            MongoDataAccess access = new MongoDataAccess();           
+            MongoDataAccess access = new MongoDataAccess();
 
-            var models = access.ReadModelCollection(id);
+            var collectionID = id.Split('/').Last();
+            var models = access.ReadModelCollection(collectionID);
 
             if (modelIndex >= models.Count())
                 return Json("alldone", JsonRequestBehavior.AllowGet); //signal, there is nothing more to load. All done
@@ -91,14 +161,15 @@ namespace ModelViewer3D.Controllers
 
             var verticesCount = model.Vertices.Count();
             var tempModel = model.LightClone();
-            var step = (int)( verticesCount/ 9);
+            var step = (int)(verticesCount / 9);
 
             var start = packetIndex * step;
             var end = (packetIndex * step) + step;
 
-            if(start >=verticesCount)
+            if (start >= verticesCount)
                 return Json("modeldone", JsonRequestBehavior.AllowGet); //signal, we finish with model
 
+            //tempModel.Vertices = model.Vertices.Skip(start).Take(end);
             for (int i = start; i < end; i++)
             {
                 if (i >= verticesCount)
@@ -112,7 +183,7 @@ namespace ModelViewer3D.Controllers
             return Json(tempModel, JsonRequestBehavior.AllowGet);
         }
 
-        
+
 
     }
 
