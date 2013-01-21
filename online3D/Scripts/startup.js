@@ -214,7 +214,7 @@ function LoadSampleModelPreview() {
     $.ajax({
         url: '../Stl/GetSavedModelPreview/tmpCFDD',
         success: function (data) {
-            data.ModelName = "View sample " + data.ModelName;
+            data.ModelName = "View sample ( " + data.ModelName + " )";
             ko.applyBindings(data, $("#sample_preview")[0]);
         },
         error: function () {
@@ -228,8 +228,10 @@ $(function Init() {
         SetupDragDropEvents();
         SetupFileLoadEvents();
         LoadSampleModelPreview();
-        LoadSampleModelPreview();
-
+        userAccess.UpdateUI();
+        $('#access').on('click', function () {
+            userAccess.requestUserAuth();
+        });
     }
 });
 

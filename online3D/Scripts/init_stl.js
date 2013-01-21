@@ -648,7 +648,7 @@ init.prototype.sendContentToServer = function () {
                         meshIndex = -1; //not valid value
                         $("#flprogress").remove();
                         toastr.error('You need to login first.', 'Error !');
-                        userAccess.showUserAuth();
+                        userAccess.requestUserAuth();
 
                     }
                 }

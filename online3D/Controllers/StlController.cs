@@ -47,11 +47,16 @@ namespace ModelViewer3D.Controllers
                 var userName = GetUserName();
                 MongoDataAccess access = new MongoDataAccess();
                 var models = access.ReadModelCollection(id, false).Where(m => m.User == userName);
+                
+                //if on current user failed, try search among sample models
+                if(models.Count() == 0)
+                    models = access.ReadModelCollection(id, false).Where(m => m.User == "sample");
+
                 ViewBag.ID = models.First().ID;
             }
             catch(Exception ex)
             {
-                return Json(false);
+                return Json(false, JsonRequestBehavior.AllowGet);
             }
 
             return StlView();

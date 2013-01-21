@@ -35,25 +35,6 @@
 </div>
 
 
- <div id='login-box' class='login-popup'>
-        <a href="#" class="close"><img class="btn_close" src="@Url.Content("~/Content/Images/close.png")" title="Close Window" alt="Close" /></a>
-          <form method="post" class="signin" action="#">
-                <fieldset class="textbox">
-            	    <label class="username">
-                        <span>Username</span>
-                        <input id="username" name="username" class="username" value="" type="text" autocomplete="on" placeholder="Username"/>
-                    </label>
-                
-                    <label class="password">
-                        <span>Password</span>
-                        <input id="password" name="password" class="password" value="" type="password" placeholder="Password"/>
-                    </label>
-                
-                    <button class="submit_button" type="button">Sign in</button>
-                </fieldset>
-          </form>
-</div>
-
 @*hiddent field for holding the model(s) unique ID that has to be loaded *@
 @if ((@ViewBag.ID) != null) {
     <p id="bag" style="visibility:hidden">@(ViewBag.ID)</p>

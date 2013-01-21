@@ -1,4 +1,5 @@
-﻿var userAccess = new (function(){
+﻿
+var userAccess = new (function(){
     
     var _this = this;
    
@@ -6,10 +7,35 @@
    _this.logedIn = ko.observable(false);
    
 
+   function getCookie(cookie)
+   {
+        var i,x,y,ARRcookies=document.cookie.split(";");
+        for (i=0;i<ARRcookies.length;i++)
+        {
+          x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+          y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+          x=x.replace(/^\s+|\s+$/g,"");
+          if (x==cookie)
+          {
+            return unescape(y);
+          }
+        }
+    }
+
+    function setCookie(name,value,exdays)
+    {
+        var exdate=new Date();
+        exdate.setDate(exdate.getDate() + exdays);
+        var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+        document.cookie=name + "=" + c_value;
+    }
+
+   
+
     _this.closeUserAuth = function() {
-         $('#mask , .login-popup').fadeOut(300, function () {
-         $('#mask').remove();
-         });
+        var signForm =  $("#signForm");
+        if(signForm.length > 0)
+            signForm.remove();
     };
 
 
@@ -18,9 +44,10 @@
             url: '../Account/LogOut/',                     
             type: 'POST',
             success: function (data) {
-                toastr.success('Loged out.','Success'); 
-                _this.logedIn(false);
-             
+                toastr.success('Loged out.','Success');                      
+                _this.CheckSigned();
+                _this.UpdateUI();
+
             },
             error: function() {
                 toastr.error('Failed load user models', 'Error');
@@ -29,7 +56,7 @@
     }
     
   
-    /*_this.loadUserData = function() {
+    _this.loadUserSavedModels = function() {
      
         var div = $("#accordion");
         if(div.length === 0) {
@@ -90,63 +117,120 @@
                 toastr.error('Failed load user models', 'Error');
             }
         });
-    };*/
+    };
+
+    _this.CheckSigned = function() {
+         var signedUser = getCookie("signed");
+         _this.logedIn( (signedUser != "" && signedUser != undefined));;
+
+         return _this.logedIn();
+    };
 
   
+    _this.UpdateUI = function() {
+         var signedUser = getCookie("signed");
+
+
+         var viewModels = $("#viewModels");
+          var header = $("#header");
+         if(header.length >0) {
+            if(viewModels.length == 0) {
+                header.before("<div id='viewModels' style='float:right;padding:20px; margin-right: -14px;'>" + 
+                                "<button id='viewsaved' class='btn btn-large'  type='button' style='color:#04c;' ></button>" + 
+                                "</div>");
+                viewModels = $("#viewModels");
+            }
+         }
+
+         //SIGNED in
+         if(signedUser != "" && signedUser != undefined) {
+            $("#access").text("Sign out");   
+            $("#viewsaved").text("View models of " + signedUser);   
+            viewModels.on('click', _this.loadUserSavedModels);
+         }
+         else {
+           //NOT signed
+            if(viewModels.length > 0)
+                viewModels.remove();
+
+            $("#access").text("Sign in");     
+         }
+    }
     
-    _this.showUserAuth = function () {
-        var loginBox = $("#login-box");
-
-        //Fade in the Popup and add close button
-        loginBox.fadeIn(300);
-
-        //Set the center alignment padding + border
-        var popMargTop = ($(loginBox).height() + 24) / 2;
-        var popMargLeft = ($(loginBox).width() + 24) / 2;
-
-        $(loginBox).css({
-            'margin-top': -popMargTop,
-            'margin-left': -popMargLeft
-        });
-
-        // Add the mask to body
-        $('body').append('<div id="mask"></div>');
-        $('#mask').fadeIn(300);
-
-        //subscribe to close click
-        $('a.close, #mask').live('click',_this.closeUserAuth);
-
-        $('button.submit_button').live('click', function(){
+    _this.requestUserAuth = function () {
+       
+     
+        var signedUser = getCookie("signed");
+        if(signedUser == "" || signedUser === undefined) //NOT signed
+        {
+            // Add the mask to body
+            $('body').append("<div id='signForm' class='modal hide fade' tabindex='-1' aria-hidden='true'>" + 
+                           "<div class='modal-header'>" + 
+                                "<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>" + 
+                                "<h3 id='myModalLabel'>Sign to see your saved models</h3>" + 
+                            "</div>" +
+                            "<div class='modal-body'>" + 
+                               "<div class='control-group'>" + 
+                                    "<label class='control-label' for='inputUserName'>User name</label>"+
+                                    "<div class='controls'>" +
+                                        "<input type='text' id='inputUserName' placeholder='Email'>" + 
+                                    "</div>" + 
+                                "</div>" + 
+                                "<div class='control-group'>" + 
+                                    "<label class='control-label' for='inputPassword'>Password</label>" +
+                                    "<div class='controls'>" + 
+                                        "<input type='password' id='inputPassword' placeholder='Password'>" + 
+                                    "</div>" + 
+                                "</div>" + 
+                            "</div>" + 
+                            "<div class='modal-footer'>" +
+                                "<button class='btn' data-dismiss='modal' aria-hidden='true'>Close</button>" + 
+                                "<button id='signInButton' class='btn btn-primary'>Sign in</button>"+
+                            "</div>" + 
+                        "</div>");
+       
+            $("#signForm").modal();
+            $('#signForm #signInButton').on('click', function(){
             
-            var userName = $('form.signin .username')[1].value;
+          
+            var userName = $("#signForm #inputUserName")[0].value;
             var loginInfo = {
                 UserName: userName,
-                Password: $('form.signin .password')[1].value,
+                Password: $("#signForm #inputPassword")[0].value,
             };
             $.ajax({
-            url: "../Account/LogOn",
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify(loginInfo),
-            dataType: 'json',
-            success: function (data) {
-                if(!data){
-                   toastr.error('Incorrect UserName or Password', 'Error!');
+                url: "../Account/LogOn",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(loginInfo),
+                dataType: 'json',
+                success: function (data) {
+                    if(!data){
+                        toastr.error('Incorrect UserName or Password', 'Error!');
+                    }
+                    else {
+                        toastr.success('Signed as ' + userName, "Done!");                        
+                        _this.closeUserAuth();       
+                        setCookie("signed",userName,1);
+                        _this.CheckSigned();
+                        _this.UpdateUI();
+                    }
+                },
+                error: function(data) {
+                    toastr.error('Failed to login', 'Error!');
+                    _this.UpdateUI();
                 }
-                else {
-                    toastr.success('Signed as ' + userName, "Done!");
-                    _this.logedIn(true);
-                    _this.closeUserAuth();               
-                }
-            },
-            error: function(data) {
-              toastr.error('Failed to login', 'Error!');
-            }
            
-        });
-
-         return false;
-      });
+            });
+         
+        
+            return false;
+         });
+      }
+      else { //SIGNED already, so unsign
+           setCookie("signed","",1);
+          _this.logOut();             
+      }
    
     }
 });

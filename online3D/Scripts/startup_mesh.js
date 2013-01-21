@@ -6,6 +6,7 @@
 
 (function () {
 
+  userAccess.CheckSigned();
 
   if ($("#bag").length !== 0) //load a data from the server
         stlscene.graphics.LoadFromServer($("#bag").text())

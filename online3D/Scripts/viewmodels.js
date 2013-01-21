@@ -43,7 +43,7 @@ var viewmodels = new (function () {
 
 
     var logInCallback = function () {
-        userAccess.showUserAuth();
+        userAccess.requestUserAuth();
     };
 
     var viewSavedModelsCallback = function () {
