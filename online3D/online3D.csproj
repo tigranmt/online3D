@@ -99,6 +99,7 @@
     <Content Include="Content\Images\entry.jpg" />
     <Content Include="Content\Images\fvs.png" />
     <Content Include="Content\Images\intro.png" />
+    <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\lvs.png" />
     <Content Include="Content\Images\meshs.png" />
     <Content Include="Content\Images\rvs.png" />

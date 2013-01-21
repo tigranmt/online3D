@@ -90,8 +90,7 @@ body
     top: 25%;
     font-size: 18px;
     color: #666;
-    overflow: auto;
-    height: 60%;
+    overflow: auto;  
     visibility: hidden;
     width: 10em;
     
