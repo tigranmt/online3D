@@ -67,10 +67,10 @@
   
 </div>
 
-<div id="basicPanel" class="basicPanel">
+<div id="basicPanel"  class="btn-group btn-group-vertical">
     
     <div id="innerbasicPanel" data-bind="foreach: navigation">
-        <a class="toolboxbotton" data-bind="click: function(e) { callback(); }, 
+        <button class="btn btn-block" data-bind="click: function(e) { callback(); }, 
                             event: { mouseover: 
                                                 function(e) 
                                                 { 
@@ -78,13 +78,13 @@
                                                 } 
                                     }, attr:{alt:alt}">
             <img class="imageOnButton" data-bind="attr:{id:id, src:src}" />
-        </a>
+        </>
     </div>
 </div>
 
-<div id="toolsPanel" > 
+<div id="toolsPanel" class="btn-group btn-group-vertical"> 
     <div id="tools" data-bind="foreach: tools">
-        <a class="toolboxbotton" data-bind="click: function(e) { callback(); }, 
+        <button class="btn btn-block" data-bind="click: function(e) { callback(); }, 
                             event: { mouseover: 
                                                 function(e) 
                                                 {                                                    
@@ -92,7 +92,7 @@
                                                 } 
                                     }, attr:{alt:alt}">
             <img class="imageOnButton" data-bind="attr:{id:id, src:src}" />
-        </a>
+        </button>
     </div>
 </div>
 <div id="progress" ></div>

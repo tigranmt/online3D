@@ -7,6 +7,7 @@ using MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using System.Collections;
+using System.Configuration;
 
 namespace online3D.Models
 {
@@ -168,8 +169,13 @@ namespace online3D.Models
         /// <returns></returns>
         private MongoDatabase GetDataBase()
         {
-            var connectionString = "mongodb://localhost:27017";
-            var dataBaseName = "models";
+            #if DEBUG
+                var connectionString = "mongodb://localhost:27017";
+            #else
+                var connectionString = ConfigurationManager.AppSettings.Get("(MONGOHQ_URL|MONGOLAB_URI)");
+            #endif
+
+                var dataBaseName = "models";
             var client = new MongoClient(connectionString);
             var server = client.GetServer();                   //connect to server
             return server.GetDatabase(dataBaseName);         //get or create database 
