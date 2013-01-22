@@ -1,4 +1,26 @@
-﻿<div class="menubox">		
+﻿<div id="fileInfo" >
+    <div class="accordion"  id="infoList"data-bind="foreach: {data : modelsInformation}">
+        <div class="accordion-group" >
+            <div class="accordion-heading" >
+                <div class="accordion-toggle" data-toggle="collapse" data-parent="#infoList" data-bind="attr:{href: href}, 
+                                style:{ 'backgroundColor': isVisible() === true ? 'transparent' : 'rgba(250, 34, 86, 0.45)' }">
+                    <span id="index" class="badge" data-bind="text:$index, click:click.bind($data), style:{ 'background-color': color}">
+                        </span>
+                    <span class="label label-info" data-bind="text:fileName"></span>
+                </div>
+            </div>
+            <div  data-bind="attr:{id:$index}" class="accordion-body collapse in">
+                <div class="accordion-inner">
+                    <span class="label label-inverse" data-bind="text: fileSize"></span>
+                    <span class="label label-inverse" data-bind="text: faceCount"></span>
+                    <span class="label label-inverse" data-bind="text: vertexCount"></span>
+                </div>
+            </div>
+        </div>       
+    </div>
+</div>
+
+<div class="menubox">		
 	<ul id="ldd_menu" class="ldd_menu">
 		<li id="access_menu">
 			<span>Access</span>
@@ -73,44 +95,4 @@
         </a>
     </div>
 </div>
-
-
-<div id="fileInfo" class="fileInfo" >
-    <div class="accordion"  id="infoList"data-bind="foreach: {data : modelsInformation}">
-        <div class="accordion-group" >
-            <div class="accordion-heading" >
-                <div class="accordion-toggle" data-toggle="collapse" data-parent="#infoList" href="#collapseOne"
-                        data-bind="style:{ 'backgroundColor': isVisible() === true ? 'transparent' : 'rgba(250, 34, 86, 0.45)' }">
-                    <span id="index" class="badge" data-bind="text:$index, click:click.bind($data), style:{ 'background-color': color}">
-                     </span>
-                    <span class="label label-info" data-bind="text:fileName"></span>
-                </div>
-            </div>
-            <div id="collapseOne" class="accordion-body collapse in">
-                <div class="accordion-inner">
-                   <span class="label label-inverse" data-bind="text: fileSize"></span>
-                   <span class="label label-inverse" data-bind="text: faceCount"></span>
-                   <span class="label label-inverse" data-bind="text: vertexCount"></span>
-                </div>
-            </div>
-        </div>       
-    </div>
-</div>
-
-
-@*<div id="fileInfo" class="fileInfo" >
-    <ol  id="infoList" class="rectangle-list" data-bind="foreach: {data : modelsInformation}">
-             <li data-bind="attr:{id:$index}">              
-               <img class="listImage" data-bind="attr:{src:src(), id:$index}, event:{mouseover:imageover.bind($data), mouseout:imageout.bind($data)}" />
-                <a href=""  data-bind="text: fileName, event:{mouseover:over.bind($data), mouseout:out.bind($data), click:click.bind($data)}, 
-                                style:{ 'backgroundColor': isVisible() === true ? 'transparent' : 'rgba(250, 34, 86, 0.45)' }"></a>
-             </li>
-     
-            <li id="fsize"   style="padding-left:0.4em" data-bind="text: fileSize"/>
-            <li id="fcount"  style="padding-left:0.4em" data-bind="text: faceCount"/>
-            <li id="vcount"  style="padding-left:0.4em" data-bind="text: vertexCount"/>        
-     
-    </ol>
-</div>*@
-
 <div id="progress" ></div>

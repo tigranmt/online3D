@@ -305,6 +305,8 @@ init.prototype.loadMeshesInformation = function () {
                 self.visible(_this.hideShowModel.apply(_this, [data.fileName])); //ko observable
             };
 
+            self.href = "#" + imIndex;
+
             var curindex = imIndex;
 
             self.setTransparencyVal = function (element, transparency) {

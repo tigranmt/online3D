@@ -20,6 +20,7 @@ body
     position: relative;
     top: -55px;
     float: right;
+    margin: auto -400px;
 }
 
 #introimage
@@ -83,17 +84,21 @@ body
 
 
 
-.fileInfo
+#fileInfo 
 {
-    position: absolute;
-    left: 85%;
-    top: 25%;
-    font-size: 18px;
-    color: #666;
-    overflow: auto;  
+    float: right;
+    overflow: auto;
     visibility: hidden;
-    width: 10em;
-    
+    width: 30em;
+    border: 1px;
+    border-color: black;
+    border-width: 1px;
+    border: 1px solid;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    position: relative;
+    top: 150px;
+    margin: 10px;
 }
 
 
