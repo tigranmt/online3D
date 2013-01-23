@@ -170,15 +170,21 @@ namespace online3D.Models
         private MongoDatabase GetDataBase()
         {
             #if DEBUG
-                var connectionString = "mongodb://localhost:27017";               
+                var connectionString = "mongodb://localhost:27017";
+                var dataBaseName = "models";
+                var client = new MongoClient(connectionString);
+                var server = client.GetServer();                   //connect to server
+                return server.GetDatabase(dataBaseName);           //get or create database 
             #else
                 var connectionString = ConfigurationManager.AppSettings.Get("(MONGOHQ_URL|MONGOLAB_URI)");
+                var url = new MongoUrl(connectionString);
+                var client = new MongoClient(url);
+                var server = client.GetServer();              //connect to server
+                return server.GetDatabase(url.DatabaseName);  //get or create database 
             #endif
 
-            var dataBaseName = "models";
-            var client = new MongoClient(connectionString);
-            var server = client.GetServer();                   //connect to server
-            return server.GetDatabase(dataBaseName);           //get or create database 
+
+
         }
 
 

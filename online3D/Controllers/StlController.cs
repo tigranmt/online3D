@@ -74,9 +74,8 @@ namespace ModelViewer3D.Controllers
        // [AuthenticationRequiered(Users = "sweden")]
         [Authorize]
         public ActionResult SaveModel(ModelInfo model)
-        {
-
-            IData access = new MongoDataAccess();
+        {           
+           
             model.User = User.Identity.Name;
 
             //generate unique link for the model 
@@ -88,6 +87,7 @@ namespace ModelViewer3D.Controllers
             var savedCount = VerticesHolder.AddModel(model);
             if (savedCount == model.VertexCount)
             {
+                IData access = new MongoDataAccess();
                 model.Vertices = VerticesHolder.GetVertices(model);
                 model.ModelImage = VerticesHolder.GetImageData(model);
                 bool saveResult = access.SaveModel(model);
