@@ -46,7 +46,7 @@ namespace online3D.Controllers
 
         private void AuthUser(UserModel user)
         {  
-            FormsAuthentication.SetAuthCookie(user.UserName, false);         
+            FormsAuthentication.SetAuthCookie(user.UserName, true, "/Stl");         
         }
 
 
