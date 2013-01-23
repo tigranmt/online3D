@@ -191,8 +191,7 @@ namespace online3D.Models
         private MongoCollection<BsonDocument> ReadCollection(string collectionKey)
         {
             var db = GetDataBase();
-            //return db.GetCollection<BsonDocument >(collectionKey); //return collection of models           
-            return db.GetCollection<BsonDocument>("models"); //return collection of models           
+            return db.GetCollection<BsonDocument >(collectionKey); //return collection of models      
         }
 
 
