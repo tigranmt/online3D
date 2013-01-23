@@ -530,9 +530,6 @@ init.prototype.showUploadProgress = function (name, percent) {
 /*get trasmission vertexes packet size based on tatal vertices amount*/
 init.prototype.getPacketSize = function(vertexCount) {
 
-    return vertexCount / 27; 
-
-
     if(vertexCount >=500000)
         return vertexCount / 81; 
     else if(vertexCount >=300000)
@@ -543,6 +540,8 @@ init.prototype.getPacketSize = function(vertexCount) {
         return vertexCount/ 243;
     else if(vertexCount >=10000)
         return vertexCount/ 729;
+    else if(vertexCount >=5000)
+        return vertexCount/ 27;
 
     return 3;
 }

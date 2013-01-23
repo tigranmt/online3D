@@ -176,7 +176,7 @@ namespace online3D.Models
                 var server = client.GetServer();                   //connect to server
                 return server.GetDatabase(dataBaseName);           //get or create database 
             #else
-                var connectionString = ConfigurationManager.AppSettings.Get("(MONGOHQ_URL|MONGOLAB_URI)");
+                var connectionString = ConfigurationManager.AppSettings.Get("MONGOLAB_URI");
                 var url = new MongoUrl(connectionString);
                 var client = new MongoClient(url);
                 var server = client.GetServer();              //connect to server
