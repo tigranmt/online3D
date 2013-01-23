@@ -34,9 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AspNetHaack, Version=0.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Binaries\AspNetHaack.dll</HintPath>
+    <Reference Include="AppHarbor.Web.Security">
+      <HintPath>Binaries\AppHarbor.Web.Security.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -69,7 +68,6 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\FormsAuthenticationConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\IntroController.cs" />
     <Compile Include="Controllers\StlController.cs" />
@@ -170,6 +168,7 @@
     <Content Include="Views\Shared\StlLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Start\" />
     <Folder Include="Content\Images\App_LocalResources\" />
   </ItemGroup>
   <ItemGroup>

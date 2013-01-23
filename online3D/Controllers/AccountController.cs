@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using online3D.Helpers;
 using System.Web.Security;
+using AppHarbor.Web.Security;
 
 namespace online3D.Controllers
 {
@@ -31,7 +32,9 @@ namespace online3D.Controllers
         [Authorize]
         public ActionResult LogOut() 
         {
-            FormsAuthentication.SignOut();
+            //FormsAuthentication.SignOut();
+            IAuthenticator authenticator = new CookieAuthenticator();
+            authenticator.SignOut();
             Response.Clear();
             return Json(true);
         }
@@ -47,20 +50,24 @@ namespace online3D.Controllers
         private void AuthUser(UserModel user)
         {  
             //FormsAuthentication.SetAuthCookie(user.UserName, true, "/Stl");         
-            FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(
-                        1,
-                            user.UserName,
-                            DateTime.Now,
-                            DateTime.Now.AddDays(1),
-                            true,
-                            user.UserName
-                        );
+            //FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(
+            //                1,
+            //                user.UserName,
+            //                DateTime.Now,
+            //                DateTime.Now.AddDays(1),
+            //                true,
+            //                user.UserName
+            //            );
 
-            string encTicket = FormsAuthentication.Encrypt(authTicket);
-            this.Response.Cookies.Add(
-                new HttpCookie(
-                    FormsAuthentication.FormsCookieName,
-                    encTicket) { Expires = authTicket.Expiration });
+            //string encTicket = FormsAuthentication.Encrypt(authTicket);
+            //this.Response.Cookies.Add(
+            //    new HttpCookie(
+            //        FormsAuthentication.FormsCookieName,
+            //        encTicket) { Expires = authTicket.Expiration });
+
+
+            IAuthenticator authenticator = new CookieAuthenticator(); // or grab one from your IoC container
+            authenticator.SetCookie(user.UserName, true);
         }
 
 

@@ -71,7 +71,8 @@ namespace ModelViewer3D.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        [AuthenticationRequiered(Users = "sweden")]
+       // [AuthenticationRequiered(Users = "sweden")]
+        [Authorize]
         public ActionResult SaveModel(ModelInfo model)
         {
 
