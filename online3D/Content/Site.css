@@ -90,7 +90,6 @@ body
 #fileInfo 
 {
     float: right;
-    overflow: auto;
     visibility: hidden;
     width: 30em;
     border: 1px;
@@ -99,9 +98,10 @@ body
     border: 1px solid;
     border-radius: 5px;
     -moz-border-radius: 5px;
-    position: relative;
+    position: absolute;
     top: 150px;
     margin: 10px;
+    right: 1%;
 }
 
 
