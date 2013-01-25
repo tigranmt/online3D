@@ -8,12 +8,15 @@ using online3D.Models;
 using MongoDB.Bson.Serialization;
 using online3D.Helpers;
 using System.Drawing;
+using NLog;
 
 namespace ModelViewer3D.Controllers
 {
     [Layout("StlLayout")]
     public class StlController : Controller
     {
+
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Default view
@@ -72,8 +75,7 @@ namespace ModelViewer3D.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost]
-       // [AuthenticationRequiered(Users = "sweden")]
+        [HttpPost]     
         [Authorize]
         public ActionResult SaveModel(ModelInfo model)
         {           
@@ -109,10 +111,13 @@ namespace ModelViewer3D.Controllers
         {
             try
             {
+                logger.Debug("Get saved model preview " + id);
+
                 MongoDataAccess access = new MongoDataAccess();
                 if (id == "first")//first model of first collection was requested
                 {
                     var models = access.ReadModelCollection(0);
+                    logger.Debug("Found " + models.Count() + " models. Returning just first of it");
                     return Json(models.First(), JsonRequestBehavior.AllowGet);
                 }
                 else
@@ -126,6 +131,7 @@ namespace ModelViewer3D.Controllers
             }
             catch (Exception ex)
             {
+                logger.ErrorException("Exception in GetSavedModelPreview", ex);
                 return Json(false);
             }
            
