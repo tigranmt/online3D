@@ -624,7 +624,9 @@ init.prototype.sendContentToServer = function () {
             $.ajax({
                 url: "SaveModel/",
                 type: "POST",
-                contentType: "application/json",
+                contentType: "application/json",                  
+                processData: false,
+                cache : false,
                 data: JSON.stringify(modelInfo),
                 //data: modelInfo,
                 dataType: 'json',
