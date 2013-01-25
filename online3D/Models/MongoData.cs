@@ -188,12 +188,37 @@ namespace online3D.Models
         }
 
 
+        private MongoCollection<BsonDocument> ReadCollection(int collectionIndex)
+        {
+            var db = GetDataBase();
+            var names = db.GetCollectionNames().Where(n=>!n.StartsWith("system"));
+
+            int collectionCount = names.Count();
+            if (collectionCount == 0 || collectionIndex >= collectionCount)
+                return null;
+
+            var name = names.ElementAt(collectionIndex);
+            return ReadCollection(name);
+        }
+
         private MongoCollection<BsonDocument> ReadCollection(string collectionKey)
         {
             var db = GetDataBase();
             return db.GetCollection<BsonDocument >(collectionKey); //return collection of models      
         }
 
+        /// <summary>
+        /// Read models from the specified by index collection
+        /// </summary>
+        /// <param name="collectionID"></param>
+        /// <param name="verticesToo"></param>
+        /// <returns></returns>
+        public IEnumerable<ModelInfo> ReadModelCollection(int collectionIndex, bool verticesToo = true)
+        {
+            var mongoCollection = ReadCollection(collectionIndex);
+            var bsons = mongoCollection.FindAll();
+            return GetModelsFromBsons(bsons, verticesToo);
+        }
 
       
 
@@ -207,18 +232,28 @@ namespace online3D.Models
         {
             var mongoCollection = ReadCollection(collectionID);
             var bsons = mongoCollection.FindAll();
-            var models = new List<ModelInfo>();
+            return GetModelsFromBsons(bsons, verticesToo);
+        }
 
+
+        /// <summary>
+        /// Generates ModelInfo list from the BsonDocuments cursor
+        /// </summary>
+        /// <param name="bsons"></param>
+        /// <param name="verticesToo"></param>
+        /// <returns></returns>
+        private IEnumerable<ModelInfo> GetModelsFromBsons(MongoCursor<BsonDocument> bsons, bool verticesToo = true)
+        {
+            var models = new List<ModelInfo>();
             //desirialize 
             foreach (var bson in bsons)
             {
                 var m = ModelInfoFromBson(bson, verticesToo);
-                models.Add(m);            
+                models.Add(m);
             }
 
             return models;
         }
-
 
         /// <summary>
         /// Reads the colleciton of all models saved under specified user name

@@ -109,10 +109,20 @@ namespace ModelViewer3D.Controllers
         {
             try
             {
-                var userName = GetUserName();
                 MongoDataAccess access = new MongoDataAccess();
-                var models = access.ReadModelCollection(id, false).Where(m => m.User == userName);
-                return Json(models.First(), JsonRequestBehavior.AllowGet);
+                if (id == "first")//first model of first collection was requested
+                {
+                    var models = access.ReadModelCollection(0);
+                    return Json(models.First(), JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    var userName = GetUserName();                   
+                    var models = access.ReadModelCollection(id, false).Where(m => m.User == userName);
+                    return Json(models.First(), JsonRequestBehavior.AllowGet);
+                }
+
+               
             }
             catch (Exception ex)
             {

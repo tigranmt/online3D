@@ -212,7 +212,7 @@ function CompatibilityChecks() {
 
 function LoadSampleModelPreview() {
     $.ajax({
-        url: '../Stl/GetSavedModelPreview/tmpCFDD',
+        url: '../Stl/GetSavedModelPreview/first',
         success: function (data) {
             data.ModelName = "View sample ( " + data.ModelName + " )";
             ko.applyBindings(data, $("#sample_preview")[0]);
