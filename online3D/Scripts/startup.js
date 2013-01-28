@@ -214,6 +214,7 @@ function LoadSampleModelPreview() {
     $.ajax({
         url: '../Stl/GetSavedModelPreview/first',
         success: function (data) {
+            $("#sample_preview").css('visibility', 'visible');
             data.ModelName = "View sample ( " + data.ModelName + " )";
             ko.applyBindings(data, $("#sample_preview")[0]);
         },
