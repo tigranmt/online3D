@@ -118,12 +118,14 @@ namespace ModelViewer3D.Controllers
                 {
                     var models = access.ReadModelCollection(0);
                     logger.Debug("Found " + models.Count() + " models. Returning just first of it");
+                    logger.Debug("Image: " + models.First().ModelImage); 
                     return Json(models.First(), JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
                     var userName = GetUserName();                   
                     var models = access.ReadModelCollection(id, false).Where(m => m.User == userName);
+                    
                     return Json(models.First(), JsonRequestBehavior.AllowGet);
                 }
 
