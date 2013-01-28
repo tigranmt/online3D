@@ -117,8 +117,7 @@ namespace ModelViewer3D.Controllers
                 if (id == "first")//first model of first collection was requested
                 {
                     var models = access.ReadModelCollection(0);
-                    logger.Debug("Found " + models.Count() + " models. Returning just first of it");
-                    logger.Debug("Image: " + models.First().ModelImage); 
+                    logger.Debug("Found " + models.Count() + " models. Returning just first of it");                   
                     return Json(models.First(), JsonRequestBehavior.AllowGet);
                 }
                 else
