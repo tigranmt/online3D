@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using online3D.Helpers;
+using online3D.Models;
 
 namespace ModelViewer3D
 {
@@ -43,6 +44,28 @@ namespace ModelViewer3D
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
+
+            this.Error += new EventHandler(MvcApplication_Error);
         }
+
+        void MvcApplication_Error(object sender, EventArgs e)
+        {
+            Exception LastOneError = Server.GetLastError();
+
+            try
+            {
+                if (LastOneError != null)
+                    LogEntry.logger.FatalException("Unhandled exception", LastOneError);
+
+            }
+            catch (Exception ex)
+            {
+                LogEntry.logger.ErrorException("Unhandled error: ", ex);
+            }
+
+        }
+
+
+        
     }
 }

@@ -83,6 +83,7 @@
     <Compile Include="Helpers\AuthenticationRequiered.cs" />
     <Compile Include="Helpers\LayoutAttribute.cs" />
     <Compile Include="Helpers\UserModel.cs" />
+    <Compile Include="Models\LogEntry.cs" />
     <Compile Include="Models\MongoData.cs" />
     <Compile Include="Models\IData.cs" />
     <Compile Include="Models\LinkGenerator.cs" />
