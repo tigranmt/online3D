@@ -12,10 +12,15 @@ namespace online3D.Models
         public static string GenerateTempLink(ModelInfo mi, HttpRequestBase  request)
         {
             var tempName = Path.GetFileNameWithoutExtension(Path.GetTempFileName());
+#if DEBUG
             var baseUrl = request.Url.GetLeftPart(UriPartial.Authority);
 
-            //base URL  + Controller(Format) + LoadModel(Action) + Unique ID
+#else
+            var baseUrl = request.Url.Scheme + "//" + request.Url.Host;
+#endif
             return baseUrl + "/" + mi.Format + "/LoadModel/" + tempName;
+            
+
         }
     }
 }

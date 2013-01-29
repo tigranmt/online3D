@@ -49,24 +49,7 @@ namespace online3D.Controllers
 
         private void AuthUser(UserModel user)
         {  
-            //FormsAuthentication.SetAuthCookie(user.UserName, true, "/Stl");         
-            //FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(
-            //                1,
-            //                user.UserName,
-            //                DateTime.Now,
-            //                DateTime.Now.AddDays(1),
-            //                true,
-            //                user.UserName
-            //            );
-
-            //string encTicket = FormsAuthentication.Encrypt(authTicket);
-            //this.Response.Cookies.Add(
-            //    new HttpCookie(
-            //        FormsAuthentication.FormsCookieName,
-            //        encTicket) { Expires = authTicket.Expiration });
-
-
-            IAuthenticator authenticator = new CookieAuthenticator(); // or grab one from your IoC container
+            IAuthenticator authenticator = new CookieAuthenticator(); 
             authenticator.SetCookie(user.UserName, true);
         }
 

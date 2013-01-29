@@ -47,15 +47,7 @@ namespace ModelViewer3D.Controllers
         {
             try
             {
-                /*var userName = GetUserName();
-                MongoDataAccess access = new MongoDataAccess();
-                var models = access.ReadModelCollection(id, false).Where(m => m.User == userName);
-                
-                //if on current user failed, try search among sample models
-                if(models.Count() == 0)
-                    models = access.ReadModelCollection(id, false).Where(m => m.User == "sample");*/
-
-                MongoDataAccess access = new MongoDataAccess();
+                             MongoDataAccess access = new MongoDataAccess();
                 var models = access.ReadModelCollection(id, false);
                 ViewBag.ID = models.First().ID;
             }
