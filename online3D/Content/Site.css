@@ -84,6 +84,7 @@ body
     margin: 15px;
     height: auto;
     padding: 5px;
+    z-index:400;
 }
 
 
