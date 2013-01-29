@@ -102,21 +102,18 @@ namespace ModelViewer3D.Controllers
         public JsonResult GetSavedModelPreview(string id)
         {
             try
-            {
-                LogEntry.logger.Debug("Get saved model preview " + id);
+            {               
 
                 MongoDataAccess access = new MongoDataAccess();
                 if (id == "first")//first model of first collection was requested
                 {
-                    var models = access.ReadModelCollection(0, false);
-                    LogEntry.logger.Debug("Found " + models.Count() + " models. Returning just first of it");                   
+                    var models = access.ReadModelCollection(0, false);                                
                     return Json(models.First(), JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
                     var userName = GetUserName();                   
-                    var models = access.ReadModelCollection(id, false).Where(m => m.User == userName);
-                    
+                    var models = access.ReadModelCollection(id, false).Where(m => m.User == userName);                    
                     return Json(models.First(), JsonRequestBehavior.AllowGet);
                 }
 
