@@ -41,10 +41,11 @@ var userAccess = new (function(){
 
     _this.logOut = function() {
             $.ajax({                     
-            url: '../Account/LogOut/',                     
+            url: '../Account/LogOut',                     
             type: 'POST',
             success: function (data) {
-                toastr.success('Loged out.','Success');                      
+                toastr.success('Loged out.','Success');     
+                setCookie("signed","",1);                 
                 _this.CheckSigned();
                 _this.UpdateUI();
 
@@ -228,7 +229,7 @@ var userAccess = new (function(){
          });
       }
       else { //SIGNED already, so unsign
-           setCookie("signed","",1);
+          
           _this.logOut();             
       }
    

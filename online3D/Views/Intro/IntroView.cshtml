@@ -55,12 +55,14 @@ position: relative;">
         </div>   
 
         <div id="sample_preview" style="padding: 33px;position: absolute;top: 420px;visibility:hidden">
-             <div class="span3 offset2">    
+             <div class="span3 offset2" style="border: solid 1px;padding: 5px 5px 2px 5px;-moz-border-radius: 4px;
+    -webkit-border-radius: 4px;">    
                                             
                  <a data-bind="attr:{href:ID}" id="link">                
-                    <img class="preview_image" style="max-width: 100%;max-height: 100%; background: rgb(206, 207, 209);" data-bind="attr:{src:ModelImage}"></img>
+                    <img class="preview_image" style="max-width: 100%;max-height: 100%; background: rgb(206, 207, 209); " data-bind="attr:{src:ModelImage}"></img>
                  </a>
-                  <h6 id="fileName" data-bind="text:ModelName"></h6>    
+                  <span />
+                  <p id="fileName" data-bind="text:ModelName"></p>    
              </div>
         </div>
       

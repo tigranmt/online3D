@@ -98,6 +98,27 @@ namespace ModelViewer3D.Controllers
         }
 
 
+        ///// <summary>
+        ///// Handles account log IN and OUT calls and redirects them to Account controller
+        ///// </summary>
+        ///// <param name="action"></param>
+        ///// <returns></returns>
+        //[HttpGet]
+        //public ActionResult Account(string action)
+        //{
+        //    if (action == "LogOut")
+        //    {
+        //        return RedirectToAction("LogOut", "Account");
+        //    }
+
+        //    return new EmptyResult();
+        //}
+
+        /// <summary>
+        /// Gets a preview for psecified ID model
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public JsonResult GetSavedModelPreview(string id)
         {

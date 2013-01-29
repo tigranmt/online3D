@@ -96,6 +96,7 @@ ul.ldd_menu ul li a:hover{
 	-moz-box-shadow:0px 0px 10px #aaa;
 	-webkit-box-shadow:0px 0px 10px #aaa;
 	-box-shadow:0px 0px 10px #aaa;
+	z-index:200;
  }
 
 .menubox h2{

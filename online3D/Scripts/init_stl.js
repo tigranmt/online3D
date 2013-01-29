@@ -169,6 +169,10 @@
         container.append(this.glRenderer.domElement); // attach the render-supplied DOM element
 
 
+        $("#3DArea #canvas").css("position","absolute");
+        $("#3DArea #canvas").css("z-index","2");
+        
+
         $(window).resize(function () { //handle resize
             _this.glCamera.aspect = window.innerWidth / window.innerHeight;
             _this.glCamera.updateProjectionMatrix();

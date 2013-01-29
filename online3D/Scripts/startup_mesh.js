@@ -7,12 +7,16 @@
 (function () {
 
   userAccess.CheckSigned();
-
-  if ($("#bag").length !== 0) //load a data from the server
-        stlscene.graphics.LoadFromServer($("#bag").text())
-    else {
-        stlscene.graphics.LoadFileData(); //load data from local file
+  var bag = $("#bag");
+  if (bag.length !== 0){ //load a data from the server
+        
+        var text = bag.text();
+        bag.remove();
+        stlscene.graphics.LoadFromServer(text);
     }
+  else {
+    stlscene.graphics.LoadFileData(); //load data from local file
+  }
 
     /**
     * the menu
