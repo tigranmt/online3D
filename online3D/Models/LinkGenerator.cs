@@ -16,7 +16,7 @@ namespace online3D.Models
             var baseUrl = request.Url.GetLeftPart(UriPartial.Authority);
 
 #else
-            var baseUrl = request.Url.Scheme + "//" + request.Url.Host;
+            var baseUrl = request.Url.Scheme + "://" + request.Url.Host;
 #endif
             return baseUrl + "/" + mi.Format + "/LoadModel/" + tempName;
             
