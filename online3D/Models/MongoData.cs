@@ -276,7 +276,10 @@ namespace online3D.Models
                 userModels.AddRange(dbModels.Where(m => m.User == username));
             }
 
-            var group = userModels.GroupBy(g=>g.ID);
+            // Get only fist element in every document, as we need only basic (passport) information 
+            // which is present in any model
+            var group = userModels.GroupBy(g=>g.ID).Select(x=>x.First());
+         
             return group;
         }
     }

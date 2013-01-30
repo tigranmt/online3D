@@ -63,18 +63,22 @@ var userAccess = new (function(){
         if(div.length === 0) {
            jQuery('<div/>', {
                 id: 'accordion',
-                class: 'carousel slide' 
+                class: 'modal hide fade' 
             }).appendTo($("#body"));
            
            div = $("#accordion"); 
            
 
-           div.html("<div class='carousel-inner' data-bind='foreach: {data : sessionModels }'> " +  
-                        "<div class='item'><img data-bind='attr:{src:image}'/>" + 
-                            "<div class='carousel-caption'>" + 
-                                "<h4 data-bind='value:name'> </h4> " +                                
+           div.html("<div id='carousel' class='carousel slide'>" + 
+                        "<div  class='carousel-inner' data-bind='foreach: sessions'> " +  
+                            "<div data-bind='css: cl'><img data-bind='attr:{src:image}'></img>" + 
+                                "<div class='carousel-caption'>" + 
+                                    "<h4 data-bind='text:name'> </h4> " +                                
+                                "</div>" + 
                             "</div>" + 
-                          "</div>" + 
+                         "</div>" + 
+                         "<a class='carousel-control left' href='#carousel' data-slide='prev'>&lsaquo;</a>" + 
+                         "<a class='carousel-control right' href='#carousel' data-slide='next'>&rsaquo;</a>" +
                     " </div>");
         }
         $.ajax({                     
@@ -92,34 +96,23 @@ var userAccess = new (function(){
                         this.sessions = sessions;
                     }     
 
-                    var SessionViewModel = function(name, index, models) {
-                        this.sessionModels = models;
-                        this.sessionname = name;
-
-                        this.id = "tab-" + index;
-                        this.href = "#tab-" + index;
-                    }
-
-                    var SavedModel = function(name, vertexCount, linkTo, image) {
-                        this.name = name;
-                        this.vertexCount = "Verices " + vertexCount;
-                        this.link = linkTo;
-                        this.image = image;
+                    var Session = function(name, id, image, cl) {
+                          this.name = name;
+                          this.id = id;
+                          this.image = image;
+                          this.cl  = cl;
                     }
 
                 
                     var sessions = new Array();
-                    for(var i=0;i<data.length; i++)
-                    {
-                        var sessionModels = new Array();
-                        for(var j=0;j<data[i].length;j++) {        
-                            var model = data[i][j];                
-                            sessionModels.push(new SavedModel(model.ModelName, model.VertexCount, model.ID, model.ModelImage));
-                        }
-
-                        sessions.push(new SessionViewModel(i, i, sessionModels));
+                    for(var i=0; i<data.length; i++)
+                    {    
+                        var model = data[i];     
+                        var cl = (i===0)?'active item':'item'; //set class based on the index of the item in list
+                        sessions.push(new Session(model.ModelName, model.ID, model.ModelImage,cl));                                          
                     }               
 
+                    $("#accordion").modal();
                     var view = new ModelsView(sessions);
                     ko.applyBindings(view, $("#accordion")[0]);
 
