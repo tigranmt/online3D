@@ -26,10 +26,10 @@ body
 
 #introimage
 {   
-   position: relative;
-   margin: -300px;   
-   float  : right;
-   opacity: .99;
+    position: relative;
+    margin: 0px -150px;
+    float: right;
+    opacity: .99;
 }
 
 

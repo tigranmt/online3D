@@ -143,7 +143,7 @@ namespace ModelViewer3D.Controllers
             catch (Exception ex)
             {
                 LogEntry.logger.ErrorException("Exception in GetSavedModelPreview", ex);
-                return Json(false);
+                return Json(false,JsonRequestBehavior.AllowGet);
             }
            
         }
@@ -168,7 +168,7 @@ namespace ModelViewer3D.Controllers
             }
             catch (Exception ex)
             {
-                return Json(false);
+                return Json(false,JsonRequestBehavior.AllowGet);
             }
         }
 

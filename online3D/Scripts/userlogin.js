@@ -62,60 +62,74 @@ var userAccess = new (function(){
         var div = $("#accordion");
         if(div.length === 0) {
            jQuery('<div/>', {
-                id: 'accordion',               
+                id: 'accordion',
+                class: 'carousel slide' 
             }).appendTo($("#body"));
            
-           div = $("#accordion");          
-           div.html("<ul id='sessionList' data-bind='foreach: sessions'>" + 			                    
-			            "<li class='content' data-bind='foreach:sessionModels'>" + 
-                            "<h1 data-bind='text:name'></h1>" + 
-				            "<em class='bullet'></em><span data-bind='text:vertexCount'></span> " + 	
-		                "</li>" +
-                    "</ul>"
-                   );
+           div = $("#accordion"); 
+           
+
+           div.html("<div class='carousel-inner' data-bind='foreach: {data : sessionModels }'> " +  
+                        "<div class='item'><img data-bind='attr:{src:image}'/>" + 
+                            "<div class='carousel-caption'>" + 
+                                "<h4 data-bind='value:name'> </h4> " +                                
+                            "</div>" + 
+                          "</div>" + 
+                    " </div>");
         }
         $.ajax({                     
-            url: 'GetSavedModels/',    
+            url: '../Stl/GetSavedModels/',
             success: function (data) {
                
-                var ModelsView = function(sessions) {
-                    this.sessions = sessions;
-                }     
 
-                var SessionViewModel = function(name, index, models) {
-                    this.sessionModels = models;
-                    this.sessionname = name;
-                    this.id = "tab-" + index;
-                    this.href = "#tab-" + index;
-                }
+               if(data === false) {
+                    toastr.error('Failed load user models', 'Error');
+                    div.remove();//remove div just created
+               }
+               else {
 
-                var SavedModel = function(name, vertexCount, linkTo) {
-                    this.name = name;
-                    this.vertexCount = "Verices " + vertexCount;
-                    this.link = linkTo;
-                }
+                    var ModelsView = function(sessions) {
+                        this.sessions = sessions;
+                    }     
 
-                
-                var sessions = new Array();
-                for(var i=0;i<data.length; i++)
-                {
-                    var sessionModels = new Array();
-                    for(var j=0;j<data[i].length;j++) {        
-                        var model = data[i][j];                
-                        sessionModels.push(new SavedModel(model.ModelName, model.VertexCount, model.ID));
+                    var SessionViewModel = function(name, index, models) {
+                        this.sessionModels = models;
+                        this.sessionname = name;
+
+                        this.id = "tab-" + index;
+                        this.href = "#tab-" + index;
                     }
 
-                    sessions.push(new SessionViewModel(i, i, sessionModels));
-                }               
+                    var SavedModel = function(name, vertexCount, linkTo, image) {
+                        this.name = name;
+                        this.vertexCount = "Verices " + vertexCount;
+                        this.link = linkTo;
+                        this.image = image;
+                    }
 
-                var view = new ModelsView(sessions);
-                ko.applyBindings(view, $("#accordion")[0]);
+                
+                    var sessions = new Array();
+                    for(var i=0;i<data.length; i++)
+                    {
+                        var sessionModels = new Array();
+                        for(var j=0;j<data[i].length;j++) {        
+                            var model = data[i][j];                
+                            sessionModels.push(new SavedModel(model.ModelName, model.VertexCount, model.ID, model.ModelImage));
+                        }
 
-              
+                        sessions.push(new SessionViewModel(i, i, sessionModels));
+                    }               
+
+                    var view = new ModelsView(sessions);
+                    ko.applyBindings(view, $("#accordion")[0]);
+
+              }
               
             },
             error: function() {
                 toastr.error('Failed load user models', 'Error');
+                div.remove();//remove div just created
+                
             }
         });
     };

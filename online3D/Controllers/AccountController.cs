@@ -29,7 +29,7 @@ namespace online3D.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        //[Authorize] //No need for authorization for LogOut
         public ActionResult LogOut() 
         {
             //FormsAuthentication.SignOut();
