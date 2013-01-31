@@ -47,12 +47,12 @@ body
     z-index: 1;
 }
 
-.gridbody
+.gridbody, #accordion
 {
     background-color: none;
-    background: url(Images/bg.png) repeat center top;   
-    
+    background: url(Images/bg.png) repeat center top;    
 }
+
 
 
 #basicPanel

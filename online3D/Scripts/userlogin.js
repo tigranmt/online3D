@@ -70,8 +70,8 @@ var userAccess = new (function(){
            
 
            div.html("<div id='carousel' class='carousel slide'>" + 
-                        "<div  class='carousel-inner' data-bind='foreach: sessions'> " +  
-                            "<div data-bind='css: cl'><img data-bind='attr:{src:image}'></img>" + 
+                        "<div id='innercarousel' class='carousel-inner' data-bind='foreach: sessions'> " +  
+                            "<div class='item'><img data-bind='attr:{src:image}'></img>" + 
                                 "<div class='carousel-caption'>" + 
                                     "<h4 data-bind='text:name'> </h4> " +                                
                                 "</div>" + 
@@ -96,26 +96,26 @@ var userAccess = new (function(){
                         this.sessions = sessions;
                     }     
 
-                    var Session = function(name, id, image, cl) {
+                    var Session = function(name, id, image, index) {
                           this.name = name;
                           this.id = id;
-                          this.image = image;
-                          this.cl  = cl;
+                          this.image = image;                          
                     }
 
                 
                     var sessions = new Array();
                     for(var i=0; i<data.length; i++)
                     {    
-                        var model = data[i];     
-                        var cl = (i===0)?'active item':'item'; //set class based on the index of the item in list
-                        sessions.push(new Session(model.ModelName, model.ID, model.ModelImage,cl));                                          
+                        var model = data[i];
+                        sessions.push(new Session(model.ModelName, model.ID, model.ModelImage,i));                                          
                     }               
 
                     $("#accordion").modal();
                     var view = new ModelsView(sessions);
                     ko.applyBindings(view, $("#accordion")[0]);
 
+                    //set the first item like an active one 
+                    $("#innercarousel .item").first().removeClass("item").addClass("active item");
               }
               
             },
