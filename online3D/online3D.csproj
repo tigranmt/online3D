@@ -143,8 +143,11 @@
     <Content Include="Content\toastr.css" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\async.js" />
     <Content Include="Scripts\binary_reader.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\Converters\stl_to_mesh.js" />
+    <Content Include="Scripts\Converters\vertex_to_mesh.js" />
     <Content Include="Scripts\startup.js" />
     <Content Include="Scripts\startup_mesh.js" />
     <Content Include="Scripts\init_stl.js" />
@@ -153,7 +156,7 @@
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\screenshot.js" />
     <Content Include="Scripts\userlogin.js" />
-    <Content Include="Scripts\stl_model_loader.js" />
+    <Content Include="Scripts\model_loader.js" />
     <Content Include="Scripts\modernizr-1.7.min.js" />
     <Content Include="Scripts\storage.js" />
     <Content Include="Scripts\three.js" />

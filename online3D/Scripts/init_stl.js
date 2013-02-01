@@ -5,7 +5,7 @@
     this.glRenderer = undefined;
     this.glCamera = undefined;
     this.sceneTracker = undefined;
-    this.stlLoader = undefined;
+    this.modelLoader = undefined;
     this.textMesh = undefined;
 
     var _this = this;
@@ -860,7 +860,7 @@ init.prototype.initScene = function (_this) {
     _this.makeDivsDraggable();
 
     //init STL loader
-    _this.stlLoader = new STL(this.glScene, this.glCamera, this.glRenderer, this.sceneTracker);
+    _this.modelLoader = new ModelLoader(this.glScene, this.glCamera, this.glRenderer, this.sceneTracker);
 
     _this.hidePanels();
 }
@@ -891,7 +891,7 @@ init.prototype.LoadFiles = function (files) {
             return;
         }
         var store = files[index];
-        _this.stlLoader.loadStlModel(store.fileData, store.fileName, store.fileSize, loadAsync);  //load models in async way  
+        _this.modelLoader.loadModel(_this.glScene, store.fileData, store.fileName, store.fileSize, loadAsync);  //load models in async way  
         index--;
     };
 
@@ -922,7 +922,7 @@ init.prototype.loadMeshesFromServer = function (meshes) {
             return;
         }
         var mesh = meshes[index];
-        _this.stlLoader.loadMeshModel(mesh, loadAsync);  //load meshes in async way  
+        _this.modelLoader.loadMeshModel(mesh, loadAsync);
         index--;
     };
 
