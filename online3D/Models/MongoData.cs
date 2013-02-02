@@ -228,10 +228,14 @@ namespace online3D.Models
         /// <param name="collectionID"></param>
         /// <param name="verticesToo"></param>
         /// <returns></returns>
-        public IEnumerable<ModelInfo> ReadModelCollection(string collectionID, bool verticesToo =true)
+        public IEnumerable<ModelInfo> ReadModelCollection(string collectionID, bool verticesToo =true, int modelIndex = -1)
         {
             var mongoCollection = ReadCollection(collectionID);
-            var bsons = mongoCollection.FindAll();
+            IEnumerable<BsonDocument> bsons = null;
+            if (modelIndex < 0)
+                bsons = mongoCollection.FindAll();
+            else
+                bsons = mongoCollection.FindAll().Skip(modelIndex).Take(1);
             return GetModelsFromBsons(bsons, verticesToo);
         }
 
@@ -242,7 +246,7 @@ namespace online3D.Models
         /// <param name="bsons"></param>
         /// <param name="verticesToo"></param>
         /// <returns></returns>
-        private IEnumerable<ModelInfo> GetModelsFromBsons(MongoCursor<BsonDocument> bsons, bool verticesToo = true)
+        private IEnumerable<ModelInfo> GetModelsFromBsons(IEnumerable<BsonDocument> bsons, bool verticesToo = true)
         {
             var models = new List<ModelInfo>();
             //desirialize 

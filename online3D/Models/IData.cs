@@ -10,7 +10,7 @@ namespace online3D.Models
     {
         bool SaveModel(ModelInfo mi);
         ModelInfo ReadModel(string collectionID, string modelID);
-        IEnumerable<ModelInfo> ReadModelCollection(string collectionID,bool verticesToo =true);
+        IEnumerable<ModelInfo> ReadModelCollection(string collectionID,bool verticesToo =true, int modelIndex = -1);
         IEnumerable ReadUserModelCollection(string usename);
     }
 }
