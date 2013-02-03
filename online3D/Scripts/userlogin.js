@@ -73,7 +73,9 @@ var userAccess = new (function(){
                         "<div id='innercarousel' class='carousel-inner' data-bind='foreach: sessions'> " +  
                             "<div class='item'><img data-bind='attr:{src:image}'></img>" + 
                                 "<div class='carousel-caption'>" + 
-                                    "<h4 data-bind='text:name'> </h4> " +                                
+                                    "<h4 data-bind='text:name'> </h4> " +   
+                                    "<span class='label label-info'>Download link: </span>" + 
+                                    "<p data-bind='text:id'> </p> " +                                
                                 "</div>" + 
                             "</div>" + 
                          "</div>" + 

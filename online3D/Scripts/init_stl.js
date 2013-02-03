@@ -207,35 +207,6 @@
                 
              })
 
-//            for (var i = 0; i < childrenCount; i++) {
-//                var mesh = this.__objects[i];             
-
-//                if (mesh instanceof THREE.Object3D && mesh.children !== undefined &&
-//                                mesh.children.length > 0)
-//                    mesh = mesh.children[0];
-
-//                if (mesh === undefined)
-//                    continue;
-
-//                var geometry = mesh.geometry;
-//                if (geometry === undefined)
-//                    continue;
-
-//                geometry.computeBoundingBox();
-
-//                var bounds = geometry.boundingBox;
-//                
-//                // bbox min
-//                boundingBox.min.x = Math.min(bounds.min.x, boundingBox.min.x);
-//                boundingBox.min.y = Math.min(bounds.min.y, boundingBox.min.y);
-//                boundingBox.min.z = Math.min(bounds.min.z, boundingBox.min.z);
-
-//                //bbox max
-//                boundingBox.max.x = Math.max(bounds.max.x, boundingBox.max.x);
-//                boundingBox.max.y = Math.max(bounds.max.y, boundingBox.max.y);
-//                boundingBox.max.z = Math.max(bounds.max.z, boundingBox.max.z);
-
-//            }
 
             return boundingBox;
         }
