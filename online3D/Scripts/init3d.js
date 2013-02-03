@@ -53,8 +53,32 @@
 
     }
 
-    init.prototype.takeScreenshot = function () {
-        return THREEx.Screenshot.toDataURL(_this.glRenderer);
+    init.prototype.takeScreenshot = function (showInWindow) {
+
+
+        var image = THREEx.Screenshot.toDataURL(_this.glRenderer);
+
+        if(showInWindow === true) {
+            //create preview window
+              jQuery('<div/>', {
+                id: 'screenshot',
+                class: 'modal hide fade gridbody' 
+            }).appendTo($("#body"));
+           
+           var screenshot = $("#screenshot"); 
+           screenshot.html("<img src='" + image + "'></img>");
+            //show modal window
+           screenshot.modal();
+
+            //subscribe to its close, so after remove accrodion
+            screenshot.on('hidden', function () {
+                screenshot.remove();
+            })
+
+        }
+
+
+        return image;
     }
 
     //renders

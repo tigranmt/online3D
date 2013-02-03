@@ -150,7 +150,7 @@
     <Content Include="Scripts\Converters\vertex_to_mesh.js" />
     <Content Include="Scripts\startup.js" />
     <Content Include="Scripts\startup_mesh.js" />
-    <Content Include="Scripts\init_stl.js" />
+    <Content Include="Scripts\init3d.js" />
     <Content Include="Scripts\jquery-1.9.min.js" />
     <Content Include="Scripts\jquery.percentageloader-0.1.min.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />

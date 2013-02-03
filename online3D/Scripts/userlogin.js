@@ -49,7 +49,7 @@ var userAccess = new (function(){
         if(div.length === 0) {
            jQuery('<div/>', {
                 id: 'accordion',
-                class: 'modal hide fade' 
+                class: 'modal hide fade gridbody' 
             }).appendTo($("#body"));
            
            div = $("#accordion"); 
