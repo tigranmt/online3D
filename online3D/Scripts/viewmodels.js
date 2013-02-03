@@ -60,7 +60,7 @@ var viewmodels = new (function () {
                           new MenuItem("shareButton", "Share", shareCallback),
                           new MenuItem("logOutButton", "Log out", logOutCallback), ];
 
-    _this.save_menu = [{ id: "saveButton", text: "Save", callback: function () { stlscene.graphics.takeScreenshot(); } }];
+    _this.save_menu = [{ id: "saveButton", text: "Screenshot", callback: function () { stlscene.graphics.takeScreenshot(); } }];
 
 
     _this.view_menu = [{ id: "soldViewButton", text: "Solid", callback: function () { stlscene.graphics.solidView(); } },

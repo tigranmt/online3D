@@ -44,6 +44,7 @@ var userAccess = new (function(){
   
     _this.loadUserSavedModels = function() {
      
+        //construct accordion DIV
         var div = $("#accordion");
         if(div.length === 0) {
            jQuery('<div/>', {
@@ -97,7 +98,14 @@ var userAccess = new (function(){
                         sessions.push(new Session(model.ModelName, model.ID, model.ModelImage,i));                                          
                     }               
 
+                    //show modal window
                     $("#accordion").modal();
+
+                    //subscribe to its close, so after remove accrodion
+                    $('#accordion').on('hidden', function () {
+                        $("#accordion").remove();
+                    })
+
                     var view = new ModelsView(sessions);
                     ko.applyBindings(view, $("#accordion")[0]);
 
