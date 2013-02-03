@@ -57,8 +57,7 @@
     var basicPanel = $("#basicPanel")[0];
     ko.applyBindings(viewmodels, basicPanel); 
 
-    var tools = $("#toolsPanel")[0];
-    ko.applyBindings(viewmodels, tools); 
+    
 
     /***************************/
 

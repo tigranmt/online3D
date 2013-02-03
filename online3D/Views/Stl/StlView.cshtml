@@ -69,7 +69,7 @@
 
 <div id="basicPanel"  class="btn-group btn-group-vertical">
     
-    <div id="innerbasicPanel" data-bind="foreach: navigation">
+    <div id="innerbasicPanel" data-bind="foreach: buttons">
         <button class="btn btn-block" data-bind="click: function(e) { callback(); }, 
                             event: { mouseover: 
                                                 function(e) 
@@ -82,17 +82,5 @@
     </div>
 </div>
 
-<div id="toolsPanel" class="btn-group btn-group-vertical"> 
-    <div id="tools" data-bind="foreach: tools">
-        <button class="btn btn-block" data-bind="click: function(e) { callback(); }, 
-                            event: { mouseover: 
-                                                function(e) 
-                                                {                                                    
-                                                   return false;
-                                                } 
-                                    }, attr:{alt:alt}">
-            <img class="imageOnButton" data-bind="attr:{id:id, src:src}" />
-        </button>
-    </div>
-</div>
+
 <div id="progress" ></div>

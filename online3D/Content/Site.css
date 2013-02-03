@@ -61,18 +61,13 @@ body
     height: 250px;
 }
 
-#toolsPanel 
-{
-   top: 55%; 
-   height: 180px;
-}
 
 .modelpreview, .thumbnail
 {
     background: rgba(10, 18, 60, 0.66);
 }
 
-.basicPanel, #toolsPanel, #basicPanel
+.basicPanel,  #basicPanel
 {  
     position: absolute;
     width: 50px;

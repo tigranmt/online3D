@@ -227,14 +227,6 @@
     }
 
 
-    //make DIVs, panels draggable on UI
-    this.makeDivsDraggable = function () {
-
-//        $("#basicPanel, #fileInfo, #toolsPanel").draggable({
-//            containment: "parent"
-//        });
-    }
-
 };
 
 
@@ -735,8 +727,7 @@ init.prototype.finalizeLoading = function () {
 
 
 init.prototype.hidePanels = function () {
-    $("#3DArea").css("visibility", "hidden");
-    $("#toolsPanel").css("visibility", "hidden");
+    $("#3DArea").css("visibility", "hidden");   
     $("#basicPanel").css("visibility", "hidden");
     $("#fileInfo").css("visibility", "hidden");
 
@@ -744,8 +735,7 @@ init.prototype.hidePanels = function () {
 
 init.prototype.showPanels = function () {
 
-    $("#3DArea").css("visibility", "visible");
-    $("#toolsPanel").css("visibility", "visible");
+    $("#3DArea").css("visibility", "visible"); 
     $("#basicPanel").css("visibility", "visible");
     $("#fileInfo").css("visibility", "visible");
 }
@@ -826,9 +816,6 @@ init.prototype.initScene = function (_this) {
 
     //setup mouse basic operations on scene
     _this.setupSceneTracking();
-
-    //make tool dives visible
-    _this.makeDivsDraggable();
 
     //init STL loader
     _this.modelLoader = new ModelLoader(this.glScene, this.glCamera, this.glRenderer, this.sceneTracker);

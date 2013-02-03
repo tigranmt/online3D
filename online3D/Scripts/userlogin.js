@@ -39,22 +39,7 @@ var userAccess = new (function(){
     };
 
 
-    _this.logOut = function() {
-            $.ajax({                     
-            url: '../Account/LogOut',                     
-            type: 'POST',
-            success: function (data) {
-                toastr.success('Loged out.','Success');     
-                setCookie("signed","",1);                 
-                _this.CheckSigned();
-                _this.UpdateUI();
-
-            },
-            error: function() {
-                toastr.error('Failed load user models', 'Error');
-            }
-        });
-    }
+   
     
   
     _this.loadUserSavedModels = function() {
@@ -167,6 +152,25 @@ var userAccess = new (function(){
          }
     }
     
+
+
+     _this.logOut = function() {
+            $.ajax({                     
+            url: '../Account/LogOut',                     
+            type: 'POST',
+            success: function (data) {
+                toastr.success('Loged out.','Success');     
+                setCookie("signed","",1);                 
+                _this.CheckSigned();
+                _this.UpdateUI();
+
+            },
+            error: function() {
+                toastr.error('Failed to logout', 'Error');
+            }
+        });
+    }
+
     _this.requestUserAuth = function () {
        
      
