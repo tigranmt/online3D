@@ -60,8 +60,15 @@
     
 
     /***************************/
+    /****** TOOLTIPS*****/
+    for(var i=0;i<viewmodels.buttons.length;i++){
+        var button = viewmodels.buttons[i];
+        $("#" + button.id).tooltip({
+            placement: 'right',
+            trigger: 'hover',
+            title : button.alt
+        });
+    }
 
-
-
-   
+   /***************************/
 })();

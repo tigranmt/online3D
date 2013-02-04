@@ -22,7 +22,7 @@ var viewmodels = new (function () {
     var _this = this;
 
 
-    _this.buttons = [{ id: "tvBtn", alt: "Top view", src: "/Content/Images/tvs.png", callback: function () { stlscene.graphics.topView(); } },
+    _this.buttons = [{ id: "tvBtn", alt: "Top view", src: "/Content/Images/tvs.png", callback: function () { stlscene.graphics.topView(); }},
                                 { id: "bvBtn", alt: "Bottom view", src: "/Content/Images/bvs.png", callback: function () { stlscene.graphics.bottomView(); } },
                                 { id: "lvBtn", alt: "Left view", src: "/Content/Images/lvs.png", callback: function () { stlscene.graphics.leftView(); } },
                                 { id: "rvBtn", alt: "Right view", src: "/Content/Images/rvs.png", callback: function () { stlscene.graphics.rightView(); } },
@@ -33,9 +33,9 @@ var viewmodels = new (function () {
                                 { id: "meshBtn", alt: "Mesh view", src: "/Content/Images/meshs.png", callback: function () { stlscene.graphics.meshView(); } },
                                 { id: "edgesBtn", alt: "Show edges", src: "/Content/Images/meshs.png", callback: function () { stlscene.graphics.showEdges(); } }];
 
-  
 
 
+    
 
 
 
