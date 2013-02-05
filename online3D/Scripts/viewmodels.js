@@ -22,6 +22,8 @@ var viewmodels = new (function () {
     var _this = this;
 
 
+
+
     _this.buttons = [{ id: "tvBtn", alt: "Top view", src: "/Content/Images/tvs.png", callback: function () { stlscene.graphics.topView(); }},
                                 { id: "bvBtn", alt: "Bottom view", src: "/Content/Images/bvs.png", callback: function () { stlscene.graphics.bottomView(); } },
                                 { id: "lvBtn", alt: "Left view", src: "/Content/Images/lvs.png", callback: function () { stlscene.graphics.leftView(); } },
