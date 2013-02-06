@@ -158,6 +158,9 @@
         var VIEW_ANGLE = 50, ASPECT = WIDTH / HEIGHT,
             NEAR = 0.1, FAR = 1000;
 
+
+       
+
         // create a WebGL renderer, camera       
         this.glRenderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
 
@@ -192,9 +195,10 @@
         this.glRenderer.domElement.id = "canvas";
         container.append(this.glRenderer.domElement); // attach the render-supplied DOM element
 
-
         $("#3DArea #canvas").css("position","absolute");
         $("#3DArea #canvas").css("z-index","2");
+        $("#3DArea #canvas").css("top","45px");
+     
         
 
         $(window).resize(function () { //handle resize
