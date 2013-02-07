@@ -8,16 +8,20 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using System.Collections;
 using System.Configuration;
+using System.Text;
+using System.Globalization;
+using online3D.Helpers;
 
 namespace online3D.Models
 {
     public class MongoDataAccess : IData
     {
-      
+
+        private const char SEPARATOR = ' ';
 
         public MongoDataAccess()
         {
-                  
+
         }
 
 
@@ -30,25 +34,25 @@ namespace online3D.Models
         private ModelInfo ModelInfoFromBson(BsonDocument bson, bool verticesToo = true)
         {
             ModelInfo mi = new ModelInfo();
-            mi.ModelName =  bson["ModelName"].AsString;
+            mi.ModelName = bson["ModelName"].AsString;
             mi.Size = bson["Size"].AsInt32;
             mi.ID = bson["ID"].AsString;
             mi.Format = bson["Format"].AsString;
             mi.VertexCount = bson["VertexCount"].AsInt32;
             mi.Color = bson["Color"].AsInt32;
             mi.User = bson["User"].AsString;
-            mi.ModelImage = bson["ModelImage"].AsString;
+            mi.ModelImage = Compressor.Decompress(bson["ModelImage"].AsString);
 
             if (verticesToo)
             {
+                var deCompressed = Compressor.Decompress(bson["Vertices"].AsString).Split(new char[]{SEPARATOR}, StringSplitOptions.RemoveEmptyEntries);
                 var vertices = new List<Vertex>();
-
-                var bsons = bson["Vertices"].AsBsonArray;
-                for (int i = 0; i < bsons.Count; i += 3)
+                for (int i = 0; i < deCompressed.Length; i += 3)
                 {
-                    vertices.Add(new Vertex(bsons[i].AsDouble,
-                                                    bsons[i + 1].AsDouble,
-                                                            bsons[i + 2].AsDouble));
+                    var x = double.Parse(deCompressed[i], CultureInfo.InvariantCulture);
+                    var y = double.Parse(deCompressed[i+1], CultureInfo.InvariantCulture);
+                    var z = double.Parse(deCompressed[i+2], CultureInfo.InvariantCulture);
+                    vertices.Add(new Vertex(x,y,z));
                 }
                 mi.Vertices = vertices;
             }
@@ -72,7 +76,7 @@ namespace online3D.Models
             bson["VertexCount"] = mi.VertexCount;
             bson["Color"] = mi.Color;
             bson["User"] = mi.User;
-            bson["ModelImage"] = mi.ModelImage;
+            bson["ModelImage"] = Compressor.Compress(mi.ModelImage);
 
             var array = BsonArrayFromEnumerable(mi.Vertices);
 
@@ -87,16 +91,22 @@ namespace online3D.Models
         /// </summary>
         /// <param name="vertices"></param>
         /// <returns></returns>
-        private BsonArray BsonArrayFromEnumerable(IEnumerable<Vertex> vertices)
+        private BsonString BsonArrayFromEnumerable(IEnumerable<Vertex> vertices)
         {
-            var array = new BsonArray(vertices.Count());
+            StringBuilder sb = new StringBuilder();
             foreach (var v in vertices)
             {
-                array.Add(BsonValue.Create(v.x));
-                array.Add(BsonValue.Create(v.y));
-                array.Add(BsonValue.Create(v.z));
+                sb.Append(v.x.ToString("00.00", CultureInfo.InvariantCulture));
+                sb.Append(SEPARATOR);
+                sb.Append(v.y.ToString("00.00", CultureInfo.InvariantCulture));
+                sb.Append(SEPARATOR);
+                sb.Append(v.z.ToString("00.00", CultureInfo.InvariantCulture));
+                sb.Append(SEPARATOR);
+            
             }
-            return array;
+
+            var compressed = Compressor.Compress(sb.ToString());
+            return new BsonString(compressed);
         }
 
         /// <summary>
@@ -113,11 +123,11 @@ namespace online3D.Models
                 var savedDocument = ReadDocument(unique, mi.ModelName);
                 if (savedDocument != null)
                 {
-                    var bsonArraySaved = savedDocument["Vertices"].AsBsonArray;
+                    var bsonArraySaved = savedDocument["Vertices"].AsString;
                     var bsonArrayNew = BsonArrayFromEnumerable(mi.Vertices);
-                    bsonArraySaved.AddRange(bsonArrayNew);
+                    bsonArraySaved +=bsonArrayNew;
                     collection.Save(savedDocument); //update document
-                   
+
                 }
                 else
                 {
@@ -126,7 +136,7 @@ namespace online3D.Models
                     collection.Insert(savedDocument);   //insert
                 }
 
-               
+
                 return true;
             }
             catch (Exception ex)
@@ -169,19 +179,19 @@ namespace online3D.Models
         /// <returns></returns>
         private MongoDatabase GetDataBase()
         {
-            #if DEBUG
-                var connectionString = "mongodb://localhost:27017";
-                var dataBaseName = "models";
-                var client = new MongoClient(connectionString);
-                var server = client.GetServer();                   //connect to server
-                return server.GetDatabase(dataBaseName);           //get or create database 
-            #else
+#if DEBUG
+            var connectionString = "mongodb://localhost:27017";
+            var dataBaseName = "models";
+            var client = new MongoClient(connectionString);
+            var server = client.GetServer();                   //connect to server
+            return server.GetDatabase(dataBaseName);           //get or create database 
+#else
                 var connectionString = ConfigurationManager.AppSettings.Get("MONGOLAB_URI");
                 var url = new MongoUrl(connectionString);
                 var client = new MongoClient(url);
                 var server = client.GetServer();              //connect to server
                 return server.GetDatabase(url.DatabaseName);  //get or create database 
-            #endif
+#endif
 
 
 
@@ -191,7 +201,7 @@ namespace online3D.Models
         private MongoCollection<BsonDocument> ReadCollection(int collectionIndex)
         {
             var db = GetDataBase();
-            var names = db.GetCollectionNames().Where(n=>!n.StartsWith("system"));
+            var names = db.GetCollectionNames().Where(n => !n.StartsWith("system"));
 
             int collectionCount = names.Count();
             if (collectionCount == 0 || collectionIndex >= collectionCount)
@@ -204,7 +214,7 @@ namespace online3D.Models
         private MongoCollection<BsonDocument> ReadCollection(string collectionKey)
         {
             var db = GetDataBase();
-            return db.GetCollection<BsonDocument >(collectionKey); //return collection of models      
+            return db.GetCollection<BsonDocument>(collectionKey); //return collection of models      
         }
 
         /// <summary>
@@ -216,11 +226,13 @@ namespace online3D.Models
         public IEnumerable<ModelInfo> ReadModelCollection(int collectionIndex, bool verticesToo = true)
         {
             var mongoCollection = ReadCollection(collectionIndex);
+            if (mongoCollection == null)
+                return null;
             var bsons = mongoCollection.FindAll();
             return GetModelsFromBsons(bsons, verticesToo);
         }
 
-      
+
 
         /// <summary>
         /// Read models from the specified collecion
@@ -228,7 +240,7 @@ namespace online3D.Models
         /// <param name="collectionID"></param>
         /// <param name="verticesToo"></param>
         /// <returns></returns>
-        public IEnumerable<ModelInfo> ReadModelCollection(string collectionID, bool verticesToo =true, int modelIndex = -1)
+        public IEnumerable<ModelInfo> ReadModelCollection(string collectionID, bool verticesToo = true, int modelIndex = -1)
         {
             var mongoCollection = ReadCollection(collectionID);
             IEnumerable<BsonDocument> bsons = null;
@@ -267,9 +279,9 @@ namespace online3D.Models
         public IEnumerable ReadUserModelCollection(string username)
         {
             var db = GetDataBase();
-            
+
             //get all collection names, except system reserved ones
-            var collectionNames = db.GetCollectionNames().Where(name=>!name.StartsWith("system."));
+            var collectionNames = db.GetCollectionNames().Where(name => !name.StartsWith("system."));
 
             List<ModelInfo> userModels = new List<ModelInfo>();
             foreach (var name in collectionNames)
@@ -282,8 +294,8 @@ namespace online3D.Models
 
             // Get only fist element in every document, as we need only basic (passport) information 
             // which is present in any model
-            var group = userModels.GroupBy(g=>g.ID).Select(x=>x.First());
-         
+            var group = userModels.GroupBy(g => g.ID).Select(x => x.First());
+
             return group;
         }
     }

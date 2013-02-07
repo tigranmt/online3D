@@ -128,8 +128,11 @@ namespace ModelViewer3D.Controllers
                 MongoDataAccess access = new MongoDataAccess();
                 if (id == "first")//first model of first collection was requested
                 {
-                    var models = access.ReadModelCollection(0, false);                                
-                    return Json(models.First(), JsonRequestBehavior.AllowGet);
+                    var models = access.ReadModelCollection(0, false);
+                    if (models != null)
+                        return Json(models.First(), JsonRequestBehavior.AllowGet);
+                    else
+                        return Json(false);
                 }
                 else
                 {
