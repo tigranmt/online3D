@@ -47,7 +47,7 @@ namespace ModelViewer3D.Controllers
         {
             try
             {
-                             MongoDataAccess access = new MongoDataAccess();
+                MongoDataAccess access = new MongoDataAccess();
                 var models = access.ReadModelCollection(id, false);
                 ViewBag.ID = models.First().ID;
             }
@@ -98,21 +98,28 @@ namespace ModelViewer3D.Controllers
         }
 
 
-        ///// <summary>
-        ///// Handles account log IN and OUT calls and redirects them to Account controller
-        ///// </summary>
-        ///// <param name="action"></param>
-        ///// <returns></returns>
-        //[HttpGet]
-        //public ActionResult Account(string action)
-        //{
-        //    if (action == "LogOut")
-        //    {
-        //        return RedirectToAction("LogOut", "Account");
-        //    }
 
-        //    return new EmptyResult();
-        //}
+        [HttpPost]
+        [Authorize]
+        public ActionResult DeleteSession(ModelInfo model)
+        {
+            try
+            {
+                var collection = model.ID.Split('/').Last();
+
+                MongoDataAccess access = new MongoDataAccess();
+                access.DeleteModelCollection(collection);
+
+                return Json(true);
+            }
+            catch (Exception ex)
+            {
+                string link = (model.ID != null) ? model.ID : string.Empty;
+                LogEntry.logger.ErrorException("Exception on deleting " + link, ex);
+                return Json(false);
+            }
+        }
+
 
         /// <summary>
         /// Gets a preview for psecified ID model

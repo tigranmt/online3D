@@ -10,7 +10,7 @@ namespace online3D.Models
     /// The base for model information
     /// </summary>
     public class ModelInfo
-    {       
+    {
         public string ID { get; set; }
         public string ModelName{get;set;}
         public int    Size{get;set;}

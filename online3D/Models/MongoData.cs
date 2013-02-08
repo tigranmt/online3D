@@ -198,6 +198,22 @@ namespace online3D.Models
         }
 
 
+
+        /// <summary>
+        /// Removes specified collection from the base
+        /// </summary>
+        /// <param name="collectionID"></param>
+        /// <returns></returns>
+        public bool DeleteModelCollection(string collectionID)
+        {
+            var db = GetDataBase();
+            var collection = db.GetCollection(collectionID);
+            collection.Drop();
+            
+            return true;
+        }
+
+
         private MongoCollection<BsonDocument> ReadCollection(int collectionIndex)
         {
             var db = GetDataBase();
@@ -217,6 +233,7 @@ namespace online3D.Models
             return db.GetCollection<BsonDocument>(collectionKey); //return collection of models      
         }
 
+
         /// <summary>
         /// Read models from the specified by index collection
         /// </summary>
@@ -231,6 +248,7 @@ namespace online3D.Models
             var bsons = mongoCollection.FindAll();
             return GetModelsFromBsons(bsons, verticesToo);
         }
+
 
 
 

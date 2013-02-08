@@ -39,6 +39,35 @@ var userAccess = new (function(){
     };
 
 
+    _this.deleteSession = function(url, callback) {
+
+         var name = url.split('/');
+         var code = name[name.length-1];
+        
+        var model = {ID: '../Stl/DeleteSession/' + code};
+         $.ajax({       
+            type: "POST",
+            url: '../Stl/DeleteSession',
+            contentType: "application/json",                  
+            processData: false,
+            cache : false,              
+            data: JSON.stringify(model),        
+            success: function (data) {
+                if(data === false){
+                    toastr.error('Failed to delete session ' + url, 'Error');
+                }
+                else {
+                    toastr.success('Session ' + url + " was deleted");    
+                    callback();                 
+                }
+                
+            },
+            error: function() {
+                toastr.error('Failed to delete session ' + url, 'Error');
+            }
+            
+         });
+    };
    
     
   
@@ -53,21 +82,26 @@ var userAccess = new (function(){
             }).appendTo($("#body"));
            
            div = $("#accordion"); 
-           
-
+          
            div.html("<div id='carousel' class='carousel slide'>" + 
                         "<div id='innercarousel' class='carousel-inner' data-bind='foreach: sessions'> " +  
                             "<div class='item'><img data-bind='attr:{src:image}'></img>" + 
                                 "<div class='carousel-caption'>" + 
-                                    "<h4 data-bind='text:name'> </h4> " +   
-                                    "<span class='label label-info'>Download link: </span>" + 
-                                    "<p data-bind='text:id'> </p> " +                                
+                                    "<div>" + 
+                                        "<h4 data-bind='text:name'> </h4> " +   
+                                        "<span class='label label-info'>Download link: </span>" + 
+                                        "<p id='linktosession' data-bind='text:id' style='display: inline; margin: 15px;'> </p> " +     
+                                        "<button id='openmodelbutton' type='button' class='btn btn-success btn-small' style='margin: 10px 5px 5px 0px;position:relative; top:10px'> Open session in a new window</button>" + 
+                                        "<button id='deletesession' type='button' class='btn btn-danger btn-small' style='margin: 0px 40px 0px; position:relative; top:10px'> Delete session</button>" + 
+                                    "</div>" +                           
                                 "</div>" + 
                             "</div>" + 
                          "</div>" + 
                          "<a class='carousel-control left' href='#carousel' data-slide='prev'>&lsaquo;</a>" + 
                          "<a class='carousel-control right' href='#carousel' data-slide='next'>&rsaquo;</a>" +
                     " </div>");
+
+         
         }
         $.ajax({                     
             url: '../Stl/GetSavedModels/',
@@ -98,6 +132,15 @@ var userAccess = new (function(){
                         sessions.push(new Session(model.ModelName, model.ID, model.ModelImage,i));                                          
                     }               
 
+
+                    //no models found
+                    if(sessions.length === 0) {
+                        toastr.error('No models found', 'Error');
+                        div.remove();//remove div just created
+                        return;
+                    }
+
+
                     //show modal window
                     $("#accordion").modal();
 
@@ -111,16 +154,43 @@ var userAccess = new (function(){
 
                     //set the first item like an active one 
                     $("#innercarousel .item").first().removeClass("item").addClass("active item");
+
+                    //subscribe to button events
+                    $("#carousel #openmodelbutton").click(function(event){
+                        var linkToSession = $("#carousel #linktosession").text();
+                        window.open(linkToSession); 
+                        event.preventDefault();
+                    });
+
+                    $("#carousel #deletesession").click(function(){
+                        var linkToSession = $("#carousel #linktosession").text();
+                        _this.deleteSession(linkToSession, function() {
+                            
+                        });
+                    });
+                    // ------------
               }
               
             },
-            error: function() {
-                toastr.error('Failed load user models', 'Error');
+            error: function(data) {
+             
                 div.remove();//remove div just created
+
+                //authentication error
+                if(data.status === 500) {
+                   _this.clearUserData();
+                   _this.requestUserAuth();
+                }
+                else {
+                   toastr.error('Failed load user models', 'Error');
+                }
                 
             }
         });
     };
+
+
+
 
     _this.CheckSigned = function() {
          var signedUser = getCookie("signed");
@@ -149,7 +219,10 @@ var userAccess = new (function(){
          if(signedUser != "" && signedUser != undefined) {
             $("#access").text("Sign out");   
             $("#viewsaved").text("View models of " + signedUser);   
-            viewModels.on('click', _this.loadUserSavedModels);
+            viewModels.click(function(event){
+                    _this.loadUserSavedModels();
+                    event.preventDefault();
+            });
          }
          else {
            //NOT signed
@@ -161,6 +234,11 @@ var userAccess = new (function(){
     }
     
 
+     _this.clearUserData = function() {
+            setCookie("signed","",1);                 
+           _this.CheckSigned();
+           _this.UpdateUI();
+     }
 
      _this.logOut = function() {
             $.ajax({                     
@@ -168,9 +246,7 @@ var userAccess = new (function(){
             type: 'POST',
             success: function (data) {
                 toastr.success('Loged out.','Success');     
-                setCookie("signed","",1);                 
-                _this.CheckSigned();
-                _this.UpdateUI();
+                _this.clearUserData();
 
             },
             error: function() {
