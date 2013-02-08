@@ -84,15 +84,15 @@ var userAccess = new (function(){
            div = $("#accordion"); 
           
            div.html("<div id='carousel' class='carousel slide'>" + 
-                        "<div id='innercarousel' class='carousel-inner' data-bind='foreach: sessions'> " +  
+                        "<div id='innercarousel' class='carousel-inner' data-bind='foreach: sessions()'> " +  
                             "<div class='item'><img data-bind='attr:{src:image}'></img>" + 
                                 "<div class='carousel-caption'>" + 
                                     "<div>" + 
                                         "<h4 data-bind='text:name'> </h4> " +   
                                         "<span class='label label-info'>Download link: </span>" + 
                                         "<p id='linktosession' data-bind='text:id' style='display: inline; margin: 15px;'> </p> " +     
-                                        "<button id='openmodelbutton' type='button' class='btn btn-success btn-small' style='margin: 10px 5px 5px 0px;position:relative; top:10px'> Open session in a new window</button>" + 
-                                        "<button id='deletesession' type='button' class='btn btn-danger btn-small' style='margin: 0px 40px 0px; position:relative; top:10px'> Delete session</button>" + 
+                                        "<button id='openmodelbutton' type='button' data-bind='click:function(e){openSession(e);}' class='btn btn-success btn-small' style='margin: 10px 5px 5px 0px;position:relative; top:10px'> Open session in a new window</button>" + 
+                                        "<button id='deletesession' type='button' data-bind='click:function(e){deleteSession(e);}' class='btn btn-danger btn-small' style='margin: 0px 40px 0px; position:relative; top:10px'> Delete session</button>" + 
                                     "</div>" +                           
                                 "</div>" + 
                             "</div>" + 
@@ -115,13 +115,40 @@ var userAccess = new (function(){
                else {
 
                     var ModelsView = function(sessions) {
-                        this.sessions = sessions;
+                        this.sessions = ko.observableArray(sessions);                      
                     }     
 
                     var Session = function(name, id, image, index) {
-                          this.name = name;
-                          this.id = id;
-                          this.image = image;                          
+
+
+                        this.name = name;
+                        this.id = id;
+                        this.image = image; 
+                          
+                        
+                        this.openSession = function(event) {
+                            var linkToSession = $("#innercarousel [class='item active'] #linktosession").text();
+                            window.open(linkToSession); 
+                           
+                        };
+
+                        this.deleteSession = function(event){
+
+                            var linkToSession = $("#innercarousel [class='item active'] #linktosession").text();
+                            _this.deleteSession(linkToSession, function() {                                                         
+                                view.sessions.remove(function(item) { return item.id == linkToSession; });
+                                //no more models in the list
+                                if(view.sessions().length == 0) {
+                                    div.remove();
+                                }
+                                else {                                    
+                                    //set the first item like an active one 
+                                   $("#innercarousel .item").first().addClass("item active");
+                                }
+                                    
+                            });
+                        };
+                                  
                     }
 
                 
@@ -141,34 +168,23 @@ var userAccess = new (function(){
                     }
 
 
+
+                     //subscribe to its close, so after remove accrodion
+                    $('#accordion').on('hidden', function () {
+                        $("#accordion").remove();
+                    });
+
                     //show modal window
                     $("#accordion").modal();
 
-                    //subscribe to its close, so after remove accrodion
-                    $('#accordion').on('hidden', function () {
-                        $("#accordion").remove();
-                    })
 
                     var view = new ModelsView(sessions);
                     ko.applyBindings(view, $("#accordion")[0]);
 
                     //set the first item like an active one 
-                    $("#innercarousel .item").first().removeClass("item").addClass("active item");
+-                   $("#innercarousel .item").first().addClass("active item");
 
-                    //subscribe to button events
-                    $("#carousel #openmodelbutton").click(function(event){
-                        var linkToSession = $("#carousel #linktosession").text();
-                        window.open(linkToSession); 
-                        event.preventDefault();
-                    });
-
-                    $("#carousel #deletesession").click(function(){
-                        var linkToSession = $("#carousel #linktosession").text();
-                        _this.deleteSession(linkToSession, function() {
-                            
-                        });
-                    });
-                    // ------------
+                    
               }
               
             },
@@ -287,7 +303,21 @@ var userAccess = new (function(){
                             "</div>" + 
                         "</div>");
        
+
+            //subscribe to its close, so after remove accrodion
+            $('#signForm').on('hidden', function () {
+                $("#signForm").remove();
+            });
+
+
+            //focus on first field
+            $('#signForm').on('shown', function () {
+               $("#signForm .modal-body #inputUserName").focus();
+            });
+
             $("#signForm").modal();
+           
+            //sign in button click handler
             $('#signForm #signInButton').on('click', function(){
             
           
