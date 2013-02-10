@@ -102,7 +102,7 @@ body
 }
 
 
-.collapsedFileInfo, .show, .hide
+.collapsedFileInfo
 {
     display: inline;
     position: absolute;
