@@ -291,14 +291,37 @@ init.prototype.loadMeshesInformation = function () {
         function modelInfo() {
             var self = this;
             self.visible = ko.observable(true);
+            if(mesh.name.length > 30)
+                self.alias = mesh.name.substring(0,27) + "...";
+            else {
+                self.alias = mesh.name;               
+            }
             self.fileName = mesh.name;
             self.fileSize = "File size: " + mesh.filesize + " kb";
             self.faceCount = "Faces: " + mesh.facecount;
             self.vertexCount = "Vertices: " + mesh.verticescount;
             self.color = mesh.color;
-            self.click = function (data) {
+            self.click = function (data,event) {
                 self.visible(_this.hideShowModel.apply(_this, [data.fileName])); //ko observable
+                event.preventDefault();
             };
+
+            self.wireframe = function(data, event){
+                _this.wireframeView(data.fileName);
+                event.preventDefault();
+            }
+
+
+            self.solid = function(data, event){
+                _this.solidView(data.fileName);
+                event.preventDefault();
+            }
+
+            self.collapse_expand = function(data, event){
+                
+                event.preventDefault();
+            }
+
 
             self.href = "#" + imIndex;
 
@@ -347,30 +370,7 @@ init.prototype.loadMeshesInformation = function () {
                 }
             };
 
-            self.seeDiv = function (target) {
-
-                self.removeDiv(target);
-
-                var wheelEvent = self.getCorrectWheelEventName();
-                target.addEventListener(wheelEvent, self.mouseWheel, false);
-
-
-                var adorner = $('<div />').appendTo('body');
-                adorner.attr('id', 'adorner');
-                adorner.css("position", "absolute");
-                adorner.css("width", "12px");
-                adorner.css("height", "12px");
-
-                var id = target.parentElement.id;
-                var offset = $("#" + id).offset();
-
-
-                adorner.css("top", offset.top + 20 + "px");
-                adorner.css("left", offset.left + 20 + "px");
-             
-                _this.createProgress('transparencyprogress', $('#adorner'));
-                self.updateTransparency();
-            };
+          
 
             self.updateTransparency = function () {
                 var mesh = self.getModelByName(self.fileName);
@@ -390,38 +390,14 @@ init.prototype.loadMeshesInformation = function () {
                     return "DOMMouseScroll";
             }
 
-            self.removeDiv = function (target) {
-                var wheelEvent = self.getCorrectWheelEventName();
-                target.removeEventListener(wheelEvent, self.mouseWheel, false);
-                var adorner = $("#adorner");
-                if (adorner !== undefined)
-                    adorner.remove();
-            };
+         
 
             self.isVisible = function () {
                 return self.visible();
             };
 
-            self.over = function (data) {
-                _this.higlightModel(data.fileName);
-            };
-
-            self.imageover = function (data, event) {
-                self.seeDiv(event.currentTarget);
-            };
-
-            self.imageout = function (data, event) {
-                self.removeDiv(event.currentTarget);
-            };
-
-
-            self.out = function (data) {
-                _this.unlightModels(data.fileName);
-            };
-
-            self.src = function () {
-                return "/Content/Images/" + curindex + ".png";
-            }
+         
+           
 
         };
 
@@ -440,6 +416,18 @@ init.prototype.loadMeshesInformation = function () {
 
     var infolist = $("#infoList")[0];
     ko.applyBindings(infos, infolist); //bind to element   
+
+    /** Set tooltips on control*/
+    var modelHeadings = $(".accordion.accordion-group.accordion-heading");
+    for(var ih = 0;ih<modelHeadings.length;ih++) 
+    {
+        modelHeadings[ih].tooltip({
+            placement: 'right',
+            trigger: 'hover',
+            title : infoViewModels[ih].fileName
+        });
+    }
+    /*********************/
 }
 
 
@@ -754,18 +742,18 @@ init.prototype.finalizeLoading = function () {
 
 
 
-init.prototype.hidePanels = function () {
+init.prototype.hidePanels = function (all) {
     $("#3DArea").css("visibility", "hidden");   
-    $("#basicPanel").css("visibility", "hidden");
-    $("#fileInfo").css("visibility", "hidden");
+    $("#basicPanel").css("visibility", "hidden");   
+    $("#expandfileInfo").css("visibility", "hidden");
 
 }
 
-init.prototype.showPanels = function () {
+init.prototype.showPanels = function (all) {
 
     $("#3DArea").css("visibility", "visible"); 
-    $("#basicPanel").css("visibility", "visible");
-    $("#fileInfo").css("visibility", "visible");
+    $("#basicPanel").css("visibility", "visible");    
+    $("#expandfileInfo").css("visibility", "visible");
 }
 
 
@@ -967,11 +955,16 @@ init.prototype.pointCloudView = function () {
 }
 
 /*View models like mesh(solid view)*/
-init.prototype.solidView = function () {
+init.prototype.solidView = function (meshname) {
 
     //iterating over meshes
     this.glScene.forEachMesh(function (mesh) {
         if (!mesh.visible)
+            return;
+
+        //caller specified the concrete model name to act on
+        //so if currrent model is not requested one, just skip it
+        if(meshname !== undefined && meshname !== mesh.name)
             return;
 
         mesh.children[0].visible = true;
@@ -981,14 +974,21 @@ init.prototype.solidView = function () {
 }
 
 
+
+
 /*View models wireframe(triangles)*/
-init.prototype.wireframeView = function () {
+init.prototype.wireframeView = function (meshname) {
 
     this.glScene.forEachMesh(function (mesh) {
         if (!mesh.visible)
             return;
 
         if (!mesh.visible)
+            return;
+
+        //caller specified the concrete model name to act on
+        //so if currrent model is not requested one, just skip it
+        if(meshname !== undefined && meshname != mesh.name)
             return;
 
         mesh.children[0].visible = false;

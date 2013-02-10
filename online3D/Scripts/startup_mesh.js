@@ -18,31 +18,7 @@
     stlscene.graphics.LoadFileData(); //load data from local file
   }
 
-    /**
-    * the menu
-    */
-    var $menu = $('#ldd_menu');
-
-    /**
-    * for each list element,
-    * we show the submenu when hovering and
-    * expand the span element (title) to 510px
-    */
-    $menu.children('li').each(function () {
-        var $this = $(this);
-        var $span = $this.children('span');
-        $span.data('width', $span.width());
-
-        $this.bind('mouseenter', function () {
-            $menu.find('.ldd_submenu').stop(true, true).hide();
-            $span.stop().animate({ 'width': '100px' }, 300, function () {
-                $this.find('.ldd_submenu').slideDown(300);
-            });
-        }).bind('mouseleave', function () {
-            $this.find('.ldd_submenu').stop(true, true).hide();
-            $span.stop().animate({ 'width': $span.data('width') + 'px' }, 300);
-        });
-    });
+   
 
     /**** BINDINGS ***/
     var access_Menu = $("#access_ul")[0];
@@ -69,6 +45,22 @@
             title : button.alt
         });
     }
+   /***************************/
 
+   /****Subscribe to events *****/
+   $(".collapsedFileInfo").click(function(e) {
+        if($(this)[0].className.indexOf('show')>=0) {
+            $("#fileInfo").css("visibility", "visible");
+            $(".hide.collapsedFileInfo").css("display", "block");
+            $(".show.collapsedFileInfo").css("display", "none");
+        }
+        else{
+            $("#fileInfo").css("visibility", "hidden");
+            $(".hide.collapsedFileInfo").css("display", "none");
+            $(".show.collapsedFileInfo").css("display", "block");
+        }
+   });
+
+  
    /***************************/
 })();
