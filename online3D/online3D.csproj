@@ -150,6 +150,7 @@
     <Content Include="Scripts\async.js" />
     <Content Include="Scripts\binary_reader.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\build.txt" />
     <Content Include="Scripts\Converters\stl_to_mesh.js" />
     <Content Include="Scripts\Converters\vertex_to_mesh.js" />
     <Content Include="Scripts\startup.js" />
