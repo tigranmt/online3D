@@ -158,7 +158,8 @@
     <Content Include="Scripts\Converters\stl_to_mesh.js" />
     <Content Include="Scripts\Converters\stl_to_mesh.min.js" />
     <Content Include="Scripts\Converters\vertex_to_mesh.js" />
-    <Content Include="Scripts\Converters\vertex_to_meshh.min.js" />
+    <Content Include="Scripts\Converters\vertex_to_mesh.min.js" />
+    <Content Include="Scripts\init3d.min.js" />
     <Content Include="Scripts\model_loader.min.js" />
     <Content Include="Scripts\screenshot.min.js" />
     <Content Include="Scripts\startup.js" />
