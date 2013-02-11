@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\IntroController.cs" />
     <Compile Include="Controllers\StlController.cs" />
     <Compile Include="Global.asax.cs">
@@ -94,6 +95,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Binaries\AppHarbor.Web.Security.dll" />
+    <Content Include="Binaries\AspNetHaack.dll" />
+    <Content Include="Binaries\jsmin.exe" />
     <Content Include="Binaries\MongoDB.Bson.dll" />
     <Content Include="Binaries\MongoDB.Driver.dll" />
     <Content Include="Content\bootstrap.min.css" />
@@ -153,7 +157,7 @@
     <Content Include="Scripts\init3d.js" />
     <Content Include="Scripts\jquery-1.9.min.js" />
     <Content Include="Scripts\jquery.percentageloader-0.1.min.js" />
-    <Content Include="Scripts\knockout-2.1.0.js" />
+    <Content Include="Scripts\knockout-2.1.0.min.js" />
     <Content Include="Scripts\screenshot.js" />
     <Content Include="Scripts\userlogin.js" />
     <Content Include="Scripts\model_loader.js" />
@@ -224,4 +228,31 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>type "$(ProjectDir)Scripts\storage.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\storage.min.js"
+type "$(ProjectDir)Scripts\toastr.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\toastr.min.js"
+type "$(ProjectDir)Scripts\userlogin.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\userlogin.min.js"
+type "$(ProjectDir)Scripts\startup.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\startup.min.js"
+type "$(ProjectDir)Scripts\async.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\async.min.js"
+type "$(ProjectDir)Scripts\three.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\three.min.js"
+type "$(ProjectDir)Scripts\binary_reader.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\binary_reader.min.js"
+type "$(ProjectDir)Scripts\init3d.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\init3d.min.js"
+type "$(ProjectDir)Scripts\model_loader.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\model_loader.min.js"
+type "$(ProjectDir)Scripts\viewmodels.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\viewmodels.min.js"
+type "$(ProjectDir)Scripts\screenshot.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\screenshot.min.js"
+type "$(ProjectDir)Scripts\startup_mesh.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\startup_mesh.min.js"
+type "$(ProjectDir)Scripts\Converters\stl_to_mesh.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Converters\stl_to_mesh.min.js"
+type "$(ProjectDir)Scripts\Converters\vertex_to_mesh.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Converters\vertex_to_meshh.min.js"
+
+
+
+
+
+
+
+type "$(ProjectDir)Content\Site.css" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Content\Site.min.css"
+type "$(ProjectDir)Content\toastr.css" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Content\toastr.min.css"
+
+</PostBuildEvent>
+  </PropertyGroup>
 </Project>

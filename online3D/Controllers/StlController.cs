@@ -8,12 +8,13 @@ using online3D.Models;
 using MongoDB.Bson.Serialization;
 using online3D.Helpers;
 using System.Drawing;
+using online3D.Controllers;
 
 
 namespace ModelViewer3D.Controllers
 {
     [Layout("StlLayout")]
-    public class StlController : Controller
+    public class StlController : BaseController
     {
 
        

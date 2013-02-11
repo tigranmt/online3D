@@ -9,7 +9,7 @@ using AppHarbor.Web.Security;
 
 namespace online3D.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         //
         // GET: /Account/

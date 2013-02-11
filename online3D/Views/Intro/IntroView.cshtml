@@ -4,22 +4,36 @@
     <meta charset="utf-8" />
     <title>online3D</title>
     
-    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" type="text/css" />
-    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />  
-    <link href="@Url.Content("~/Content/toastr.css")" rel="stylesheet" type="text/css" />
-    <script src="@Url.Content("~/Scripts/jquery-1.9.min.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/modernizr-1.7.min.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/bootstrap.min.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/storage.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/knockout-2.1.0.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/toastr.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/userlogin.js")" type="text/javascript"></script>   
-    <script src="@Url.Content("~/Scripts/startup.js")" type="text/javascript"></script>
-   
-   
-  
-   
-
+   @if (ViewBag.DebugMode)
+   {
+        <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" type="text/css" />
+        <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />  
+        <link href="@Url.Content("~/Content/toastr.css")" rel="stylesheet" type="text/css" />
+        <script src="@Url.Content("~/Scripts/jquery-1.9.min.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/modernizr-1.7.min.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/bootstrap.min.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/storage.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/knockout-2.1.0.min.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/toastr.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/userlogin.js")" type="text/javascript"></script>   
+        <script src="@Url.Content("~/Scripts/startup.js")" type="text/javascript"></script>
+   }
+   else
+   {
+        <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" type="text/css" />
+        <link href="@Url.Content("~/Content/Site.min.css")" rel="stylesheet" type="text/css" />  
+        <link href="@Url.Content("~/Content/toastr.min.css")" rel="stylesheet" type="text/css" />
+       
+        <script src="@Url.Content("~/Scripts/jquery-1.9.min.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/modernizr-1.7.min.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/bootstrap.min.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/storage.min.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/knockout-2.1.0.min.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/toastr.min.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/userlogin.min.js")" type="text/javascript"></script>   
+        <script src="@Url.Content("~/Scripts/startup.min.js")" type="text/javascript"></script>
+       
+   }
    
 
 </head>
