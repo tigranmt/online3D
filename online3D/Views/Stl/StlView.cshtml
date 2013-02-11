@@ -8,7 +8,7 @@
                 <div class="accordion-heading" >
                     <div class="accordion-toggle" data-toggle="collapse" data-parent="#infoList" data-bind="attr:{href: href}">
                         <span id="index" class="badge" data-bind="text:$index"></span>
-                        <span class="label label-info" data-bind="text:alias" ></span>                   
+                        <span class="label label-info" data-bind="text:alias" style="width: 15em;"></span>                   
                         <button class="btn btn-mini" data-bind="click:wireframe.bind($data)" type="button">Wireframe</button>
                         <button class="btn btn-mini" data-bind="click:solid.bind($data)" type="button">Solid</button>
                          <button class="btn btn-danger btn-mini" data-bind="click:click.bind($data), text:isVisible()? 'Hide' : 'Show', css: { 'btn-success': isVisible() === false }" 

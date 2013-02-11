@@ -291,8 +291,8 @@ init.prototype.loadMeshesInformation = function () {
         function modelInfo() {
             var self = this;
             self.visible = ko.observable(true);
-            if(mesh.name.length > 30)
-                self.alias = mesh.name.substring(0,27) + "...";
+            if(mesh.name.length > 25)
+                self.alias = mesh.name.substring(0,23) + "...";
             else {
                 self.alias = mesh.name;               
             }
@@ -418,16 +418,16 @@ init.prototype.loadMeshesInformation = function () {
     ko.applyBindings(infos, infolist); //bind to element   
 
     /** Set tooltips on control*/
-    var modelHeadings = $(".accordion.accordion-group.accordion-heading");
-    for(var ih = 0;ih<modelHeadings.length;ih++) 
-    {
-        modelHeadings[ih].tooltip({
-            placement: 'right',
-            trigger: 'hover',
-            title : infoViewModels[ih].fileName
-        });
-    }
-    /*********************/
+//    var modelHeadings = $("#infoList .accordion-heading .badge");
+//    for(var ih = 0;ih<modelHeadings.length;ih++) 
+//    {
+//        modelHeadings[ih].tooltip({
+//            placement: 'right',
+//            trigger: 'hover',
+//            title : infoViewModels[ih].fileName
+//        });
+//    }
+//    /*********************/
 }
 
 
