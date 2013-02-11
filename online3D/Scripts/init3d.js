@@ -574,8 +574,12 @@ init.prototype.sendContentToServer = function () {
 
 
             while (index < verticesCount) {
-                var gv = geometryMesh.geometry.vertices[index];                
-                verticesSplit.push(gv);
+                var gv = geometryMesh.geometry.vertices[index];    
+                var vertex = {x :parseFloat(Math.round(gv.x * 100) / 100).toFixed(2), 
+                                        y: parseFloat(Math.round(gv.y * 100) / 100).toFixed(2), 
+                                            z:parseFloat(Math.round(gv.z * 100) / 100).toFixed(2)};
+                verticesSplit.push(vertex);
+                //verticesSplit.push(parseFloat(Math.round(gv.x * 100) / 100).toFixed(2);
                 index++;
 
                 /*In case of first vertex in the model just push it raise ajax. So we will check for authentication requeirement,
