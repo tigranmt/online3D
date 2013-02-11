@@ -148,18 +148,28 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\async.js" />
+    <Content Include="Scripts\async.min.js" />
     <Content Include="Scripts\binary_reader.js" />
+    <Content Include="Scripts\binary_reader.min.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\build.txt" />
     <Content Include="Scripts\Converters\stl_to_mesh.js" />
+    <Content Include="Scripts\Converters\stl_to_mesh.min.js" />
     <Content Include="Scripts\Converters\vertex_to_mesh.js" />
+    <Content Include="Scripts\Converters\vertex_to_meshh.min.js" />
+    <Content Include="Scripts\model_loader.min.js" />
+    <Content Include="Scripts\screenshot.min.js" />
     <Content Include="Scripts\startup.js" />
+    <Content Include="Scripts\startup.min.js" />
     <Content Include="Scripts\startup_mesh.js" />
     <Content Include="Scripts\init3d.js" />
     <Content Include="Scripts\jquery-1.9.min.js" />
     <Content Include="Scripts\jquery.percentageloader-0.1.min.js" />
     <Content Include="Scripts\knockout-2.1.0.min.js" />
     <Content Include="Scripts\screenshot.js" />
+    <Content Include="Scripts\startup_mesh.min.js" />
+    <Content Include="Scripts\storage.min.js" />
+    <Content Include="Scripts\toastr.min.js" />
     <Content Include="Scripts\userlogin.js" />
     <Content Include="Scripts\model_loader.js" />
     <Content Include="Scripts\modernizr-1.7.min.js" />
@@ -167,7 +177,9 @@
     <Content Include="Scripts\three.js" />
     <Content Include="Scripts\three.min.js" />
     <Content Include="Scripts\toastr.js" />
+    <Content Include="Scripts\userlogin.min.js" />
     <Content Include="Scripts\viewmodels.js" />
+    <Content Include="Scripts\viewmodels.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
