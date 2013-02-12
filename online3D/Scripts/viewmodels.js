@@ -24,7 +24,7 @@ var viewmodels = new (function () {
 
 
 
-    _this.buttons = [{ id: "tvBtn", alt: "Top view", src: "/Content/Images/tvs.png", callback: function () { stlscene.graphics.topView(); }},
+    _this.buttons = [{ id: "tvBtn", alt: "Top view", src: "/Content/Images/tvs.png", callback: function () { stlscene.graphics.topView(); } },
                                 { id: "bvBtn", alt: "Bottom view", src: "/Content/Images/bvs.png", callback: function () { stlscene.graphics.bottomView(); } },
                                 { id: "lvBtn", alt: "Left view", src: "/Content/Images/lvs.png", callback: function () { stlscene.graphics.leftView(); } },
                                 { id: "rvBtn", alt: "Right view", src: "/Content/Images/rvs.png", callback: function () { stlscene.graphics.rightView(); } },
@@ -37,8 +37,11 @@ var viewmodels = new (function () {
 
 
 
-    
 
+    _this.gotoHome = function (event) {
+        var home = window.location.origin;
+        window.open(home);
+    }
 
 
     var logInCallback = function () {

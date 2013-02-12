@@ -36,14 +36,15 @@
 ">
     <div class="navbar-inner">    
      <div class="container-fluid">
-        <div href="#" class="brand" style="
+        <a id="home" href="#" class="brand" style="
                     font-size: 41px;
                     font-weight: bold;
                     left: -25px;
                     position: relative;
-                    color: #3a87ad;">
-            Online3D
-        </div>
+                    color: #3a87ad;"
+                    data-bind="click: function(e) { gotoHome(e); }">          
+                Online3D           
+        </a>
         <div class="nav-collapse collapse navbar-responsive-collapse">
             <ul  class="nav">
                 <li class="dropdown">             
