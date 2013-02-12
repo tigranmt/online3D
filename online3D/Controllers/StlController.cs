@@ -193,16 +193,23 @@ namespace ModelViewer3D.Controllers
         {
             try
             {
-                MongoDataAccess access = new MongoDataAccess();
-
+                
                 var collectionID = id.Split('/').Last();
-                var models = access.ReadModelCollection(collectionID, true, modelIndex);
+                string key = ModelHolder.GetKeyFrom(collectionID, modelIndex);
 
-                if (models.Count() == 0)
-                    return Json("alldone", JsonRequestBehavior.AllowGet); //signal, there is nothing more to load. All done
+                ModelInfo model = ModelHolder.GetInfo(key);;
+                if (model == null)
+                {
+                    MongoDataAccess access = new MongoDataAccess();
+                    var models = access.ReadModelCollection(collectionID, true, modelIndex);
 
-                var model = models.FirstOrDefault();
-            
+                    if (models.Count() == 0)
+                        return Json("alldone", JsonRequestBehavior.AllowGet); //signal, there is nothing more to load. All done
+
+                    model = models.FirstOrDefault();
+                    ModelHolder.Add(key, model);
+                }
+               
 
                 var verticesCount = model.VertexCount;
                 var tempModel = model.LightClone();
@@ -211,8 +218,10 @@ namespace ModelViewer3D.Controllers
                 var start = packetIndex * step;
                 var end = (packetIndex * step) + step;
 
-                if (start >= verticesCount)
+                if (start >= verticesCount) {
+                    ModelHolder.Remove(key);
                     return Json("modeldone", JsonRequestBehavior.AllowGet); //signal, we finish with model
+                }
 
 
                 tempModel.Vertices = model.Vertices.Skip(start).Take(end - start).ToList();
