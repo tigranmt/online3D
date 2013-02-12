@@ -39,8 +39,9 @@ var viewmodels = new (function () {
 
 
     _this.gotoHome = function (event) {
-        var home = window.location.origin;
-        window.open(home);
+
+        var home = window.location.pathname.split('/');
+        window.open(home[2]);
     }
 
 
