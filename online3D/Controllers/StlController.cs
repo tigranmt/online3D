@@ -213,13 +213,11 @@ namespace ModelViewer3D.Controllers
 
                 if (start >= verticesCount)
                     return Json("modeldone", JsonRequestBehavior.AllowGet); //signal, we finish with model
-
-                //tempModel.Vertices = model.Vertices.Skip(start).Take(end);
+                
                 for (int i = start; i < end; i++)
                 {
                     if (i >= verticesCount)
                         break;
-
                     tempList.Add(model.Vertices.ElementAt(i));
                 }
 

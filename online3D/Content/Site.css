@@ -131,10 +131,11 @@ body
 
 .preview_image, .img-polaroid
 {
-    border-color: Black;
-    border: 1px solid rgb(41, 29, 29);
+    box-shadow: 0 0 10px 0 #bbb;
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;    
+    background: url(Images/bg.png) repeat left top;    
+    
 }
 
 
