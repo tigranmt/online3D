@@ -7,17 +7,17 @@ namespace online3D.Models
 {
     public static class VerticesHolder
     {
-        private static Dictionary<string, List<Vertex>> internalData = new Dictionary<string, List<Vertex>>();
+        private static Dictionary<string, List<string>> internalData = new Dictionary<string, List<string>>();
         private static Dictionary<string, string> modelImages = new Dictionary<string, string>();
         private static object _lock = new object();
         public static int AddModel(ModelInfo mi)
         {
             lock (_lock)
             {
-                List<Vertex> temp = null;
+                List<string> temp = null;
                 var key = KeyFromModel(mi);
                 if (!internalData.TryGetValue(key, out temp))
-                    internalData[key] = new List<Vertex>();
+                    internalData[key] = new List<string>();
 
                 internalData[key].AddRange(mi.Vertices);
 
@@ -28,13 +28,13 @@ namespace online3D.Models
             }
         }
 
-        public static IEnumerable<Vertex> GetVertices(ModelInfo mi)
+        public static IEnumerable<string> GetVertices(ModelInfo mi)
         {
             lock (_lock)
             {
                 var key = KeyFromModel(mi);
                 if (!internalData.ContainsKey(key))
-                    return new List<Vertex>();
+                    return new List<string>();
 
                 return internalData[key];
             }

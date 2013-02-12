@@ -16,9 +16,6 @@ namespace ModelViewer3D.Controllers
     [Layout("StlLayout")]
     public class StlController : BaseController
     {
-
-       
-
         /// <summary>
         /// Default view
         /// </summary>
@@ -205,9 +202,9 @@ namespace ModelViewer3D.Controllers
                     return Json("alldone", JsonRequestBehavior.AllowGet); //signal, there is nothing more to load. All done
 
                 var model = models.FirstOrDefault();
-                var tempList = new List<Vertex>();
+                var tempList = new List<string>();
 
-                var verticesCount = model.Vertices.Count();
+                var verticesCount = model.VertexCount;
                 var tempModel = model.LightClone();
                 var step = (int)(verticesCount / 27);
 

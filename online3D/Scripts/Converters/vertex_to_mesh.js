@@ -4,7 +4,7 @@ Dependency async.js
 **/
 function VertexToMesh() {
 
-    var getTrianglesCountInPacket = function (vertexCount) {
+    var getVertexCountInPacket = function (vertexCount) {
         if (vertexCount >= 100000)
             return 3000;
         else if (vertexCount >= 40000)
@@ -12,7 +12,7 @@ function VertexToMesh() {
         else if (vertexCount >= 10000)
             return 1200;
 
-        return 1;
+        return 3;
     }
 
 
@@ -35,7 +35,7 @@ function VertexToMesh() {
         //single step runner
         var readStep = function (iterator) {
             //just define a step of 1/1000 of the quantity of triangles in the mesh
-            var index = parseInt(getTrianglesCountInPacket(allVerticesCount));
+            var index = parseInt(getVertexCountInPacket(allVerticesCount));
             var verticesCount = 0;
 
             if (i === allVerticesCount) {
@@ -45,7 +45,7 @@ function VertexToMesh() {
 
                 while (index > 0 && i < allVerticesCount) {
 
-                    geometry.vertices.push(new THREE.Vector3(vertices[i].x, vertices[i].y, vertices[i].z));
+                    geometry.vertices.push(vertices[i]);
                     verticesCount++;
 
                     //this is triangle, so create a new face

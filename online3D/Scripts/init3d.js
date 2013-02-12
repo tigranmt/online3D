@@ -575,9 +575,9 @@ init.prototype.sendContentToServer = function () {
 
             while (index < verticesCount) {
                 var gv = geometryMesh.geometry.vertices[index];    
-                var vertex = {x :parseFloat(Math.round(gv.x * 100) / 100).toFixed(2), 
-                                        y: parseFloat(Math.round(gv.y * 100) / 100).toFixed(2), 
-                                            z:parseFloat(Math.round(gv.z * 100) / 100).toFixed(2)};
+                var vertex = "x:" + parseFloat(Math.round(gv.x * 100) / 100).toFixed(2) + " " + 
+                                        "y:" + parseFloat(Math.round(gv.y * 100) / 100).toFixed(2) + " " + 
+                                            "z:"  + parseFloat(Math.round(gv.z * 100) / 100).toFixed(2);
                 verticesSplit.push(vertex);
                 //verticesSplit.push(parseFloat(Math.round(gv.x * 100) / 100).toFixed(2);
                 index++;
@@ -614,7 +614,7 @@ init.prototype.sendContentToServer = function () {
                 contentType: "application/json",                  
                 processData: false,
                 cache : false,
-                data: JSON.stringify(modelInfo),
+                data: JSON.stringify(modelInfo),                
                 //data: modelInfo,
                 dataType: 'json',
                 success: function (data) {
@@ -718,7 +718,13 @@ init.prototype.LoadFromServer = function (unique) {
                     }
                      
 
-                    tempModel.Vertices = tempModel.Vertices.concat(data.Vertices); //concatenate vertices arrived to already available ones
+                    var vertices = []; 
+                    for(var v = 0; v<data.Vertices.length;v++) {
+                        var splitted = data.Vertices[v].split(/:| /);
+                        vertices.push(new THREE.Vector3(parseFloat(splitted[1]), parseFloat(splitted[3]), parseFloat(splitted[5])));
+                    }
+
+                    tempModel.Vertices = tempModel.Vertices.concat(vertices); //concatenate vertices arrived to already available ones
                     packet++;
                     load(); //call myself again
                 }

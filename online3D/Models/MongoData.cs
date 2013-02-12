@@ -46,13 +46,10 @@ namespace online3D.Models
             if (verticesToo)
             {
                 var deCompressed = Compressor.Decompress(bson["Vertices"].AsString).Split(new char[]{SEPARATOR}, StringSplitOptions.RemoveEmptyEntries);
-                var vertices = new List<Vertex>();
+                var vertices = new List<string>();
                 for (int i = 0; i < deCompressed.Length; i += 3)
                 {
-                    var x = double.Parse(deCompressed[i], CultureInfo.InvariantCulture);
-                    var y = double.Parse(deCompressed[i+1], CultureInfo.InvariantCulture);
-                    var z = double.Parse(deCompressed[i+2], CultureInfo.InvariantCulture);
-                    vertices.Add(new Vertex(x,y,z));
+                   vertices.Add(deCompressed[i] + SEPARATOR + deCompressed[i + 1] + SEPARATOR + deCompressed[i + 2]);
                 }
                 mi.Vertices = vertices;
             }
@@ -91,18 +88,13 @@ namespace online3D.Models
         /// </summary>
         /// <param name="vertices"></param>
         /// <returns></returns>
-        private BsonString BsonArrayFromEnumerable(IEnumerable<Vertex> vertices)
+        private BsonString BsonArrayFromEnumerable(IEnumerable<string> vertices)
         {
             StringBuilder sb = new StringBuilder();
             foreach (var v in vertices)
             {
-                sb.Append(v.x.ToString("00.00", CultureInfo.InvariantCulture));
+                sb.Append(v);
                 sb.Append(SEPARATOR);
-                sb.Append(v.y.ToString("00.00", CultureInfo.InvariantCulture));
-                sb.Append(SEPARATOR);
-                sb.Append(v.z.ToString("00.00", CultureInfo.InvariantCulture));
-                sb.Append(SEPARATOR);
-            
             }
 
             var compressed = Compressor.Compress(sb.ToString());
