@@ -28,7 +28,7 @@ namespace online3D.Models
             }
         }
 
-        public static IEnumerable<string> GetVertices(ModelInfo mi)
+        public static List<string> GetVertices(ModelInfo mi)
         {
             lock (_lock)
             {

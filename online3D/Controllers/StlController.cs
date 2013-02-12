@@ -202,7 +202,7 @@ namespace ModelViewer3D.Controllers
                     return Json("alldone", JsonRequestBehavior.AllowGet); //signal, there is nothing more to load. All done
 
                 var model = models.FirstOrDefault();
-                var tempList = new List<string>();
+            
 
                 var verticesCount = model.VertexCount;
                 var tempModel = model.LightClone();
@@ -213,15 +213,9 @@ namespace ModelViewer3D.Controllers
 
                 if (start >= verticesCount)
                     return Json("modeldone", JsonRequestBehavior.AllowGet); //signal, we finish with model
-                
-                for (int i = start; i < end; i++)
-                {
-                    if (i >= verticesCount)
-                        break;
-                    tempList.Add(model.Vertices.ElementAt(i));
-                }
 
-                tempModel.Vertices = tempList;
+
+                tempModel.Vertices = model.Vertices.Skip(start).Take(end - start).ToList();
 
                 return Json(tempModel, JsonRequestBehavior.AllowGet);
             }
