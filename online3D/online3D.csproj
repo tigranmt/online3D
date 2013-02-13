@@ -173,6 +173,8 @@
     <Content Include="Scripts\screenshot.js" />
     <Content Include="Scripts\startup_mesh.min.js" />
     <Content Include="Scripts\storage.min.js" />
+    <Content Include="Scripts\threeorbitcontrol.js" />
+    <Content Include="Scripts\threeorbitcontrol.min.js" />
     <Content Include="Scripts\toastr.min.js" />
     <Content Include="Scripts\userlogin.js" />
     <Content Include="Scripts\model_loader.js" />
@@ -252,6 +254,7 @@ type "$(ProjectDir)Scripts\userlogin.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "
 type "$(ProjectDir)Scripts\startup.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\startup.min.js"
 type "$(ProjectDir)Scripts\async.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\async.min.js"
 type "$(ProjectDir)Scripts\three.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\three.min.js"
+type "$(ProjectDir)Scripts\threeorbitcontrol.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\threeorbitcontrol.min.js"
 type "$(ProjectDir)Scripts\binary_reader.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\binary_reader.min.js"
 type "$(ProjectDir)Scripts\init3d.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\init3d.min.js"
 type "$(ProjectDir)Scripts\model_loader.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\model_loader.min.js"

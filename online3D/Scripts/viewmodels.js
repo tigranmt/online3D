@@ -40,8 +40,8 @@ var viewmodels = new (function () {
 
     _this.gotoHome = function (event) {
 
-        var home = window.location.pathname.split('/');
-        window.open(home[2]);
+        var home = window.location.href.split('/');
+        window.open(home[0] + "//" + home[2]);
     }
 
 

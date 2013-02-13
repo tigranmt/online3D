@@ -7,49 +7,56 @@
     this.sceneTracker = undefined;
     this.modelLoader = undefined;
     this.textMesh = undefined;
+    
 
     var _this = this;
 
 
+
+    this.drawLine = function(scene, start, end) {
+        var geometry = new THREE.Geometry();
+        geometry.vertices.push(start);
+        geometry.vertices.push(end);  
+        var material = new THREE.LineBasicMaterial({
+            color: 0x0000ff,
+        });
+        var line = new THREE.Line(geometry, material);
+        scene.add(line);
+
+    }
+
     this.pointFromRay = function (event) {
 
-        //view vector from UI coordinates
-        var vector = new THREE.Vector3(
-                    (event.clientX / $("#3DArea").width()) * 2 - 1,
-                    -(event.clientY / window.innerHeight) * 2 + 1,
-                    0.5);
+        var x = ( event.clientX  / window.innerWidth ) * 2 - 1;
+        var y = -( (event.clientY - $("#navbar").height()) /  window.innerHeight ) * 2 + 1;
 
+      
+        var scenePosition = _this.sceneTracker.center;
+        var viewDirection = new THREE.Vector3();
+        viewDirection.set(x,y,1);
 
         //unproject to 3D surface
         var projector = new THREE.Projector();
-        projector.unprojectVector(vector, _this.glCamera);
+        projector.unprojectVector(viewDirection, _this.glCamera);
+ 
+        // Substract the vector representing the camera position
+        viewDirection = viewDirection.sub(viewDirection, scenePosition);
 
-        //construct ray
-        var ray = new THREE.Ray(_this.glCamera.position,
-                             vector.subSelf(_this.glCamera.position).normalize());
-
-        //get intersecting objects
-        var point = undefined;
+        //get all meshes from scene
+        var objects = [];
         _this.glScene.forEachMesh(function (mesh) {
+            objects.push(mesh.children[0]);            
+        }, _this.isComposedMesh);
 
-            var objects = new Array();
-            objects.push(mesh);
+        //ray trace
+        var raycaster = new THREE.Raycaster( _this.glCamera.position, viewDirection.normalize());
+        var intersects = raycaster.intersectObjects( objects );
+        var point = new THREE.Vector3();
 
-            var intersects = ray.intersectObjects(objects, false);
-            if (intersects.length > 0) {
+        if (intersects.length > 0) {
                 point = intersects[0].point;
                 return point;
-            }
-
-        }, function continueIteration(mesh) {
-            if (point !== undefined)
-                return false;
-            if (_this.isComposedMesh(mesh)) {
-                return true;
-            }
-        });
-
-        return point;
+        }
 
     }
 
@@ -243,11 +250,13 @@
 
         //subscribe to mouse click event
         $("#3DArea").click(function (e) {
-            if (e.button === 1) //middle 
+            if (e.button === 0) //middle 
             {
                 var pointClicked = _this.pointFromRay(e);
-                if (pointClicked !== undefined)
+                if (pointClicked !== undefined) {
                     _this.sceneTracker.center = pointClicked;
+                    _this.spotlight.position = _this.glCamera.position;
+                }
             }
 
         });
@@ -433,15 +442,6 @@ init.prototype.loadMeshesInformation = function () {
 
 /*Creates progress with: id(Id of the progress), parent(parent element to add to)*/
 init.prototype.createProgress = function (id, parent) {
-
-//    var inner = $('<div />').appendTo(parent);
-//    inner.attr('id', id);
-//    //inner.addClass("progress-bar blue stripes");
-//    inner.addClass(" progress progress-striped active");   
-//    inner.css({ "margin": "-6px 4px 2px -20px", "height": "5px", "width": "40px", "left": "50%", "padding": "3px" });
-//    var span = $('<span />').appendTo('#' + id);
-//    span.attr('id', 'progressspan');
-//    span.css({ "width": "100%", "top": "-0.7em" });
 
     var inner = $('<div />').appendTo(parent);
     inner.attr('id', id);   
@@ -824,10 +824,13 @@ init.prototype.fitCamera = function (scene, camera, tracker, bounds) {
 
     var center = this.lookFrom(vector);
 
-    var spotlight = new THREE.SpotLight(0xFFFFFF, 0.8);
-    spotlight.position = camera.position;
-    spotlight.target.position = center;
-    scene.add(spotlight);
+    if(this.spotlight === undefined) {
+        this.spotlight = new THREE.SpotLight(0xFFFFFF, 0.8);        
+        scene.add(this.spotlight);
+    }
+
+    this.spotlight.position = camera.position;
+    this.spotlight.target.position = center;
 
 }
 
