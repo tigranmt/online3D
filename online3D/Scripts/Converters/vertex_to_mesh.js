@@ -13,6 +13,7 @@ function VertexToMesh() {
             return 1200;
         else if (vertexCount >= 3000)
             return 900;
+
         return 3;
     }
 

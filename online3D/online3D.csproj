@@ -262,7 +262,7 @@ type "$(ProjectDir)Scripts\viewmodels.js" |  "$(ProjectDir)Binaries\jsmin" &gt; 
 type "$(ProjectDir)Scripts\screenshot.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\screenshot.min.js"
 type "$(ProjectDir)Scripts\startup_mesh.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\startup_mesh.min.js"
 type "$(ProjectDir)Scripts\Converters\stl_to_mesh.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Converters\stl_to_mesh.min.js"
-type "$(ProjectDir)Scripts\Converters\vertex_to_mesh.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Converters\vertex_to_meshh.min.js"
+type "$(ProjectDir)Scripts\Converters\vertex_to_mesh.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Converters\vertex_to_mesh.min.js"
 
 
 
