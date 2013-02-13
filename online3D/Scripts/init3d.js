@@ -31,7 +31,7 @@
         var y = -( (event.clientY - $("#navbar").height()) /  window.innerHeight ) * 2 + 1;
 
       
-        var scenePosition = _this.sceneTracker.center;
+        var cameraPosition =  _this.glCamera.position;
         var viewDirection = new THREE.Vector3();
         viewDirection.set(x,y,1);
 
@@ -40,7 +40,7 @@
         projector.unprojectVector(viewDirection, _this.glCamera);
  
         // Substract the vector representing the camera position
-        viewDirection = viewDirection.sub(viewDirection, scenePosition);
+        viewDirection = viewDirection.subVectors(viewDirection, cameraPosition);
 
         //get all meshes from scene
         var objects = [];
@@ -49,7 +49,11 @@
         }, _this.isComposedMesh);
 
         //ray trace
-        var raycaster = new THREE.Raycaster( _this.glCamera.position, viewDirection.normalize());
+
+        viewDirection.normalize();
+
+      
+        var raycaster = new THREE.Raycaster( cameraPosition, viewDirection);
         var intersects = raycaster.intersectObjects( objects );
         var point = new THREE.Vector3();
 
