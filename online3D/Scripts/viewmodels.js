@@ -73,5 +73,8 @@ var viewmodels = new (function () {
                             { id: "wireframeViewButton", text: "Wireframe", callback: function () { stlscene.graphics.wireframeView(); } },
                             { id: "meshViewButton", text: "Mesh", callback: function () { stlscene.graphics.meshView(); } },
                             { id: "pointViewButton", text: "Point cloud", callback: function () { /*point cloud clicked*/ } }];
+
+
+    _this.tools_menu = [{ id: "ppMeasure", text: "Mesure point to point", callback: function () { TOOLS.startTool(TOOLS.POINT_TO_POINT_MEASURER); } }];
 }
 );

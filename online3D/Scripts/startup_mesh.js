@@ -30,6 +30,10 @@
     var view_Menu = $("#view_ul")[0];
     ko.applyBindings(viewmodels, view_Menu); 
 
+
+    var tools_Menu = $("#tools_ul")[0];
+    ko.applyBindings(viewmodels, tools_Menu); 
+
     var basicPanel = $("#basicPanel")[0];
     ko.applyBindings(viewmodels, basicPanel); 
 

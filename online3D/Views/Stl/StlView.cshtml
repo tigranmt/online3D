@@ -78,6 +78,17 @@
                     </ul>
                 </li>
             </ul>
+
+             <ul  class="nav">
+                <li class="dropdown">             
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">Tools<b class="caret"></b></a>      
+                    <ul class="dropdown-menu" id="tools_ul" data-bind="foreach: tools_menu">                     
+                       <li>
+                           <a data-bind="attr:{id:id}, text:text, click: function(e) { callback(); }" href="#" ></a>
+                       </li>
+                    </ul>
+                </li>
+            </ul>
         </div>
 
        
