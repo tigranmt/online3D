@@ -128,7 +128,8 @@
     this.update = function () {
 
         var position = this.object.position;
-        var offset = position.clone().sub(this.center)
+        var clone = position.clone();
+        var offset = clone.subVectors(clone, this.center);
 
         // angle from z-axis around y-axis
 

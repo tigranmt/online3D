@@ -176,6 +176,8 @@
     <Content Include="Scripts\threeorbitcontrol.js" />
     <Content Include="Scripts\threeorbitcontrol.min.js" />
     <Content Include="Scripts\toastr.min.js" />
+    <Content Include="Scripts\Tools\tools.js" />
+    <Content Include="Scripts\Tools\tools.min.js" />
     <Content Include="Scripts\userlogin.js" />
     <Content Include="Scripts\model_loader.js" />
     <Content Include="Scripts\modernizr-1.7.min.js" />
@@ -263,6 +265,7 @@ type "$(ProjectDir)Scripts\screenshot.js" |  "$(ProjectDir)Binaries\jsmin" &gt; 
 type "$(ProjectDir)Scripts\startup_mesh.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\startup_mesh.min.js"
 type "$(ProjectDir)Scripts\Converters\stl_to_mesh.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Converters\stl_to_mesh.min.js"
 type "$(ProjectDir)Scripts\Converters\vertex_to_mesh.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Converters\vertex_to_mesh.min.js"
+type "$(ProjectDir)Scripts\Tools\tools.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Tools\tools.min.js"
 
 
 

@@ -25,45 +25,7 @@
 
     }
 
-    this.pointFromRay = function (event) {
-
-        var x = ( event.clientX  / window.innerWidth ) * 2 - 1;
-        var y = -( (event.clientY - $("#navbar").height()) /  window.innerHeight ) * 2 + 1;
-
-      
-        var cameraPosition =  _this.glCamera.position;
-        var viewDirection = new THREE.Vector3();
-        viewDirection.set(x,y,1);
-
-        //unproject to 3D surface
-        var projector = new THREE.Projector();
-        projector.unprojectVector(viewDirection, _this.glCamera);
- 
-        // Substract the vector representing the camera position
-        viewDirection = viewDirection.subVectors(viewDirection, cameraPosition);
-
-        //get all meshes from scene
-        var objects = [];
-        _this.glScene.forEachMesh(function (mesh) {
-            objects.push(mesh.children[0]);            
-        }, _this.isComposedMesh);
-
-        //ray trace
-
-        viewDirection.normalize();
-
-      
-        var raycaster = new THREE.Raycaster( cameraPosition, viewDirection);
-        var intersects = raycaster.intersectObjects( objects );
-        var point = new THREE.Vector3();
-
-        if (intersects.length > 0) {
-                point = intersects[0].point;
-                return point;
-        }
-
-    }
-
+   
     init.prototype.takeScreenshot = function (showInWindow) {
 
 
@@ -110,7 +72,7 @@
     init.prototype.hideShowModel = function (modelName) {
         this.unlightModels();
         var breakExecution = false;
-        this.glScene.forEachMesh(function (mesh) {
+        TOOLS.forEachMesh(function (mesh) {
             if (mesh.name === modelName) {
                 if (mesh.visible === undefined)
                     mesh.visible = false;
@@ -126,7 +88,7 @@
         }, function (mesh) {
             if (breakExecution)
                 return false;
-            return _this.isComposedMesh(mesh);
+            return TOOLS.isComposedMesh(mesh);
         }
         );
 
@@ -136,7 +98,7 @@
 
     init.prototype.higlightModel = function (modelName) {
 
-        _this.glScene.forEachMesh(function (mesh) {
+        TOOLS.forEachMesh(function (mesh) {
             var mat = mesh.children[0].material;
             if (mesh.name !== modelName) {
                 mat.opacity = 0.6;
@@ -146,16 +108,16 @@
             }
 
             mat.needsUpdate = true;
-        }, _this.isComposedMesh);
+        });
     }
 
     init.prototype.unlightModels = function (modelName) {
-        _this.glScene.forEachMesh(function (mesh) {
+        TOOLS.forEachMesh(function (mesh) {
             var mat = mesh.children[0].material;
             mat.opacity = 1.0;
             mat.needsUpdate = true;
 
-        }, _this.isComposedMesh);
+        });
 
     }
 
@@ -189,17 +151,7 @@
         this.glScene.add(this.glCamera); // add the camera to the scene
 
 
-        //assign iterator function to scene
-        this.glScene.forEachMesh = function (callback, canProcessCallback) {
-            var childrenCount = this.__objects.length;
-            for (var i = 0; i < childrenCount; i++) {
-                var mesh = this.__objects[i];
-                if (mesh !== undefined && (canProcessCallback === undefined ||
-                                    canProcessCallback.call(this, mesh) !== false)) {
-                    callback.call(this, mesh);
-                }
-            }
-        };
+       TOOLS.attach(this.glScene, this.glCamera);
 
         //generate renderer
         this.glRenderer.setSize(WIDTH, HEIGHT);
@@ -219,36 +171,7 @@
 
         });
 
-        //add to scene a new method
-        this.glScene.getSceneBoundingBox = function () {
-
-            var boundingBox = { min: new THREE.Vector3(Number.MAX_VALUE), max: new THREE.Vector3(Number.MIN_VALUE) };
-            //var childrenCount = this.__objects.length;
-
-             this.forEachMesh(function(mesh){
-                var geometry = mesh.geometry;
-                if (geometry === undefined)
-                    return;
-
-                geometry.computeBoundingBox();
-
-                var bounds = geometry.boundingBox;
-                
-                // bbox min
-                boundingBox.min.x = Math.min(bounds.min.x, boundingBox.min.x);
-                boundingBox.min.y = Math.min(bounds.min.y, boundingBox.min.y);
-                boundingBox.min.z = Math.min(bounds.min.z, boundingBox.min.z);
-
-                //bbox max
-                boundingBox.max.x = Math.max(bounds.max.x, boundingBox.max.x);
-                boundingBox.max.y = Math.max(bounds.max.y, boundingBox.max.y);
-                boundingBox.max.z = Math.max(bounds.max.z, boundingBox.max.z);
-                
-             })
-
-
-            return boundingBox;
-        }
+      
 
 
 
@@ -256,7 +179,7 @@
         $("#3DArea").click(function (e) {
             if (e.button === 0) //middle 
             {
-                var pointClicked = _this.pointFromRay(e);
+                var pointClicked = TOOLS.getVertexFromMouseCoord(e);
                 if (pointClicked !== undefined) {
                     _this.sceneTracker.center = pointClicked;
                     _this.spotlight.position = _this.glCamera.position;
@@ -272,11 +195,7 @@
 
 
 /*checks if specified mesh is a composed mesh*/
-init.prototype.isComposedMesh = function (mesh) {
-    return (mesh.children != undefined &&
-                  mesh.children.length == 2 &&
-                    mesh.children[0].geometry != undefined);
-}
+
 
 init.prototype.extensionIsOk = function (file) {
     return true;
@@ -299,7 +218,7 @@ init.prototype.loadMeshesInformation = function () {
     var _this = this;
 
     //collect all meshes information into the view array
-    this.glScene.forEachMesh(function (mesh) {
+    TOOLS.forEachMesh(function (mesh) {
 
         function modelInfo() {
             var self = this;
@@ -417,9 +336,7 @@ init.prototype.loadMeshesInformation = function () {
         //push in view array
         infoViewModels.push(new modelInfo());
         imIndex++;
-    }
-
-    , this.isComposedMesh);
+    });
 
     //ctor object
     var infos = new (function (infos) {
@@ -551,7 +468,7 @@ init.prototype.sendContentToServer = function () {
         }
 
         var mesh = _this.glScene.__objects[meshIndex];
-        if (!_this.isComposedMesh(mesh)) {
+        if (!TOOLS.isComposedMesh(mesh)) {
             meshIndex++;
             uploadAnotherModel();
             return;
@@ -781,7 +698,7 @@ init.prototype.lookFrom = function (vector, offset, axis, bounds) {
 
 
     if (bounds === undefined)
-        bounds = this.glScene.getSceneBoundingBox();
+        bounds = TOOLS.getSceneBoundingBox();
 
     var center = new THREE.Vector3();
     center.x = (bounds.min.x + bounds.max.x) / 2;
@@ -791,7 +708,7 @@ init.prototype.lookFrom = function (vector, offset, axis, bounds) {
     this.sceneTracker.center = center;
 
     var diag = new THREE.Vector3();
-    diag = diag.sub(bounds.max, bounds.min);
+    diag = diag.subVectors(bounds.max, bounds.min);
     var radius = diag.length() / 2;
 
     // Compute offset needed to move the camera back that much needed to center AABB (approx: better if from BB front face)
@@ -975,7 +892,7 @@ init.prototype.pointCloudView = function () {
 init.prototype.solidView = function (meshname) {
 
     //iterating over meshes
-    this.glScene.forEachMesh(function (mesh) {
+    TOOLS.forEachMesh(function (mesh) {
         if (!mesh.visible)
             return;
 
@@ -987,7 +904,7 @@ init.prototype.solidView = function (meshname) {
         mesh.children[0].visible = true;
         mesh.children[1].visible = false;
 
-    }, this.isComposedMesh);
+    });
 }
 
 
@@ -996,7 +913,7 @@ init.prototype.solidView = function (meshname) {
 /*View models wireframe(triangles)*/
 init.prototype.wireframeView = function (meshname) {
 
-    this.glScene.forEachMesh(function (mesh) {
+    TOOLS.forEachMesh(function (mesh) {
         if (!mesh.visible)
             return;
 
@@ -1010,7 +927,7 @@ init.prototype.wireframeView = function (meshname) {
 
         mesh.children[0].visible = false;
         mesh.children[1].visible = true;
-    }, this.isComposedMesh);
+    });
 
 
 }
@@ -1018,14 +935,14 @@ init.prototype.wireframeView = function (meshname) {
 /*View models like mesh(solid model + wireframe)*/
 init.prototype.meshView = function () {
 
-    this.glScene.forEachMesh(function (mesh) {
+    TOOLS.forEachMesh(function (mesh) {
 
         if (!mesh.visible)
             return;
 
         mesh.children[0].visible = true;
         mesh.children[1].visible = true;
-    }, this.isComposedMesh);
+    });
 
 }
 
