@@ -15,6 +15,16 @@
         }
 
         _t.start();
+
+       
+        var home = $('#home');
+        home.attr({'data-tougle': 'popover', 
+                            'data-content':_t.text, 
+                            'data-original-title':_t.title,
+                            'data-placement' : 'bottom',
+                            'data-html' : '<button id="popoverclose" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>'});        
+        home.popover('show');
+        
     },
 
     stoptool: function (toolname) {
@@ -22,6 +32,8 @@
         if (_t !== undefined) {
             _t.stop();
         }
+
+        $('#home').popover('hide');
     },
 
     toolFromName: function (toolName) {
@@ -156,7 +168,7 @@ TOOLS.Tool = function(toolname) {
 
 TOOLS.PointToPointMeasurer = function () {
 
-
+    var _this = this;
 
     this.start = function () {
         console.log("Start point to point measurer");
@@ -165,7 +177,8 @@ TOOLS.PointToPointMeasurer = function () {
         document.addEventListener('mousemove', onMouseMove, false);
         document.addEventListener('mouseup', onMouseUp, false);
 
-        TOOLS.current = this;
+        TOOLS.current = _this;
+       
     };
 
     this.stop = function () {
@@ -178,36 +191,63 @@ TOOLS.PointToPointMeasurer = function () {
         TOOLS.current = undefined;
     };
 
-    var createVertex = function (vertex) {
-        var sphereGeometry = new THREE.SphereGeometry(50, 32, 16);
-        var sphereMaterial = new THREE.MeshLambertMaterial({ color: 0x1818ff });
+
+    this.title = "Measure distance";
+    this.text = "Measure distance between 2 points."
+
+    var createVertex = function (vertex, vertexColor) {
+        if (vertexColor === undefined)
+            vertexColor = '#221111';
+        var sphereGeometry = new THREE.SphereGeometry(0.2);
+        var sphereMaterial = new THREE.MeshLambertMaterial({ color: vertexColor });
         var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-        sphere.position.set(vertex);
+        sphere.position = vertex;
         TOOLS.addMesh(sphere);
 
         return sphere;
     };
 
-    var addPointFromMouse = function (event) {
+    var addPointFromMouse = function (event, color) {
         var vertex = TOOLS.getVertexFromMouseCoord(event);
         if (vertex !== undefined) {
-            return createVertex(vertex);
+            return createVertex(vertex, color);
         }
     };
 
     var removePoints = function () {
-        TOOLS.removeMesh(this.startPoint);
-        TOOLS.removeMesh(this.endPoint);
+        TOOLS.removeMesh(_this.startPoint);
+        TOOLS.removeMesh(_this.endPoint);
 
-        this.startPoint = undefined;
-        this.endPoint = undefined;
+        _this.startPoint = undefined;
+        _this.endPoint = undefined;
     };
 
-    this.cleanPoints = function () {
+    var removeLine = function() {
+        if(_this.line !== undefined){
+           TOOLS.removeMesh(_this.line);
+           _this.line = undefined;
+        }
+    };
+
+    this.clean = function () {
         removePoints();
+        removeLine();
     };
 
-    var drawLine = function (start, point) {
+
+
+    var drawLine = function (start, end) {
+
+        var line = new THREE.Geometry();
+        line.vertices.push(start.position);
+        line.vertices.push(end.position);
+        var material = new THREE.LineBasicMaterial({
+            color: 0x0000ff,
+        });
+
+        _this.line = new THREE.Line(line, material);
+        TOOLS.addMesh(_this.line);
+
     };
 
 
@@ -215,20 +255,29 @@ TOOLS.PointToPointMeasurer = function () {
 
 
     var onMouseMove = function (event) {
-        if (this.startPoint != undefined && this.endPoint != undefined) {
+        if (_this.startPoint != undefined && _this.endPoint != undefined) {
             //Draw distance text
         }
     };
 
     var onMouseUp = function (event) {
-        if (this.startPoint === undefined) {
-            this.startPoint = addPointFromMouse(event);
-        }
-        else if (this.endPoint === undefined) {
-            this.endPoint = addPointFromMouse(event);
 
-            if(this.endPoint!== undefined)
-                drawLine(this.startPoint, this.endPoint);
+        //if not a LEFT button, return
+        if (event.button !== 0)
+            return;
+
+        if(_this.startPoint !== undefined && _this.endPoint !== undefined) {
+            _this.clean();
+        }
+
+        if (_this.startPoint === undefined) {
+            _this.startPoint = addPointFromMouse(event, '#EE33EE');
+        }
+        else if (_this.endPoint === undefined) {
+            _this.endPoint = addPointFromMouse(event, '#AA33AA');
+
+            if (_this.endPoint !== undefined)
+                drawLine(_this.startPoint, _this.endPoint);
         }
     };
 }

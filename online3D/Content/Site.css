@@ -55,7 +55,7 @@ body
 
 #basicPanel
 {
-    top:20%;     
+    bottom:5%;     
     height: 250px;
 }
 
@@ -68,15 +68,14 @@ body
 .basicPanel,  #basicPanel
 {  
     position: absolute;
-    width: 50px;
-    border: 1px solid;
-    border-radius: 5px;
+    width: 50px;   
+    box-shadow: 0 0 20px 0 #bbb;
     -moz-border-radius: 5px;
     visibility: hidden;
     float: left;
     margin: 15px;
     height: auto;
-    padding: 5px;
+    padding: 5px;    
     z-index:400;
 }
 
