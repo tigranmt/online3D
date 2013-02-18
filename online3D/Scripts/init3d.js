@@ -177,7 +177,7 @@
 
         //subscribe to mouse click event
         $("#3DArea").click(function (e) {
-            if (e.button === 0) //middle 
+            if (e.button === 0 && e.ctrlKey) //middle 
             {
                 var pointClicked = TOOLS.getVertexFromMouseCoord(e);
                 if (pointClicked !== undefined) {

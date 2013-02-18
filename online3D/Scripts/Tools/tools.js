@@ -1,7 +1,28 @@
-﻿var TOOLS = TOOLS || {
+﻿var TOOLS = TOOLS || {    
+
     POINT_TO_POINT_MEASURER: "Point to point Measurer",
 
     toolsarray: {},
+
+    createUiForTool : function(tool) {
+      $('body').append('<div id="divToolInfo" class="modal" style="left:25em; width:' + tool.uiWidth + 'px;box-shadow: 0 0 50px 0 #bbb;background: url(Images/bg.png) repeat  left;">'+
+                             '<div class="modal-header">' + 
+                                '<button id="closebutton" type="button" class="btn-danger" style="position:absolute;left:' + (tool.uiWidth - 40) + 'px;" data-dismiss="modal" aria-hidden="true">&times;</button>' + 
+                                '<h3>' + tool.title +'</h3>' + 
+                             '</div>' + 
+                             '<div class="modal-body">' +
+                                '<p>' + tool.text + '</p>' +
+                             '</div>'  +
+                             '<div class="modal-body">' + 
+                                tool.htmlUI + //inject tool related html
+                             '</div>' + 
+                        '</div>');
+        
+         //on close button click stops current tool and removes the tool div
+         $("#closebutton").click(function(event) {
+            TOOLS.stopcurrenttool();           
+         });
+    },
 
     startTool: function (toolname) {
 
@@ -16,23 +37,7 @@
 
         _t.start();        
 
-         $('body').append('<div id="divToolInfo" class="modal" style="left:15%">'+
-                             '<div class="modal-header">' + 
-                                '<button id="closebutton" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' + 
-                                '<h3>' + _t.title +'</h3>' + 
-                             '</div>' + 
-                             '<div class="modal-body">' +
-                                '<p>' + _t.text + '</p>' +
-                             '</div>'  +
-                             '<div class="modal-body">' + 
-                                _t.htmlUI + //inject tool related html
-                             '</div>' + 
-                        '</div>');
-        
-         //on close button click stops current tool and removes the tool div
-         $("#closebutton").click(function(event) {
-            TOOLS.stopcurrenttool();           
-         });
+        this.createUiForTool(_t);
         
     },
 
@@ -60,18 +65,15 @@
         this.scene.remove(mesh);
     },
 
-
-    //get THREE.Vector3 object from mouse coordinate
-    getVertexFromMouseCoord: function (event) {
-
-
+    getViewDirection : function(event) {
+        
         var x = (event.clientX / window.innerWidth) * 2 - 1;
         var navbar = $("#navbar");
         var navbarheight = navbar ? navbar.height() : 0;
         var y = -((event.clientY - navbarheight) / window.innerHeight) * 2 + 1;
 
 
-        var cameraPosition = this.camera.position;
+       
         var viewDirection = new THREE.Vector3();
         viewDirection.set(x, y, 1);
 
@@ -79,13 +81,21 @@
         var projector = new THREE.Projector();
         projector.unprojectVector(viewDirection, this.camera);
 
+        return viewDirection;
+    },
+
+    getIntersectionFromMouseCoord:function(event) {
+        var viewDirection = this.getViewDirection(event);
+        var cameraPosition = this.camera.position;
+
         // Substract the vector representing the camera position
         viewDirection = viewDirection.subVectors(viewDirection, cameraPosition);
 
         //get all meshes from scene
         var objects = [];
         this.forEachMesh(function (mesh) {
-            objects.push(mesh.children[0]);
+            if(mesh.visible)
+                objects.push(mesh.children[0]);
         });
 
 
@@ -97,10 +107,16 @@
         var point = new THREE.Vector3();
 
         if (intersects.length > 0) {
-            point = intersects[0].point;
-            return point;
+           return intersects[0];            
         }
+    },
 
+    //get THREE.Vector3 object from mouse coordinate
+    getVertexFromMouseCoord: function (event) {
+
+        var inter = this.getIntersectionFromMouseCoord(event);
+        if(inter !== undefined)
+            return inter.point;     
     },
 
     isComposedMesh: function (mesh) {
@@ -178,12 +194,16 @@ TOOLS.Tool = function(toolname) {
 TOOLS.PointToPointMeasurer = function () {
 
     var _this = this;
+    
+    this.title = "Measure distance";
+    this.text = "Measure distance between 2 points.";
+    this.htmlUI = "<h2 id='distanceInfo' style='color:rgb(139, 85, 197)'>Distance: 0.0mm</h2>";
+    this.uiWidth = 400;
 
     this.start = function () {
         console.log("Start point to point measurer");
 
-        //subscribe to mouse click and mousemove event for drawing 
-        document.addEventListener('mousemove', onMouseMove, false);
+        document.addEventListener('mousewheel', onMouseWheel, false);
         document.addEventListener('mouseup', onMouseUp, false);
 
         TOOLS.current = _this;
@@ -193,27 +213,39 @@ TOOLS.PointToPointMeasurer = function () {
     this.stop = function () {
         console.log("Stop point to point measurer");
 
-        //remove event listeners
-        document.removeEventListener('mousemove', onMouseMove, false);
+        _this.clean();
+      
+        document.removeEventListener('mousewheel', onMouseWheel, false);
         document.removeEventListener('mouseup', onMouseUp, false);
-
         TOOLS.current = undefined;
     };
 
+    var getPointScale = function(event, vertex) {
+        var viewDirection = TOOLS.getViewDirection(event);
+        var distance = viewDirection.distanceTo(vertex);
 
-    this.title = "Measure distance";
-    this.text = "Measure distance between 2 points."
+        console.log("Distance value: " + distance);
+        var bounds = TOOLS.getSceneBoundingBox();
 
-    this.htmlUI = "<h2 id='distanceInfo' style='color:rgb(139, 85, 197)'>Distance: 0.0mm</h2>";
+        var max = Math.max(bounds.max.x, bounds.max.y);
+        max = Math.max(max, bounds.max.z);
 
+        return (max * 60)/distance;
+    };
 
-    var createVertex = function (vertex, vertexColor) {
+    var createVertex = function (event, vertex, vertexColor) {
         if (vertexColor === undefined)
             vertexColor = '#221111';
         var sphereGeometry = new THREE.SphereGeometry(0.2);
         var sphereMaterial = new THREE.MeshLambertMaterial({ color: vertexColor });
         var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
         sphere.position = vertex;
+       
+        var scale = getPointScale(event, vertex);      
+
+        console.log("Scale value: " + scale);
+        
+        sphere.scale = new THREE.Vector3(scale,scale, scale);
         TOOLS.addMesh(sphere);
 
         return sphere;
@@ -222,7 +254,7 @@ TOOLS.PointToPointMeasurer = function () {
     var addPointFromMouse = function (event, color) {
         var vertex = TOOLS.getVertexFromMouseCoord(event);
         if (vertex !== undefined) {
-            return createVertex(vertex, color);
+            return createVertex(event, vertex, color);
         }
     };
 
@@ -263,19 +295,23 @@ TOOLS.PointToPointMeasurer = function () {
     };
 
 
-
-
-
-    var onMouseMove = function (event) {
-        if (_this.startPoint != undefined && _this.endPoint != undefined) {
-            //Draw distance text
+    var onMouseWheel = function(event) {
+        if(_this.startPoint !== undefined) {
+            var startScale = getPointScale(event, _this.startPoint.position);
+            _this.startPoint.scale = new THREE.Vector3(startScale, startScale,startScale);
         }
+
+         if(_this.endPoint !== undefined) {
+            var endScale = getPointScale(event, _this.endPoint.position);
+            _this.endPoint.scale = new THREE.Vector3(endScale, endScale,endScale);
+        }
+            
     };
 
     var onMouseUp = function (event) {
 
         //if not a LEFT button, return
-        if (event.button !== 0)
+        if (event.button !== 0 || event.ctrlKey || event.shiftKey)
             return;
 
         if(_this.startPoint !== undefined && _this.endPoint !== undefined) {
@@ -293,6 +329,7 @@ TOOLS.PointToPointMeasurer = function () {
                 var distance = _this.startPoint.position.distanceTo(_this.endPoint.position);
                 //round to #.00
                 distance = Math.round(distance * 100) / 100; 
+
                 var distanceUI = $("#distanceInfo");
                 if(distanceUI !== undefined) 
                     distanceUI.text("Distance: " + distance + " mm");
