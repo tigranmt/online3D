@@ -14,26 +14,35 @@
             this.toolsarray[toolname] = _t;
         }
 
-        _t.start();
+        _t.start();        
 
-       
-        var home = $('#home');
-        home.attr({'data-tougle': 'popover', 
-                            'data-content':_t.text, 
-                            'data-original-title':_t.title,
-                            'data-placement' : 'bottom',
-                            'data-html' : '<button id="popoverclose" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>'});        
-        home.popover('show');
+         $('body').append('<div id="divToolInfo" class="modal" style="left:15%">'+
+                             '<div class="modal-header">' + 
+                                '<button id="closebutton" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' + 
+                                '<h3>' + _t.title +'</h3>' + 
+                             '</div>' + 
+                             '<div class="modal-body">' +
+                                '<p>' + _t.text + '</p>' +
+                             '</div>'  +
+                             '<div class="modal-body">' + 
+                                _t.htmlUI + //inject tool related html
+                             '</div>' + 
+                        '</div>');
+        
+         //on close button click stops current tool and removes the tool div
+         $("#closebutton").click(function(event) {
+            TOOLS.stopcurrenttool();           
+         });
         
     },
 
-    stoptool: function (toolname) {
-        var _t = toolsarray[toolname];
-        if (_t !== undefined) {
-            _t.stop();
+    stopcurrenttool: function () {
+       
+        if (TOOLS.current !== undefined) {
+            TOOLS.current.stop();
         }
 
-        $('#home').popover('hide');
+        $("#divToolInfo").remove();
     },
 
     toolFromName: function (toolName) {
@@ -195,6 +204,9 @@ TOOLS.PointToPointMeasurer = function () {
     this.title = "Measure distance";
     this.text = "Measure distance between 2 points."
 
+    this.htmlUI = "<h2 id='distanceInfo' style='color:rgb(139, 85, 197)'>Distance: 0.0mm</h2>";
+
+
     var createVertex = function (vertex, vertexColor) {
         if (vertexColor === undefined)
             vertexColor = '#221111';
@@ -274,10 +286,17 @@ TOOLS.PointToPointMeasurer = function () {
             _this.startPoint = addPointFromMouse(event, '#EE33EE');
         }
         else if (_this.endPoint === undefined) {
-            _this.endPoint = addPointFromMouse(event, '#AA33AA');
-
-            if (_this.endPoint !== undefined)
+            _this.endPoint = addPointFromMouse(event, '#AA33AA');            
+            if (_this.endPoint !== undefined) {
                 drawLine(_this.startPoint, _this.endPoint);
+                
+                var distance = _this.startPoint.position.distanceTo(_this.endPoint.position);
+                //round to #.00
+                distance = Math.round(distance * 100) / 100; 
+                var distanceUI = $("#distanceInfo");
+                if(distanceUI !== undefined) 
+                    distanceUI.text("Distance: " + distance + " mm");
+            }
         }
     };
 }
