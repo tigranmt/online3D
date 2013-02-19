@@ -82,6 +82,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\AuthenticationRequiered.cs" />
+    <Compile Include="Helpers\CacheChecker.cs" />
     <Compile Include="Helpers\Compressor.cs" />
     <Compile Include="Helpers\LayoutAttribute.cs" />
     <Compile Include="Helpers\UserModel.cs" />

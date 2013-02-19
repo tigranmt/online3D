@@ -8,7 +8,7 @@ namespace online3D.Models
     public sealed class ModelHolder
     {
         private static object _lock = new object();
-        private static Dictionary<string, ModelInfo> internalDic = new Dictionary<string, ModelInfo>();
+        internal static Dictionary<string, ModelInfo> internalDic = new Dictionary<string, ModelInfo>();
 
         public static string GetKeyFrom(string collectionID, int modelIndex)
         {
@@ -40,5 +40,7 @@ namespace online3D.Models
                 internalDic.Remove(key);
             }
         }
+
+     
     }
 }

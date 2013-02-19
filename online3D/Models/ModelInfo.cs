@@ -9,7 +9,7 @@ namespace online3D.Models
     /// <summary>
     /// The base for model information
     /// </summary>
-    public class ModelInfo
+    public sealed class ModelInfo
     {
         public string ID { get; set; }
         public string ModelName{get;set;}
@@ -20,8 +20,8 @@ namespace online3D.Models
         public int Color { get; set; }
         public string User { get; set; }
         public string ModelImage{get;set;}
-
-
+        public DateTime ExpiresOn { get; set; }
+        
         /// <summary>
         /// Clones only properties and not coollections
         /// </summary>

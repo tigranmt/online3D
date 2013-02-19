@@ -14,6 +14,8 @@ namespace ModelViewer3D
 
     public class MvcApplication : System.Web.HttpApplication
     {
+       
+
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
           //  filters.Add(new AuthenticationRequiered());
@@ -46,7 +48,20 @@ namespace ModelViewer3D
             RegisterRoutes(RouteTable.Routes);
 
             this.Error += new EventHandler(MvcApplication_Error);
+
+            CacheChecker.Start();
+           
+            
         }
+
+        protected void Application_End()
+        {
+            CacheChecker.Stop();
+        }
+
+        
+
+       
 
         void MvcApplication_Error(object sender, EventArgs e)
         {

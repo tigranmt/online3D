@@ -207,6 +207,7 @@ namespace ModelViewer3D.Controllers
                         return Json("alldone", JsonRequestBehavior.AllowGet); //signal, there is nothing more to load. All done
 
                     model = models.FirstOrDefault();
+                    model.ExpiresOn = DateTime.Now.AddDays(1);
                     ModelHolder.Add(key, model);
                 }
                
