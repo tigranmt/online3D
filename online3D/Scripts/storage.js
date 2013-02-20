@@ -100,7 +100,12 @@
 
     window.indexedFiles.addFile = function (fileData, callback) {
         try { 
+
             var db = window.indexedFiles.db;
+            if (!db.objectStoreNames.contains(storeName)) {
+              db.createObjectStore(storeName,{ keyPath: "fileName" });
+            }
+            
             var trans = db.transaction([storeName], "readwrite");    
             var _next = callback;
 

@@ -4,7 +4,7 @@ body
 {position:absolute;}.logo
 {position:relative;top:-55px;float:right;}#introimage
 {position:relative;margin:0px-150px;float:right;opacity:.99;}#flprogress
-{width:300px;height:50px;background:white;position:absolute;top:90%;left:10px;border:1px solid;border-radius:5px;background:rgba(70,19,117,0.38);z-index:1;}.gridbody
+{width:300px;height:50px;background:white;position:absolute;top:90%;left:90px;border:1px solid;border-radius:5px;background:rgba(70,19,117,0.38);z-index:1;}.gridbody
 {background-color:none;background:url(Images/bg.png)repeat center top;}#basicPanel
 {bottom:5%;height:250px;}.modelpreview,.thumbnail
 {background:rgba(10,18,60,0.66);}.basicPanel,#basicPanel
