@@ -103,6 +103,7 @@
     <Content Include="Binaries\MongoDB.Bson.dll" />
     <Content Include="Binaries\MongoDB.Driver.dll" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\colorpicker.min.css" />
     <Content Include="Content\Images\alphabutton.png" />
     <Content Include="Content\Images\backvs.png" />
     <Content Include="Content\Images\bg.png" />

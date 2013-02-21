@@ -207,7 +207,7 @@ function StlToMesh() {
                 if (geometry.vertices.length > 0) {
 
                     var meshMaterial = new THREE.MeshPhongMaterial({ ambient: 0x222222, vertexColors: THREE.FaceColors, specular: 0x49D8FB, shininess: 140, perPixel: false, overdraw: true, side: THREE.DoubleSide });
-                    var meshWireframe = new THREE.MeshBasicMaterial({ color: 0x111111, specular: 0x49D8FB, shininess: 140, wireframe: true });
+                    var meshWireframe = new THREE.MeshBasicMaterial({ color: 0x111111, vertexColors: THREE.FaceColors, specular: 0x49D8FB, shininess: 140, wireframe: true });
                     var multiMaterial = [meshMaterial, meshWireframe];
 
                     geometry.computeFaceNormals();
@@ -353,7 +353,7 @@ function StlToMesh() {
 
                     //consruct mesh
                     var meshMaterial = new THREE.MeshPhongMaterial({ ambient: 0x222222, vertexColors: THREE.FaceColors, specular: 0x49D8FB, shininess: 140, perPixel: false, overdraw: false, side: THREE.DoubleSide });
-                    var meshWireframe = new THREE.MeshBasicMaterial({ color: 0x111111, wireframe: true});
+                    var meshWireframe = new THREE.MeshBasicMaterial({ color: 0x111111,  vertexColors: THREE.FaceColor, wireframe: true});
                     var multiMaterial = [meshMaterial, meshWireframe];
 
                     //normals calculation for correct lighting

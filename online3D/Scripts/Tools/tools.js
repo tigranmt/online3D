@@ -36,9 +36,10 @@
             this.toolsarray[toolname] = _t;
         }
 
+        this.createUiForTool(_t);
         _t.start();
 
-        this.createUiForTool(_t);
+       
 
     },
 
