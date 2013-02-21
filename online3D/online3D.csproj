@@ -104,6 +104,7 @@
     <Content Include="Binaries\MongoDB.Driver.dll" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\colorpicker.min.css" />
+    <Content Include="Content\Images\alpha.png" />
     <Content Include="Content\Images\alphabutton.png" />
     <Content Include="Content\Images\backvs.png" />
     <Content Include="Content\Images\bg.png" />
@@ -111,11 +112,13 @@
     <Content Include="Content\Images\close.png" />
     <Content Include="Content\Images\entry.jpg" />
     <Content Include="Content\Images\fvs.png" />
+    <Content Include="Content\Images\hue.png" />
     <Content Include="Content\Images\intro.png" />
     <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\lvs.png" />
     <Content Include="Content\Images\meshs.png" />
     <Content Include="Content\Images\rvs.png" />
+    <Content Include="Content\Images\saturation.png" />
     <Content Include="Content\Images\solids.png" />
     <Content Include="Content\Images\tool_bg.jpg" />
     <Content Include="Content\Images\tvs.png" />
