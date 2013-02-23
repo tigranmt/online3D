@@ -92,7 +92,7 @@ function VertexToMesh() {
                 geometry.computeFaceNormals();
                 geometry.computeVertexNormals();
 
-                geometry.__dirtyColors = true;
+               // geometry.__dirtyColors = true;
                 var mesh = THREE.SceneUtils.createMultiMaterialObject(geometry, multiMaterial);
 
                 //set additional mesh data

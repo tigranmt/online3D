@@ -1,7 +1,7 @@
 ﻿TOOLS.MeshPencil = function () {
 
     var _this = this;
-
+    var leftButtonPressed = false;
 
     var hexToRgba = function (hex) {
         var c = hex;
@@ -28,6 +28,8 @@
     this.start = function () {
         console.log("Start mesh pencil");
         document.addEventListener('mousemove', onMouseMove, false);
+        document.addEventListener('mousedown', onMouseDown, false);
+        document.addEventListener('mouseup', onMouseUp, false);
         TOOLS.current = _this;
 
         $('#cpcolor').colorpicker().on('changeColor', function (ev) {
@@ -42,19 +44,66 @@
     this.stop = function () {
         console.log("Stop mesh pencil");
         document.removeEventListener('mousemove', onMouseMove, false);
+        document.removeEventListener('mousedown', onMouseDown, false);
+        document.removeEventListener('mouseup', onMouseUp, false);
     };
 
+    var onMouseDown = function (event) {
+        leftButtonPressed = event.button === 0;
+    };
+
+    var onMouseUp = function (event) {
+        leftButtonPressed = false;
+    };
+
+    var keyfromVertex = function (v) {
+        if (v === undefined)
+            return;
+        var precisionPoints = 4; // number of decimal points, eg. 4 for epsilon of 0.0001
+        var precision = Math.pow(10, precisionPoints);
+        return [Math.round(v.x * precision), Math.round(v.y * precision), Math.round(v.z * precision)].join('_');
+    };
+
+    var getNeighbours = function (geometry, face) {
+
+        var vertexMap = {};
+        var neighbours = new Array();
+
+        vertexMap[keyfromVertex(geometry.vertices[face.a])] = 0;
+        vertexMap[keyfromVertex(geometry.vertices[face.b])] = 1;
+        vertexMap[keyfromVertex(geometry.vertices[face.c])] = 2;
+
+        for (var i = 0; i < geometry.faces.length; i++) {
+
+            var neigbourFace = geometry.faces[i];
+            if (vertexMap[keyfromVertex(geometry.vertices[neigbourFace.a])] !== undefined ||
+                    vertexMap[keyfromVertex(geometry.vertices[neigbourFace.b])] !== undefined ||
+                        vertexMap[keyfromVertex(geometry.vertices[neigbourFace.c])] !== undefined) {
+                neighbours.push(neigbourFace);
+            }
+        }
+
+
+        return neighbours;
+    };
 
     var onMouseMove = function (event) {
 
         console.log(event.button);
-        // if (event.button !== 0) {//left button
-        var intersection = TOOLS.getIntersectionFromMouseCoord(event);
-        if (intersection !== undefined) {
-            intersection.face.color.setHex(_this.color);
-            intersection.object.geometry.__dirtyColors = true;
+
+        if (event.altKey || event.ctrlKey)
+            return;
+
+        if (leftButtonPressed) {//left button
+            var intersection = TOOLS.getIntersectionFromMouseCoord(event);
+            if (intersection !== undefined) {
+                intersection.face.color.setHex(_this.color);
+                var neigbours = getNeighbours(intersection.object.geometry, intersection.face);
+                for (var n = 0; n < neigbours.length; n++)
+                    neigbours[n].color.setHex(_this.color);
+                intersection.object.geometry.colorsNeedUpdate = true;
+            }
         }
-        // }
     };
 
 }
