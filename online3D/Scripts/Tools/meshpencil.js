@@ -87,6 +87,19 @@
         return neighbours;
     };
 
+
+    var setColorOnFace = function (geometry, face, color) {
+        face.color.set(color)
+//        if (geometry.faceColors === undefined)
+//            geometry.faceColors = {};
+//        if (geometry.faceColors[color] === undefined)
+//            geometry.faceColors[color] = new Array();
+//        geometry.faceColors[color].push(face.a);
+//        geometry.faceColors[color].push(face.b);
+//        geometry.faceColors[color].push(face.c);
+    };
+
+
     var onMouseMove = function (event) {
 
         console.log(event.button);
@@ -97,7 +110,7 @@
         if (leftButtonPressed) {//left button
             var intersection = TOOLS.getIntersectionFromMouseCoord(event);
             if (intersection !== undefined) {
-                intersection.face.color.set(_this.color);
+                setColorOnFace(intersection.object.geometry, intersection.face, _this.color);
                 var neigbours = getNeighbours(intersection.object.geometry, intersection.face);
                 for (var n = 0; n < neigbours.length; n++)
                     neigbours[n].color.set(_this.color);

@@ -488,7 +488,7 @@ init.prototype.sendContentToServer = function () {
 
         }
 
-        var screenShotTaken = false;
+        var firstLoad = false;
 
         function currentModelSequence() {
 
@@ -525,9 +525,9 @@ init.prototype.sendContentToServer = function () {
             };
 
 
-            if(index === 1 && !screenShotTaken) {
+            if(index === 1 && !firstLoad) {
                 modelInfo. ModelImage =  _this.takeScreenshot();   
-                screenShotTaken = true;         
+                firstLoad = true;         
             }
 
             $.ajax({
