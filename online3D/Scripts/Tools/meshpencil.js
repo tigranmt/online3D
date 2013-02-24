@@ -97,10 +97,10 @@
         if (leftButtonPressed) {//left button
             var intersection = TOOLS.getIntersectionFromMouseCoord(event);
             if (intersection !== undefined) {
-                intersection.face.color.setHex(_this.color);
+                intersection.face.color.set(_this.color);
                 var neigbours = getNeighbours(intersection.object.geometry, intersection.face);
                 for (var n = 0; n < neigbours.length; n++)
-                    neigbours[n].color.setHex(_this.color);
+                    neigbours[n].color.set(_this.color);
                 intersection.object.geometry.colorsNeedUpdate = true;
             }
         }
