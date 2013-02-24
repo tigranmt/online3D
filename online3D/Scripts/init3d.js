@@ -182,6 +182,7 @@
                 var pointClicked = TOOLS.getVertexFromMouseCoord(e);
                 if (pointClicked !== undefined) {
                     _this.sceneTracker.center = pointClicked;
+                    _this.sceneTracker.update();
                     _this.spotlight.position = _this.glCamera.position;
                 }
             }
