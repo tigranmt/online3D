@@ -7,7 +7,8 @@ namespace online3D.Models
 {
     public static class VerticesHolder
     {
-        private static Dictionary<string, List<string>> internalData = new Dictionary<string, List<string>>();
+        private static Dictionary<string, List<string>> vertexData = new Dictionary<string, List<string>>();
+        private static Dictionary<string, List<string>> faceColorData = new Dictionary<string, List<string>>();
         private static Dictionary<string, string> modelImages = new Dictionary<string, string>();
         private static object _lock = new object();
         public static int AddModel(ModelInfo mi)
@@ -16,15 +17,21 @@ namespace online3D.Models
             {
                 List<string> temp = null;
                 var key = KeyFromModel(mi);
-                if (!internalData.TryGetValue(key, out temp))
-                    internalData[key] = new List<string>();
+                if (!vertexData.TryGetValue(key, out temp))
+                    vertexData[key] = new List<string>();
 
-                internalData[key].AddRange(mi.Vertices);
+                if (!faceColorData.TryGetValue(key, out temp))
+                    faceColorData[key] = new List<string>();
+
+                vertexData[key].AddRange(mi.Vertices);
+                
+                if(mi.FaceColors!=null)
+                    faceColorData[key].AddRange(mi.FaceColors);
 
                 if (!string.IsNullOrEmpty(mi.ModelImage))
                     modelImages[key] = mi.ModelImage;
 
-                return internalData[key].Count;
+                return vertexData[key].Count;
             }
         }
 
@@ -33,10 +40,22 @@ namespace online3D.Models
             lock (_lock)
             {
                 var key = KeyFromModel(mi);
-                if (!internalData.ContainsKey(key))
+                if (!vertexData.ContainsKey(key))
                     return new List<string>();
 
-                return internalData[key];
+                return vertexData[key];
+            }
+        }
+
+        public static List<string> GetFaceColors(ModelInfo mi)
+        {
+            lock (_lock)
+            {
+                var key = KeyFromModel(mi);
+                if (!faceColorData.ContainsKey(key))
+                    return new List<string>();
+
+                return faceColorData[key];
             }
         }
 
@@ -57,7 +76,16 @@ namespace online3D.Models
             lock (_lock)
             {
                 var key = KeyFromModel(mi);
-                internalData.Remove(key);
+                vertexData.Remove(key);
+            }
+        }
+
+        public static void RemoveFaceColorsData(ModelInfo mi)
+        {
+            lock (_lock)
+            {
+                var key = KeyFromModel(mi);
+                faceColorData.Remove(key);
             }
         }
 

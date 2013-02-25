@@ -84,8 +84,10 @@ namespace ModelViewer3D.Controllers
                 IData access = new MongoDataAccess();
                 model.Vertices = VerticesHolder.GetVertices(model);
                 model.ModelImage = VerticesHolder.GetImageData(model);
+                model.FaceColors = VerticesHolder.GetFaceColors(model);
                 bool saveResult = access.SaveModel(model);
                 VerticesHolder.RemoveVerticesData(model);
+                VerticesHolder.RemoveFaceColorsData (model);
                 VerticesHolder.RemoveImageData(model);
 
                 if (!saveResult)
@@ -226,6 +228,10 @@ namespace ModelViewer3D.Controllers
 
 
                 tempModel.Vertices = model.Vertices.Skip(start).Take(end - start).ToList();
+               
+                //return colors in one shot
+                if(packetIndex == 0)
+                    tempModel.FaceColors = model.FaceColors;
 
                 return Json(tempModel, JsonRequestBehavior.AllowGet);
             }

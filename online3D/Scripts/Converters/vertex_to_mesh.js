@@ -30,9 +30,16 @@ function VertexToMesh() {
         var geometry = new THREE.Geometry();
         var modelColor = object.Color;
         var vertices = object.Vertices;
+        var faceColors = object.FaceColors || "";
         var i = 0;
         var allVerticesCount = vertices.length;
+        var faceDic = {};
+        for (var faceIndex = 0; faceIndex < faceColors.length; faceIndex++) {
+            var split = faceColors[faceIndex].split(":");
+            faceDic[parseInt(split[0])] = split[1];
+        }
 
+        faceColors = undefined;
 
         //single step runner
         var readStep = function (iterator) {
@@ -54,7 +61,23 @@ function VertexToMesh() {
                     if (verticesCount == 3) {
                         var length = geometry.vertices.length;
                         var face = new THREE.Face3(length - 3, length - 2, length - 1, 1);
-                        face.color.setHex(modelColor);
+                        var a = face.a;
+
+                        face.color.setStyle(faceDic[a]);
+                        if (face.color.getHex() === 0) {
+                            var b = face.b;
+                            face.color.setStyle(faceDic[b]);
+                            if (face.color.getHex() === 0) {
+                                var c = face.c;
+                                face.color.setStyle(faceDic[c]);
+
+                                if (face.color.getHex() === 0) {                                 
+                                    face.color.setHex(modelColor);
+                                }
+                            }
+                        }
+                       
+
                         geometry.faces.push(face);
                         verticesCount = 0;
                     }
@@ -92,7 +115,7 @@ function VertexToMesh() {
                 geometry.computeFaceNormals();
                 geometry.computeVertexNormals();
 
-               // geometry.__dirtyColors = true;
+                // geometry.__dirtyColors = true;
                 var mesh = THREE.SceneUtils.createMultiMaterialObject(geometry, multiMaterial);
 
                 //set additional mesh data

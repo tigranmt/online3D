@@ -3,22 +3,13 @@
     var _this = this;
     var leftButtonPressed = false;
 
-    var hexToRgba = function (hex) {
-        var c = hex;
-        var r = (c & (0xff << 24)) >>> 24;
-        var g = (c & (0xff << 16)) >>> 16;
-        var b = (c & (0xff << 8)) >>> 8;
-        var a = (c & 0xff) / 0xff;
-        return 'rgba(' + [r, g, b, a].join(',') + ')';
-    };
-
-    this.color = 0xffee99; //default selection color
+    this.color = "#00ffee"; //default selection color
     this.title = "Mesh pencil";
     this.text = "Choose a color and color mesh with mouse.";
     this.htmlUI = //"<div class='well'>" + 
-			        "<div class='input-append color' data-color='" + hexToRgba(this.color) + "'  id='cpcolor'>" +
+			        "<div class='input-append color' data-color='" + this.color + "'  id='cpcolor'>" +
 				        "<input type='text' class='span2' value='' readonly=''>" +
-				        "<span class='add-on' style='cursor:pointer;'><i style='background-color:" + hexToRgba(this.color) + ";'></i></span>" +
+				        "<span class='add-on' style='cursor:pointer;'><i style='background-color:" + this.color + ";'></i></span>" +
 			        "</div>";
     //"</div>";
 
@@ -89,14 +80,11 @@
 
 
     var setColorOnFace = function (geometry, face, color) {
-        face.color.set(color)
-//        if (geometry.faceColors === undefined)
-//            geometry.faceColors = {};
-//        if (geometry.faceColors[color] === undefined)
-//            geometry.faceColors[color] = new Array();
-//        geometry.faceColors[color].push(face.a);
-//        geometry.faceColors[color].push(face.b);
-//        geometry.faceColors[color].push(face.c);
+        face.color.set(color);
+        geometry.vertices[face.a].vertexColor = color;
+        geometry.vertices[face.b].vertexColor = color;
+        geometry.vertices[face.c].vertexColor = color;
+
     };
 
 
@@ -113,7 +101,7 @@
                 setColorOnFace(intersection.object.geometry, intersection.face, _this.color);
                 var neigbours = getNeighbours(intersection.object.geometry, intersection.face);
                 for (var n = 0; n < neigbours.length; n++)
-                    neigbours[n].color.set(_this.color);
+                    setColorOnFace(intersection.object.geometry, neigbours[n], _this.color); 
                 intersection.object.geometry.colorsNeedUpdate = true;
             }
         }

@@ -489,17 +489,22 @@ init.prototype.sendContentToServer = function () {
         }
 
         var firstLoad = false;
+        
 
         function currentModelSequence() {
 
             var verticesSplit = new Array();
-
+            var colorsSplit = new Array();
 
             while (index < verticesCount) {
                 var gv = geometryMesh.geometry.vertices[index];    
                 var vertex = "x:" + parseFloat(Math.round(gv.x * 100) / 100).toFixed(2) + " " + 
                                         "y:" + parseFloat(Math.round(gv.y * 100) / 100).toFixed(2) + " " + 
                                             "z:"  + parseFloat(Math.round(gv.z * 100) / 100).toFixed(2);
+              
+                if(gv.vertexColor !== undefined) 
+                   colorsSplit.push(index + ":" + gv.vertexColor);
+
                 verticesSplit.push(vertex);
                 //verticesSplit.push(parseFloat(Math.round(gv.x * 100) / 100).toFixed(2);
                 index++;
@@ -522,6 +527,7 @@ init.prototype.sendContentToServer = function () {
                 Vertices: verticesSplit,
                 VertexCount: verticesCount,
                 Color: mesh.color,
+                FaceColors: colorsSplit
             };
 
 
@@ -619,6 +625,8 @@ init.prototype.LoadFromServer = function (unique) {
                     tempModel.VertexCount = data.VertexCount;
                 if (tempModel.Color === undefined)
                     tempModel.Color = data.Color;
+                if (tempModel.FaceColors === undefined)
+                    tempModel.FaceColors = data.FaceColors;
                 /**------**/
 
 
