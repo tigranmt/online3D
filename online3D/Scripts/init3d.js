@@ -181,9 +181,9 @@
             {
                 var pointClicked = TOOLS.getVertexFromMouseCoord(e);
                 if (pointClicked !== undefined) {
-                    _this.sceneTracker.center = pointClicked;
-                    _this.sceneTracker.update();
+                    _this.sceneTracker.center = pointClicked;                              
                     _this.spotlight.position = _this.glCamera.position;
+                    _this.spotlight.target.position = pointClicked;
                 }
             }
 
@@ -755,8 +755,9 @@ init.prototype.fitCamera = function (scene, camera, tracker, bounds) {
     var center = this.lookFrom(vector);
 
     if(this.spotlight === undefined) {
-        this.spotlight = new THREE.SpotLight(0xFFFFFF, 0.8);        
+        this.spotlight = new THREE.SpotLight(0xFFFFFF, 0.9);              
         scene.add(this.spotlight);
+
     }
 
     this.spotlight.position = camera.position;

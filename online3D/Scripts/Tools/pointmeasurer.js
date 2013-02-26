@@ -29,16 +29,13 @@ TOOLS.PointToPointMeasurer = function () {
     };
 
     var getPointScale = function(event, vertex) {
-        var viewDirection = TOOLS.getViewDirection(event);
-        var distance = viewDirection.distanceTo(vertex);
-
-        console.log("Distance value: " + distance);
+       
         var bounds = TOOLS.getSceneBoundingBox();
 
         var max = Math.max(bounds.max.x, bounds.max.y);
         max = Math.max(max, bounds.max.z);
 
-        return (max * 60)/distance;
+        return (max/60);
     };
 
     var createVertex = function (event, vertex, vertexColor) {
