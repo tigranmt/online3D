@@ -29,7 +29,7 @@
     init.prototype.takeScreenshot = function (showInWindow) {
 
 
-        var image = THREEx.Screenshot.ax(_this.glRenderer);
+        var image = THREEx.Screenshot.toDataURL(_this.glRenderer);
 
         if(showInWindow === true) {
             //create preview window
