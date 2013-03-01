@@ -33,7 +33,7 @@ var viewmodels = new (function () {
                                 { id: "solidBtn", alt: "Solid view", src: "/Content/Images/solids.png", callback: function () { stlscene.graphics.solidView(); } },
                                 { id: "wireFrameBtn", alt: "Wireframe view", src: "/Content/Images/wireframes.png", callback: function () { stlscene.graphics.wireframeView(); } },
                                 { id: "meshBtn", alt: "Mesh view", src: "/Content/Images/meshs.png", callback: function () { stlscene.graphics.meshView(); } },
-                                { id: "edgesBtn", alt: "Show edges", src: "/Content/Images/meshs.png", callback: function () { stlscene.graphics.showEdges(); } }];
+                                { id: "axisBtn", alt: "Show axis", src: "/Content/Images/axis.png", callback: function () { stlscene.graphics.showAxis(); } }];
 
 
 

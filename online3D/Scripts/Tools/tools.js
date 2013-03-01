@@ -39,7 +39,7 @@
         this.createUiForTool(_t);
         _t.start();
 
-       
+
 
     },
 
@@ -181,6 +181,18 @@
 
                 if (mesh !== undefined && next.call(this, mesh) !== false) {
                     callback.call(this, mesh);
+                }
+            }
+        };
+
+
+        this.findFirst = function (callback) {
+            var childrenCount = this.scene.__objects.length;
+            for (var i = 0; i < childrenCount; i++) {
+
+                var mesh = this.scene.__objects[i];
+                if (mesh !== undefined && callback.call(this, mesh) !== false) {
+                    return mesh;
                 }
             }
         };

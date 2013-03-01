@@ -21,7 +21,7 @@
             color: 0x0000ff,
         });
         var line = new THREE.Line(geometry, material);
-        scene.add(line);
+        scene.add(line);finf
 
     }
 
@@ -29,7 +29,7 @@
     init.prototype.takeScreenshot = function (showInWindow) {
 
 
-        var image = THREEx.Screenshot.toDataURL(_this.glRenderer);
+        var image = THREEx.Screenshot.ax(_this.glRenderer);
 
         if(showInWindow === true) {
             //create preview window
@@ -678,6 +678,69 @@ init.prototype.LoadFromServer = function (unique) {
 
 init.prototype.finalizeLoading = function () {
     this.loadMeshesInformation.apply(this);
+    
+}
+
+init.prototype.removeAxis = function() {
+      
+      //collect all geometry data of the axis
+      var meshesToRemove = [];
+      TOOLS.forEachMesh(function (mesh) {           
+             meshesToRemove.push(mesh);            
+        }, function (mesh) {          
+            return mesh.arrow !== undefined;
+           }
+        );
+
+       for(var i=0;i<meshesToRemove.length;i++) 
+          TOOLS.removeMesh(meshesToRemove[i]);
+
+}
+
+
+init.prototype.showAxis = function() {
+
+     if(this.axisVisible) {
+        this.removeAxis();
+        this.axisVisible = false;
+     }
+     else {
+         var    bounds = TOOLS.getSceneBoundingBox();
+         var diag = new THREE.Vector3();
+         diag = diag.subVectors(bounds.max, bounds.min);
+         var diagLength = diag.length();
+
+        //create axis
+         var axis = new THREE.AxisHelper(diagLength);    
+         axis.arrow = true;
+         this.glScene.add( axis );      
+
+         //x text
+         var shapex = new THREE.TextGeometry("X", {font: 'helvetiker', height:0.5, size:2});
+         var wrapperx = new THREE.MeshNormalMaterial({color: 0x111111});
+         var xAxis = new THREE.Mesh(shapex, wrapperx);
+         xAxis.position = new THREE.Vector3(diagLength - 2, 0,0); 
+         xAxis.arrow = true;
+         this.glScene.add(xAxis);
+
+         //y text
+         var shapey = new THREE.TextGeometry("Y", {font: 'helvetiker', height:0.5, size:2});
+         var wrappery = new THREE.MeshNormalMaterial({color: 0x111111});
+         var yAxis = new THREE.Mesh(shapey, wrappery);
+         yAxis.position = new THREE.Vector3(0, diagLength - 2,0); 
+         yAxis.arrow = true;
+         this.glScene.add(yAxis);
+
+         //z text
+         var shapez = new THREE.TextGeometry("Z", {font: 'helvetiker', height:0.5, size:2});
+         var wrapperz = new THREE.MeshNormalMaterial({color: 0x111111});
+         var zAxis = new THREE.Mesh(shapez, wrapperz);
+         zAxis.position = new THREE.Vector3(0, 0,diagLength - 2);      
+         zAxis.arrow = true;
+         this.glScene.add(zAxis);
+
+         this.axisVisible = true;
+     }
 }
 
 
@@ -957,10 +1020,6 @@ init.prototype.meshView = function () {
 }
 
 
-init.prototype.showEdges = function () {
-    var mesh = this.glScene.__los[0];
-    var geometry = mesh.geometry;
-}
 
 
 /*View from the top of the scen*/
