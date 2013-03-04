@@ -34,8 +34,10 @@ var userAccess = new (function(){
 
     _this.closeUserAuth = function() {
         var signForm =  $("#signForm");
-        if(signForm.length > 0)
+        if(signForm.length > 0) {
+            signForm.modal('hide');
             signForm.remove();
+        }
     };
 
 
@@ -119,12 +121,10 @@ var userAccess = new (function(){
                     }     
 
                     var Session = function(name, id, image, index) {
-
-
+                       
                         this.name = name;
                         this.id = id;
-                        this.image = image; 
-                          
+                        this.image = image;                           
                         
                         this.openSession = function(event) {
                             var linkToSession = $("#innercarousel [class='item active'] #linktosession").text();
@@ -156,7 +156,7 @@ var userAccess = new (function(){
                     for(var i=0; i<data.length; i++)
                     {    
                         var model = data[i];
-                        sessions.push(new Session(model.ModelName, model.ID, model.ModelImage,i));                                          
+                        sessions.push(new Session(model.SessionName, model.ID, model.ModelImage,i));                                          
                     }               
 
 
@@ -298,17 +298,11 @@ var userAccess = new (function(){
                                 "</div>" + 
                             "</div>" + 
                             "<div class='modal-footer'>" +
-                                "<button class='btn' data-dismiss='modal' aria-hidden='true'>Close</button>" + 
+                                "<button id='closeSignInButton' class='btn' data-dismiss='modal' aria-hidden='true'>Close</button>" + 
                                 "<button id='signInButton' class='btn btn-primary'>Sign in</button>"+
                             "</div>" + 
                         "</div>");
        
-
-            //subscribe to its close, so after remove accrodion
-            $('#signForm').on('hidden', function () {
-                $("#signForm").remove();
-            });
-
 
             //focus on first field
             $('#signForm').on('shown', function () {
@@ -321,38 +315,38 @@ var userAccess = new (function(){
             $('#signForm #signInButton').on('click', function(){
             
           
-            var userName = $("#signForm #inputUserName")[0].value;
-            var loginInfo = {
-                UserName: userName,
-                Password: $("#signForm #inputPassword")[0].value,
-            };
-            $.ajax({
-                url: "../Account/LogOn",
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(loginInfo),
-                dataType: 'json',
-                success: function (data) {
-                    if(!data){
-                        toastr.error('Incorrect UserName or Password', 'Error!');
-                    }
-                    else {
-                        toastr.success('Signed as ' + userName, "Done!");                        
-                        _this.closeUserAuth();       
-                        setCookie("signed",userName,1);
-                        _this.CheckSigned();
+                var userName = $("#signForm #inputUserName")[0].value;
+                var loginInfo = {
+                    UserName: userName,
+                    Password: $("#signForm #inputPassword")[0].value,
+                };
+                $.ajax({
+                    url: "../Account/LogOn",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(loginInfo),
+                    dataType: 'json',
+                    success: function (data) {
+                        if(!data){
+                            toastr.error('Incorrect UserName or Password', 'Error!');
+                        }
+                        else {
+                            toastr.success('Signed as ' + userName, "Done!");                        
+                            _this.closeUserAuth();       
+                            setCookie("signed",userName,1);
+                            _this.CheckSigned();
+                            _this.UpdateUI();
+                        }
+                    },
+                    error: function(data) {
+                        toastr.error('Failed to login', 'Error!');
                         _this.UpdateUI();
                     }
-                },
-                error: function(data) {
-                    toastr.error('Failed to login', 'Error!');
-                    _this.UpdateUI();
-                }
            
-            });
+                });
          
         
-            return false;
+                return false;
          });
       }
       else { //SIGNED already, so unsign

@@ -42,7 +42,12 @@ namespace online3D.Models
             mi.Color = bson["Color"].AsInt32;
             mi.User = bson["User"].AsString;
             mi.ModelImage = Compressor.Decompress(bson["ModelImage"].AsString);
-
+            mi.SessionName = bson["SessionName"].ToString();
+          
+            DateTime dt = default(DateTime);
+            if (DateTime.TryParse(bson["SavedOn"].ToString(),System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.None, out dt))
+                mi.SavedOn = dt;
+          
             if (verticesToo)
             {
                 var deCompressed = Compressor.Decompress(bson["Vertices"].AsString).Split(new char[]{SEPARATOR}, StringSplitOptions.RemoveEmptyEntries);
@@ -81,6 +86,8 @@ namespace online3D.Models
             bson["Color"] = mi.Color;
             bson["User"] = mi.User;
             bson["ModelImage"] = Compressor.Compress(mi.ModelImage);
+            bson["SessionName"] = mi.SessionName;
+            bson["SavedOn"] = mi.SavedOn.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
             var array = BsonArrayFromEnumerable(mi.Vertices);
             bson.Add("Vertices", array);
@@ -122,6 +129,8 @@ namespace online3D.Models
                 var unique = mi.ID.Split('/').Last();   //get last string (uniqeud ID) in the path     
                 var collection = ReadCollection(unique); //get collection
                 var savedDocument = ReadDocument(unique, mi.ModelName);
+                mi.SavedOn = DateTime.Now;
+
                 if (savedDocument != null)
                 {
                     var bsonArraySaved = savedDocument["Vertices"].AsString;
@@ -283,8 +292,15 @@ namespace online3D.Models
             //desirialize 
             foreach (var bson in bsons)
             {
-                var m = ModelInfoFromBson(bson, verticesToo);
-                models.Add(m);
+                try
+                {
+                    var m = ModelInfoFromBson(bson, verticesToo);
+                    models.Add(m);
+                }
+                catch (Exception ex)
+                {
+                    LogEntry.logger.ErrorException("Error on loading bson for model", ex);
+                }
             }
 
             return models;

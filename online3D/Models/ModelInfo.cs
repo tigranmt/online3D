@@ -21,6 +21,8 @@ namespace online3D.Models
         public int Color { get; set; }
         public string User { get; set; }
         public string ModelImage{get;set;}
+        public string SessionName { get; set; }
+        public DateTime SavedOn { get; set; }
         public DateTime ExpiresOn { get; set; }
         
         /// <summary>
@@ -29,7 +31,7 @@ namespace online3D.Models
         /// <returns></returns>
         public ModelInfo LightClone()
         {
-            return new ModelInfo { ID = this.ID, ModelName = this.ModelName, Format = this.Format, Size = this.Size, VertexCount =  this.VertexCount, Color=this.Color, User = this.User };
+            return new ModelInfo { ID = this.ID, ModelName = this.ModelName, Format = this.Format, Size = this.Size, VertexCount = this.VertexCount, Color = this.Color, User = this.User, SessionName = this.SessionName };
         }
     }
 }
