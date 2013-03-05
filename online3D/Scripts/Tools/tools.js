@@ -2,6 +2,7 @@
 
     POINT_TO_POINT_MEASURER: "Point to point Measurer",
     MESH_PENCIL: "Mesh pencil",
+    NOTES_MANAGER : "Notes manager",
 
     toolsarray: {},
 
@@ -25,6 +26,18 @@
         });
     },
 
+    //starts sepcified tool like an agent, no STOP call expected to it
+    startTooAgent: function (tooname) {
+        var _t = this.toolsarray[toolname];
+        if (_t === undefined) {
+            _t = this.toolFromName(toolname);
+            this.toolsarray[toolname] = _t;
+        }
+
+        this.createUiForTool(_t);
+        _t.startAgent();
+    },
+
     startTool: function (toolname) {
 
         if (this.current !== undefined)
@@ -38,9 +51,6 @@
 
         this.createUiForTool(_t);
         _t.start();
-
-
-
     },
 
     stopcurrenttool: function () {
@@ -58,6 +68,8 @@
             return new this.PointToPointMeasurer();
         else if (toolName === this.MESH_PENCIL)
             return new this.MeshPencil();
+        else if (toolName === this.NOTES_MANAGER)
+            return new this.NotesManager();
     },
 
 

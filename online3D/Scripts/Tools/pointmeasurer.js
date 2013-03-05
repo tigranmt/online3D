@@ -18,6 +18,10 @@ TOOLS.PointToPointMeasurer = function () {
        
     };
 
+    this.startAgent = function () {
+        console.log("No agent call for " + this.title + " expected");
+    };
+
     this.stop = function () {
         console.log("Stop point to point measurer");
 

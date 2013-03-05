@@ -669,6 +669,12 @@ init.prototype.LoadFromServer = function (unique) {
                     tempModel.Color = data.Color;
                 if (tempModel.FaceColors === undefined)
                     tempModel.FaceColors = data.FaceColors;
+                if (tempModel.SessionName === undefined)
+                    tempModel.SessionName = data.SessionName;
+                if (tempModel.User === undefined)
+                    tempModel.User = data.User;
+                if (tempModel.SavedOn === undefined)
+                    tempModel.SavedOn = data.SavedOn;
                 /**------**/
 
 
@@ -684,6 +690,8 @@ init.prototype.LoadFromServer = function (unique) {
                 else if (data !== "alldone") {
                     if(packet == 0) {
                         _this.showDownloadProgress(tempModel.ModelName, 0);
+                        //add session information label 
+                      
                     }
                     else{
                        _this.showDownloadProgress(tempModel.ModelName, 100 / (tempModel.VertexCount / tempModel.Vertices.length));

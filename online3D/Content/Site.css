@@ -209,3 +209,14 @@ ribbon {
   text-shadow: 0 0 0.5em #444;
 }
 
+
+#usernotes 
+{
+    position: absolute;
+    bottom: 10px;
+    right: 100px;
+    box-shadow: 0 0 80px 0 #bbb;
+    background: url(Images/bg.png) repeat bottom left;
+    padding: 10px 5px 5px 5px;
+    z-index: 110;
+}

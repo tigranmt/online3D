@@ -79,3 +79,31 @@ var viewmodels = new (function () {
                           { id: "ppMeshPencil", text: "Mesh pencil", callback: function () { TOOLS.startTool(TOOLS.MESH_PENCIL); } }];
 }
 );
+
+
+var note = function (note, coord) {
+    var _this = this;
+
+    _this.closeButtonHtml = "";
+    _this.text = ko.observable(note);
+    _this.vertex = vertex;
+    _this.vertexColor = "#00445F";
+
+    _this.mouseOver = function (data) {
+
+    };
+};
+
+
+var notesmodel = new (function () {
+    var _this = this;
+
+    _this.notes = ko.observableArray();
+    _this.addNewNote = function (data) {
+        $("#usernotes").animate({width:"300px", height:"400px"}, 1500);
+    };
+
+    _this.count = ko.computed(function () {
+        return _this.notes.length;
+    });
+});

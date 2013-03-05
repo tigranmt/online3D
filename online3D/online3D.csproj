@@ -186,6 +186,7 @@
     <Content Include="Scripts\Tools\colorpicker.min.js" />
     <Content Include="Scripts\Tools\meshpencil.js" />
     <Content Include="Scripts\Tools\meshpencil.min.js" />
+    <Content Include="Scripts\Tools\notesmanager.js" />
     <Content Include="Scripts\Tools\pointmeasurer.min.js" />
     <Content Include="Scripts\Tools\tools.js" />
     <Content Include="Scripts\Tools\tools.min.js" />

@@ -27,7 +27,10 @@
             _this.color = ev.color.toHex();
         });
 
+    };
 
+    this.startAgent = function () {
+        console.log("No agent call for " + this.title + " expected");
     };
 
 
@@ -101,7 +104,7 @@
                 setColorOnFace(intersection.object.geometry, intersection.face, _this.color);
                 var neigbours = getNeighbours(intersection.object.geometry, intersection.face);
                 for (var n = 0; n < neigbours.length; n++)
-                    setColorOnFace(intersection.object.geometry, neigbours[n], _this.color); 
+                    setColorOnFace(intersection.object.geometry, neigbours[n], _this.color);
                 intersection.object.geometry.colorsNeedUpdate = true;
             }
         }

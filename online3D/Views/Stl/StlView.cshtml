@@ -33,8 +33,7 @@
 <div id="navbar" class="navbar"style="
     opacity: 0.9;
     z-index: 100;
-    position: relative;
-">
+    position: relative;">
     <div class="navbar-inner">    
      <div class="container-fluid">
         <a id="home" href="#" class="brand" style="
@@ -99,17 +98,7 @@
 </div>
 
 
-
-
-@*hiddent field for holding the model(s) unique ID that has to be loaded *@
-@if ((@ViewBag.ID) != null) {
-    <p id="bag" style="visibility:hidden">@(ViewBag.ID)</p>
-}
-
-
-<div id="3DArea">
-  
-</div>
+<div id="3DArea"></div>
 
 <div id="basicPanel"  class="btn-group btn-group-vertical">
     
@@ -120,7 +109,24 @@
     </div>
 </div>
 
-
-
-
 <div id="progress" ></div>
+
+@*hiddent field for holding the model(s) unique ID that has to be loaded *@
+@if ((@ViewBag.ID) != null) {
+    <p id="bag" style="visibility:hidden">@(ViewBag.ID)</p>
+    <div id="usernotes" style="visibility:hidden">
+        <button class="btn btn-mini btn-success" data-bind="click:addNewNote.bind($data)" type="button">Add new note</button>
+        <div class="accordion" data-bind="foreach: notes">
+            <div class="accordion-group" data-bind="mouseover:mouseOver.bind($data)" >
+                <div class="accordion-heading">                   
+                    <a class="accordion-toggle" data-toggle="collapse" data-bind="value:$index" data-parent="#accordion2" href="#collapseOne">                       
+                    </a>
+                </div>
+                <div id="collapseOne" class="accordion-body collapse in">
+                    <div class="accordion-inner" data-bind="value:text">                      
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -39,6 +39,10 @@
 
     var home_Menu = $("#home")[0];
     ko.applyBindings(viewmodels, home_Menu); 
+
+    var notes = $("#usernotes")[0];
+    ko.applyBindings(notesmodel, notes);
+
     /***************************/
     /****** TOOLTIPS*****/
     for(var i=0;i<viewmodels.buttons.length;i++){
