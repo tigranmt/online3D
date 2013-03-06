@@ -41,7 +41,8 @@
     ko.applyBindings(viewmodels, home_Menu); 
 
     var notes = $("#usernotes")[0];
-    ko.applyBindings(notesmodel, notes);
+    if(notes !== undefined)
+        ko.applyBindings(notesmodel, notes);
 
     /***************************/
     /****** TOOLTIPS*****/
