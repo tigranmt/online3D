@@ -20,5 +20,7 @@ namespace online3D.Models
             y = _y;
             z = _z;
         }
+
+      
     }
 }

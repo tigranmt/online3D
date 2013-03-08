@@ -85,10 +85,14 @@ namespace ModelViewer3D.Controllers
                 model.Vertices = VerticesHolder.GetVertices(model);
                 model.ModelImage = VerticesHolder.GetImageData(model);
                 model.FaceColors = VerticesHolder.GetFaceColors(model);
+                model.Notes = VerticesHolder.GetNotes(model);
+
                 bool saveResult = access.SaveModel(model);
+
                 VerticesHolder.RemoveVerticesData(model);
                 VerticesHolder.RemoveFaceColorsData (model);
                 VerticesHolder.RemoveImageData(model);
+                VerticesHolder.RemoveNotes(model);
 
                 if (!saveResult)
                     return Json(false);
@@ -214,6 +218,7 @@ namespace ModelViewer3D.Controllers
                 }
                
 
+                /** vertices load **/
                 var verticesCount = model.VertexCount;
                 var tempModel = model.LightClone();
                 var step = (int)(verticesCount / 27);
@@ -225,13 +230,18 @@ namespace ModelViewer3D.Controllers
                     ModelHolder.Remove(key);
                     return Json("modeldone", JsonRequestBehavior.AllowGet); //signal, we finish with model
                 }
-
-
                 tempModel.Vertices = model.Vertices.Skip(start).Take(end - start).ToList();
+                /***************************/
+
+
                
                 //return colors in one shot
                 if(packetIndex == 0)
                     tempModel.FaceColors = model.FaceColors;
+
+                //return notes only for first packet of the first model
+                if (modelIndex == 0 && packetIndex == 0)
+                    tempModel.Notes = model.Notes;
 
                 return Json(tempModel, JsonRequestBehavior.AllowGet);
             }

@@ -111,22 +111,33 @@
 
 <div id="progress" ></div>
 
-@*hiddent field for holding the model(s) unique ID that has to be loaded *@
-@if ((@ViewBag.ID) != null) {
-    <p id="bag" style="visibility:hidden">@(ViewBag.ID)</p>
-    <div id="usernotes" style="visibility:hidden">
-        <button class="btn btn-mini btn-success" data-bind="click:addNewNote.bind($data)" type="button">Add new note</button>
-        <div class="accordion" data-bind="foreach: notes">
+<div id="usernotes">
+        <div style="position:fixed">
+            <button id='addnewnotebutton' class="btn btn-mini btn-success" data-bind="click:addNewNote.bind($data)" type="button">Add new note</button>
+          @*  <button id='addpinbutton' class="btn btn-mini btn-info"    data-bind="click:addPin.bind($data)" type="button" style='display:none'>Add pin</button>*@
+            <button id='savenotebutton' class="btn btn-mini btn-success" data-bind="click:saveNote.bind($data)" type="button" style='display:none'>Save note</button>
+            <button id='cancelnotebutton' class="btn btn-mini btn-danger"  data-bind="click:cancelNote.bind($data)" type="button" style='display:none'>Cancel</button>
+        </div>
+        <div id="notesaccordion" class="accordion" data-bind="foreach: notes" style="margin:5px;top: 35px;position: relative;">
             <div class="accordion-group" data-bind="mouseover:mouseOver.bind($data)" >
-                <div class="accordion-heading">                   
-                    <a class="accordion-toggle" data-toggle="collapse" data-bind="value:$index" data-parent="#accordion2" href="#collapseOne">                       
+                <div class="accordion-heading">         
+                    <span class="badge badge-inverse" data-bind="text:noteIndex"></span>
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-bind="text:shortDescription" data-parent="#accordion2" href="#collapseOne" style="display: inline;">                       
                     </a>
                 </div>
                 <div id="collapseOne" class="accordion-body collapse in">
-                    <div class="accordion-inner" data-bind="value:text">                      
+                    <div class="accordion-inner" data-bind="text:text">                  
+                       
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+
+     
+</div>
+
+
+@*hidden field for holding the model(s) unique ID that has to be loaded *@
+@if ((@ViewBag.ID) != null) {
+    <p id="bag" style="visibility:hidden">@(ViewBag.ID)</p>
 }

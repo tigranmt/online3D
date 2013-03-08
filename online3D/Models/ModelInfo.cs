@@ -24,6 +24,7 @@ namespace online3D.Models
         public string SessionName { get; set; }
         public DateTime SavedOn { get; set; }
         public DateTime ExpiresOn { get; set; }
+        public List<Note> Notes { get; set; }
         
         /// <summary>
         /// Clones only properties and not coollections

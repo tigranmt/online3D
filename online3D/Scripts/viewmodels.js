@@ -81,13 +81,14 @@ var viewmodels = new (function () {
 );
 
 
-var note = function (note, coord) {
+var note = function (note, index, coord) {
     var _this = this;
 
     _this.closeButtonHtml = "";
-    _this.text = ko.observable(note);
-    _this.vertex = vertex;
-    _this.vertexColor = "#00445F";
+    _this.text = note;
+    _this.shortDescription = note.substring(0, 10) + "...";
+    _this.vertex = coord;   
+    _this.noteIndex = index;
 
     _this.mouseOver = function (data) {
 
@@ -99,11 +100,62 @@ var notesmodel = new (function () {
     var _this = this;
 
     _this.notes = ko.observableArray();
+
     _this.addNewNote = function (data) {
-        $("#usernotes").animate({width:"300px", height:"400px"}, 1500);
+
+        var userNotes = $("#usernotes");
+        _this.originalWidth = userNotes.width();
+        _this.originalHeight = userNotes.height();
+
+        userNotes.animate({ width: "300px", height: "400px" }, 400);
+        userNotes.append("<textarea id='notetextarea' style='width:280px;height:350px; margin:5px;top: 35px;position: absolute;'></textarea>");
+        $("#usernotes #notesaccordion").hide();
+        $("#usernotes #addnewnotebutton").hide();
+        $("#usernotes #addpinbutton").show();
+        $("#usernotes #savenotebutton").show();
+        $("#usernotes #cancelnotebutton").show();
+
+    };
+
+    var closeNoteEdit = function () {
+        $("#usernotes #notetextarea").remove();
+        $("#usernotes #addpinbutton").hide();
+        $("#usernotes #savenotebutton").hide();
+        $("#usernotes #cancelnotebutton").hide();
+
+        // $("#usernotes").animate({ width: _this.originalWidth + "px", height: _this.originalHeight + "px" }, 400);
+        $("#usernotes #notesaccordion").show();
+        $("#usernotes #addnewnotebutton").show();
+    };
+
+    _this.cancelNote = function (data) {
+        closeNoteEdit();
+    };
+
+    _this.saveNote = function (data) {
+
+        var noteText = $("#usernotes #notetextarea")[0].value;
+        var nextindex = _this.notes().length + 1;
+        _this.notes.push(new note(noteText, nextindex, new THREE.Vector3()));
+
+        closeNoteEdit();
+    };
+
+    _this.addPin = function (data) {
     };
 
     _this.count = ko.computed(function () {
-        return _this.notes.length;
+        return _this.notes().length;
     });
+
+
+    _this.forJSON = function () {
+        var notesForJson = $.map(_this.notes(), function (note) {
+            return { NoteText: note.text, NoteVertex: note.vertex };
+        });
+
+        return notesForJson; 
+    };
+
+
 });

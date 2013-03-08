@@ -11,6 +11,7 @@ using System.Configuration;
 using System.Text;
 using System.Globalization;
 using online3D.Helpers;
+using System.Web.Script.Serialization;
 
 namespace online3D.Models
 {
@@ -43,6 +44,7 @@ namespace online3D.Models
             mi.User = bson["User"].AsString;
             mi.ModelImage = Compressor.Decompress(bson["ModelImage"].AsString);
             mi.SessionName = bson["SessionName"].ToString();
+
           
             DateTime dt = default(DateTime);
             if (DateTime.TryParse(bson["SavedOn"].ToString(),System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.None, out dt))
@@ -64,6 +66,13 @@ namespace online3D.Models
                     faceColors.Add(deCompressed[i]);
 
                 mi.FaceColors = faceColors;
+
+
+                deCompressed = Compressor.Decompress(bson["Notes"].AsString).Split(new char[] { SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+                var notes = new List<Note>();
+                for (int i = 0; i < deCompressed.Length; i += 3)
+                    notes.Add(new JavaScriptSerializer().Deserialize(deCompressed[i], typeof(Note)) as Note);
+                mi.Notes = notes;
             }
 
             return mi;
@@ -94,8 +103,26 @@ namespace online3D.Models
 
             var faceColors = BsonArrayFromEnumerable(mi.FaceColors);
             bson.Add("FaceColors", faceColors);
+
+            var notes = BsonArrayFromEnumerableNotes(mi.Notes);
+            bson.Add("Notes", notes);
+
             return bson;
 
+        }
+
+
+        private BsonString BsonArrayFromEnumerableNotes(IEnumerable<Note> notes)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (var n in notes)
+            {               
+                sb.Append(new JavaScriptSerializer().Serialize(n));
+                sb.Append(SEPARATOR);
+            }
+
+            var compressed = Compressor.Compress(sb.ToString());
+            return new BsonString(compressed);
         }
 
 

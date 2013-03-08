@@ -92,6 +92,7 @@
     <Compile Include="Models\IData.cs" />
     <Compile Include="Models\LinkGenerator.cs" />
     <Compile Include="Models\ModelInfo.cs" />
+    <Compile Include="Models\Note.cs" />
     <Compile Include="Models\Vertex.cs" />
     <Compile Include="Models\VerticesHolder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

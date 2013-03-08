@@ -530,18 +530,18 @@ init.prototype.sendModelsToServer = function(sessionInfo) {
 
 
                 if(index === 1 && !firstLoad) {
-                    modelInfo. ModelImage =  _this.takeScreenshot();   
+                    modelInfo.ModelImage =  _this.takeScreenshot();  
+                    modelInfo.Notes = notesmodel.forJSON();
                     firstLoad = true;         
                 }
 
                 $.ajax({
                     url: "SaveModel/",
                     type: "POST",
-                    contentType: "application/json",                  
+                    contentType: "application/json",
                     processData: false,
                     cache : false,
-                    data: JSON.stringify(modelInfo),                
-                    //data: modelInfo,
+                    data: JSON.stringify(modelInfo),
                     dataType: 'json',
                     success: function (data) {
                     
@@ -675,6 +675,11 @@ init.prototype.LoadFromServer = function (unique) {
                     tempModel.User = data.User;
                 if (tempModel.SavedOn === undefined)
                     tempModel.SavedOn = data.SavedOn;
+
+                //ONLY FOR THE FIRST MODEL
+                if(mindex == 0 && tempModel.Notes === undefined)  {
+                    tempModel.Notes = data.Notes
+                }
                 /**------**/
 
 
