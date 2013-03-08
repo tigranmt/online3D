@@ -107,7 +107,7 @@ function VertexToMesh() {
             if (geometry.vertices.length > 0) {
 
                 //consruct mesh
-                var meshMaterial = new THREE.MeshPhongMaterial({ ambient: 0x222222, vertexColors: THREE.FaceColors, specular: 0x49D8FB, shininess: 140, perPixel: false, overdraw: false, side: THREE.DoubleSide });
+                var meshMaterial = new THREE.MeshPhongMaterial({ ambient: 0x222222, vertexColors: THREE.FaceColors, specular: 0x49D8FB, shininess: 140, perPixel: false, overdraw: true, side: THREE.DoubleSide });
                 var meshWireframe = new THREE.MeshBasicMaterial({ color: 0x111111, wireframe: true });
                 var multiMaterial = [meshMaterial, meshWireframe];
 

@@ -221,3 +221,33 @@ ribbon {
     z-index: 110;
     overflow: overlay;
 }
+
+#usernotes #notesaccordion
+{
+    margin:5px;
+    top: 35px;
+    position: relative;
+}
+
+#usernotes #notesaccordion a
+{
+  display: inline;
+}
+
+#usernotes #collapsenotesbutton 
+{
+    top: -10px;
+    position: absolute;
+    right: 1px;
+}
+
+#notetextarea 
+{
+    width:280px;
+    height:350px; 
+    margin:5px;
+    top: 35px;
+    position: absolute;
+}
+
+

@@ -944,7 +944,7 @@ init.prototype.loadMeshesFromServer = function (meshes) {
     _this.initScene(_this);
     var index = meshes.length - 1;
 
-    
+    var notes = new Array();
 
     //load in async way
     var loadAsync = function () {
@@ -953,11 +953,26 @@ init.prototype.loadMeshesFromServer = function (meshes) {
             _this.fitCamera.apply(_this, [_this.glScene, _this.glCamera, _this.sceneTracker]); //fit camera on end
             _this.renderOnScreen(); //render
             _this.finalizeLoading.apply(_this);
-            _this.showPanels(); //show panels            
+            _this.showPanels(); //show panels       
+            
+            for(var i=0;i<notes.length;i++) {
+                var note = notes[i];
+                notesmodel.addNoteToList(note.NoteText, i+1, note.NoteVertex);
+            }
+
+            if(notes.length > 0)
+                notesmodel.expand();
+                 
             toastr.success('Done !');
             return;
         }
         var mesh = meshes[index];
+        
+        //save notes, as they are present in only one model of possible multiple models present in session 
+        //
+        if(mesh.Notes !== undefined) 
+            notes = mesh.Notes;
+
         _this.modelLoader.loadMeshModel(mesh, loadAsync);
         index--;
     };

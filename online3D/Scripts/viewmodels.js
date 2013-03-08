@@ -87,8 +87,10 @@ var note = function (note, index, coord) {
     _this.closeButtonHtml = "";
     _this.text = note;
     _this.shortDescription = note.substring(0, 10) + "...";
-    _this.vertex = coord;   
+    _this.vertex = coord;
     _this.noteIndex = index;
+    _this.collapseId = index;
+    _this.collapseHref = "#" + index;
 
     _this.mouseOver = function (data) {
 
@@ -101,29 +103,42 @@ var notesmodel = new (function () {
 
     _this.notes = ko.observableArray();
 
-    _this.addNewNote = function (data) {
+    _this.expand = function (data) {
+        var userNotes = $("#usernotes");     
+        userNotes.animate({ width: "300px", height: "400px" }, 400);
+        $("#notesheader").hide();
+        $("#usernotes #addnewnotebutton").show();
+        $("#usernotes #collapsenotesbutton").show();
+        
+    };
+
+    _this.collapse = function (data) {
+        var userNotes = $("#usernotes");
+        userNotes.animate({ width: "300px", height: "0px" }, 400);
+
+        $("#usernotes #collapsenotesbutton").hide();
+        $("#usernotes #addnewnotebutton").hide();
+        $("#notesheader").show();
+    };
+
+    _this.startAddNewNote = function (data) {
 
         var userNotes = $("#usernotes");
-        _this.originalWidth = userNotes.width();
-        _this.originalHeight = userNotes.height();
 
-        userNotes.animate({ width: "300px", height: "400px" }, 400);
-        userNotes.append("<textarea id='notetextarea' style='width:280px;height:350px; margin:5px;top: 35px;position: absolute;'></textarea>");
+
+
+        userNotes.append("<textarea id='notetextarea'></textarea>");
         $("#usernotes #notesaccordion").hide();
-        $("#usernotes #addnewnotebutton").hide();
-        $("#usernotes #addpinbutton").show();
+        $("#usernotes #addnewnotebutton").hide();       
         $("#usernotes #savenotebutton").show();
         $("#usernotes #cancelnotebutton").show();
 
     };
 
     var closeNoteEdit = function () {
-        $("#usernotes #notetextarea").remove();
-        $("#usernotes #addpinbutton").hide();
+        $("#usernotes #notetextarea").remove();      
         $("#usernotes #savenotebutton").hide();
         $("#usernotes #cancelnotebutton").hide();
-
-        // $("#usernotes").animate({ width: _this.originalWidth + "px", height: _this.originalHeight + "px" }, 400);
         $("#usernotes #notesaccordion").show();
         $("#usernotes #addnewnotebutton").show();
     };
@@ -132,14 +147,18 @@ var notesmodel = new (function () {
         closeNoteEdit();
     };
 
-    _this.saveNote = function (data) {
+    _this.addNote = function (data) {
 
         var noteText = $("#usernotes #notetextarea")[0].value;
         var nextindex = _this.notes().length + 1;
-        _this.notes.push(new note(noteText, nextindex, new THREE.Vector3()));
+        _this.addNoteToList(noteText, nextindex, new THREE.Vector3());
 
         closeNoteEdit();
     };
+
+    _this.addNoteToList = function (noteText, noteIndex, vertex) {
+        _this.notes.push(new note(noteText, noteIndex, new THREE.Vector3()));
+    }
 
     _this.addPin = function (data) {
     };
@@ -154,7 +173,7 @@ var notesmodel = new (function () {
             return { NoteText: note.text, NoteVertex: note.vertex };
         });
 
-        return notesForJson; 
+        return notesForJson;
     };
 
 

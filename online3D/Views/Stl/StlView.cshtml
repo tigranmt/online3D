@@ -112,20 +112,25 @@
 <div id="progress" ></div>
 
 <div id="usernotes">
-        <div style="position:fixed">
-            <button id='addnewnotebutton' class="btn btn-mini btn-success" data-bind="click:addNewNote.bind($data)" type="button">Add new note</button>
-          @*  <button id='addpinbutton' class="btn btn-mini btn-info"    data-bind="click:addPin.bind($data)" type="button" style='display:none'>Add pin</button>*@
-            <button id='savenotebutton' class="btn btn-mini btn-success" data-bind="click:saveNote.bind($data)" type="button" style='display:none'>Save note</button>
+        
+        <div style="position:fixed;width:300px;">
+            <div id="notesheader">
+                <button id='expandnotes' class="btn btn-mini btn-success" data-bind="click:expand.bind($data)" type="button">Notes</button>          
+                <span class="badge badge-inverse" data-bind="text:count"></span>
+            </div>
+            <button id='addnewnotebutton' class="btn btn-mini btn-success" data-bind="click:startAddNewNote.bind($data)" style='display:none' type="button">Add new note</button>          
+            <button id='savenotebutton' class="btn btn-mini btn-success" data-bind="click:addNote.bind($data)" type="button" style='display:none'>Save note</button>
             <button id='cancelnotebutton' class="btn btn-mini btn-danger"  data-bind="click:cancelNote.bind($data)" type="button" style='display:none'>Cancel</button>
+            <button id='collapsenotesbutton' class="close"  data-bind="click:collapse.bind($data)" type="button" style='display:none'>x</button>
         </div>
-        <div id="notesaccordion" class="accordion" data-bind="foreach: notes" style="margin:5px;top: 35px;position: relative;">
+        <div id="notesaccordion" class="accordion" data-bind="foreach: notes">
             <div class="accordion-group" data-bind="mouseover:mouseOver.bind($data)" >
                 <div class="accordion-heading">         
                     <span class="badge badge-inverse" data-bind="text:noteIndex"></span>
-                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-bind="text:shortDescription" data-parent="#accordion2" href="#collapseOne" style="display: inline;">                       
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-bind="text:shortDescription, attr: { href: collapseHref }" data-parent="#notesaccordion" >                       
                     </a>
                 </div>
-                <div id="collapseOne" class="accordion-body collapse in">
+                <div data-bind="attr: { id: collapseId }" class="accordion-body collapse in">
                     <div class="accordion-inner" data-bind="text:text">                  
                        
                     </div>
