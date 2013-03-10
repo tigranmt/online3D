@@ -84,17 +84,32 @@ var viewmodels = new (function () {
 var note = function (note, index, coord) {
     var _this = this;
 
-    _this.closeButtonHtml = "";
+    _this.closeButtonHtml = "<button id='removenotebutton' class='close'  style='font-size: 1.1em;position:absolute;' type='button'>x</button>";
     _this.text = note;
     _this.shortDescription = note.substring(0, 10) + "...";
     _this.vertex = coord;
-    _this.noteIndex = index;
-    _this.collapseId = index;
-    _this.collapseHref = "#" + index;
+    _this.noteIndex = ko.observable(index);
+    _this.collapseId = ko.observable(index);
+    _this.collapseHref = ko.observable("#" + index);
+    _this.noteRemoveRequest = undefined;
 
-    _this.mouseOver = function (data) {
+    _this.mouseOver = function (data, event) {
+        var userNotes = $("#usernotes");
 
+        if ($("#usernotes #removenotebutton").length === 0) {
+            $("#usernotes").append(_this.closeButtonHtml);
+            $("#usernotes #removenotebutton").click(function () {
+                var noteId = $("#usernotes #removenotebutton").attr("parent-note-index");
+                _this.noteRemoveRequest(parseInt(noteId) - 1); //we pass INDEX !, and not just note number, so -1
+            });
+        }
+        //position close button
+        var removenotebutton = $("#usernotes #removenotebutton");
+        removenotebutton.css({ top: event.currentTarget.offsetTop + event.currentTarget.offsetHeight - 10, left: event.currentTarget.clientWidth + 5 });
+        removenotebutton.attr("parent-note-index", _this.noteIndex());
     };
+
+
 };
 
 
@@ -103,44 +118,98 @@ var notesmodel = new (function () {
 
     _this.notes = ko.observableArray();
 
-    _this.expand = function (data) {
-        var userNotes = $("#usernotes");     
-        userNotes.animate({ width: "300px", height: "400px" }, 400);
-        $("#notesheader").hide();
-        $("#usernotes #addnewnotebutton").show();
-        $("#usernotes #collapsenotesbutton").show();
-        
+    _this.htmlChanged = undefined;
+
+    var refreshIndeices = function () {
+        for (var i = 0; i < _this.notes().length; i++) {
+            var originalIndex = _this.notes()[i].noteIndex();
+            var newIndex = i + 1;
+
+            _this.notes()[i].noteIndex(newIndex);
+            _this.notes()[i].collapseId(newIndex);
+            _this.notes()[i].collapseHref("#" + newIndex);
+        }
+    };
+
+    var noteRemove = function (noteIndex) {
+        if (noteIndex >= 0 && noteIndex < _this.notes().length) {
+            _this.notes.splice(noteIndex, 1);
+            $("#usernotes #removenotebutton").remove();
+
+            refreshIndeices();
+        }
+    };
+
+    var raiseHtmlChangedEvent = function () {
+        if (_this.htmlChanged !== undefined)
+            _this.htmlChanged();
+    };
+
+    _this.mouseLeave = function (data, event) {
+
+        var removenotebutton = $("#usernotes #removenotebutton");
+        if (removenotebutton.length !== 0)
+            removenotebutton.remove();
+    };
+
+    _this.accordionHtml = "<div id='notesaccordion' class='accordion' data-bind='foreach: notes'>" +
+                            "<div class='accordion-group' data-bind='event:{mouseover:mouseOver.bind($data)}, mouseoverBubble: false'>" +
+                                "<div class='accordion-heading'>" +
+                                    "<span class='badge badge-inverse' data-bind='text:noteIndex'></span>" +
+                                    "<a class='accordion-toggle collapsed' data-toggle='collapse' data-bind='text:shortDescription, attr: { href: collapseHref }' data-parent='#notesaccordion'></a>" +
+                                "</div>" +
+                                "<div data-bind='attr: { id: collapseId }' class='accordion-body collapse in'>" +
+                                    "<div class='accordion-inner' data-bind='text:text'></div>" +
+                                "</div>" +
+                            "</div>" +
+                          "</div>";
+
+    _this.collapseButtonHtml = "<button id='collapsenotesbutton' class='close'  style='font-size: 2.5em;' data-bind='click:collapse.bind($data)' type='button'>-</button>";
+
+
+
+    _this.expand = function (animate) {
+        var userNotes = $("#usernotes");
+
+        if (animate !== false)
+            userNotes.animate({ width: "300px", height: "400px" }, 400);
+
+        userNotes.html("<div style='position:fixed;width:300px;'>" +
+                            "<button id='addnewnotebutton' class='btn btn-mini btn-success' data-bind='click:startAddNewNote.bind($data)' type='button'>Add new note</button>" +
+                            _this.collapseButtonHtml +
+                        "</div>" + _this.accordionHtml
+
+        );
+
+        raiseHtmlChangedEvent();
+
     };
 
     _this.collapse = function (data) {
         var userNotes = $("#usernotes");
-        userNotes.animate({ width: "300px", height: "0px" }, 400);
-
-        $("#usernotes #collapsenotesbutton").hide();
-        $("#usernotes #addnewnotebutton").hide();
-        $("#notesheader").show();
+        userNotes.animate({ width: "3em", height: "2em" }, 400);
+        userNotes.html("<button id='expandnotes' class='btn btn-mini btn-success'  data-bind='click:expand.bind($data)' type='button'>Notes</button>");
+        raiseHtmlChangedEvent();
     };
 
     _this.startAddNewNote = function (data) {
 
         var userNotes = $("#usernotes");
+        userNotes.html("<div style='position:fixed;width:300px;'>" +
+                            "<button id='savenotebutton' class='btn btn-mini btn-success' style='margin: 0.5em;' data-bind='click:addNote.bind($data)' type='button'>Save note</button>" +
+                            "<span/>" +
+                            "<button id='cancelnotebutton' class='btn btn-mini btn-danger'  data-bind='click:cancelNote.bind($data)' type='button'>Cancel</button>" +
+                            _this.collapseButtonHtml +
+                            "<textarea id='notetextarea'></textarea>" +
+                       "</div>"
+        );
 
-
-
-        userNotes.append("<textarea id='notetextarea'></textarea>");
-        $("#usernotes #notesaccordion").hide();
-        $("#usernotes #addnewnotebutton").hide();       
-        $("#usernotes #savenotebutton").show();
-        $("#usernotes #cancelnotebutton").show();
+        raiseHtmlChangedEvent();
 
     };
 
     var closeNoteEdit = function () {
-        $("#usernotes #notetextarea").remove();      
-        $("#usernotes #savenotebutton").hide();
-        $("#usernotes #cancelnotebutton").hide();
-        $("#usernotes #notesaccordion").show();
-        $("#usernotes #addnewnotebutton").show();
+        _this.expand(false);
     };
 
     _this.cancelNote = function (data) {
@@ -154,10 +223,14 @@ var notesmodel = new (function () {
         _this.addNoteToList(noteText, nextindex, new THREE.Vector3());
 
         closeNoteEdit();
+
+
     };
 
     _this.addNoteToList = function (noteText, noteIndex, vertex) {
-        _this.notes.push(new note(noteText, noteIndex, new THREE.Vector3()));
+        var singlenote = new note(noteText, noteIndex, new THREE.Vector3());
+        singlenote.noteRemoveRequest = noteRemove;
+        _this.notes.push(singlenote);
     }
 
     _this.addPin = function (data) {

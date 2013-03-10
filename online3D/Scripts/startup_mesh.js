@@ -41,8 +41,16 @@
     ko.applyBindings(viewmodels, home_Menu); 
 
     var notes = $("#usernotes")[0];
-    if(notes !== undefined)
-        ko.applyBindings(notesmodel, notes);
+    if(notes !== undefined) {
+
+       //apply first binding 
+       ko.applyBindings(notesmodel, notes);
+
+       //subscribe to html changed event so REapply bindings
+       notesmodel.htmlChanged = function() {
+            ko.applyBindings(notesmodel, notes);
+       }
+    }
 
     /***************************/
     /****** TOOLTIPS*****/

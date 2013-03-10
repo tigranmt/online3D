@@ -70,8 +70,17 @@ namespace online3D.Models
 
                 deCompressed = Compressor.Decompress(bson["Notes"].AsString).Split(new char[] { SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
                 var notes = new List<Note>();
-                for (int i = 0; i < deCompressed.Length; i += 3)
-                    notes.Add(new JavaScriptSerializer().Deserialize(deCompressed[i], typeof(Note)) as Note);
+                for (int i = 0; i < deCompressed.Length; i++)
+                {
+                    try
+                    {
+                        notes.Add(new JavaScriptSerializer().Deserialize(deCompressed[i], typeof(Note)) as Note);
+                    }
+                    catch (Exception ex)
+                    {
+                        LogEntry.logger.FatalException("Decompressing note " + i, ex);
+                    }
+                }
                 mi.Notes = notes;
             }
 
