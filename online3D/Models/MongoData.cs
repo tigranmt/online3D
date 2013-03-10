@@ -125,7 +125,10 @@ namespace online3D.Models
         {
             StringBuilder sb = new StringBuilder();
             foreach (var n in notes)
-            {               
+            {
+                if(n.NoteText.Length > 300)
+                    n.NoteText = n.NoteText.Substring(0, 300);
+
                 sb.Append(new JavaScriptSerializer().Serialize(n));
                 sb.Append(SEPARATOR);
             }
@@ -173,7 +176,6 @@ namespace online3D.Models
                     var bsonArrayNew = BsonArrayFromEnumerable(mi.Vertices);
                     bsonArraySaved +=bsonArrayNew;
                     collection.Save(savedDocument); //update document
-
                 }
                 else
                 {

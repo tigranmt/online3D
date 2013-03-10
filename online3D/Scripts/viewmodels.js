@@ -116,9 +116,12 @@ var note = function (note, index, coord) {
 var notesmodel = new (function () {
     var _this = this;
 
+    _this.note_text_limit = 300;
     _this.notes = ko.observableArray();
 
     _this.htmlChanged = undefined;
+
+    _this.charactersToType = ko.observable(_this.note_text_limit);
 
     var refreshIndeices = function () {
         for (var i = 0; i < _this.notes().length; i++) {
@@ -197,12 +200,22 @@ var notesmodel = new (function () {
         var userNotes = $("#usernotes");
         userNotes.html("<div style='position:fixed;width:300px;'>" +
                             "<button id='savenotebutton' class='btn btn-mini btn-success' style='margin: 0.5em;' data-bind='click:addNote.bind($data)' type='button'>Save note</button>" +
-                            "<span/>" +
-                            "<button id='cancelnotebutton' class='btn btn-mini btn-danger'  data-bind='click:cancelNote.bind($data)' type='button'>Cancel</button>" +
+                            "<button id='cancelnotebutton' class='btn btn-mini btn-danger' style='margin: 0.5em;' data-bind='click:cancelNote.bind($data)' type='button'>Cancel</button>" +
+                            "<span data-bind='text:charactersToType' style='margin:0.0em 0.0em 0.0em 3.5em;'> </span> to go.." +
                             _this.collapseButtonHtml +
                             "<textarea id='notetextarea'></textarea>" +
                        "</div>"
         );
+
+        $('#notetextarea').bind("keyup paste", function (e) {
+            var curLength = $(this).val().length;
+
+            if (curLength + 1 > _this.note_text_limit)
+                $(this).val($(this).val().substring(0, _this.note_text_limit));
+
+            _this.charactersToType(_this.note_text_limit - curLength);
+        });
+
 
         raiseHtmlChangedEvent();
 
@@ -243,7 +256,7 @@ var notesmodel = new (function () {
 
     _this.forJSON = function () {
         var notesForJson = $.map(_this.notes(), function (note) {
-            return { NoteText: note.text, NoteVertex: note.vertex };
+            return { NoteText: note.text.substring(0, _this.note_text_limit), NoteVertex: note.vertex };
         });
 
         return notesForJson;

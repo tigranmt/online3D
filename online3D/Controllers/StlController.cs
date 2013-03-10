@@ -82,6 +82,7 @@ namespace ModelViewer3D.Controllers
             if (savedCount == model.VertexCount)
             {
                 IData access = new MongoDataAccess();
+
                 model.Vertices = VerticesHolder.GetVertices(model);
                 model.ModelImage = VerticesHolder.GetImageData(model);
                 model.FaceColors = VerticesHolder.GetFaceColors(model);
