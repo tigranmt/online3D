@@ -95,7 +95,7 @@ var note = function (note, index, coord) {
 
     _this.mouseOver = function (data, event) {
         var userNotes = $("#usernotes");
-
+       
         if ($("#usernotes #removenotebutton").length === 0) {
             $("#usernotes").append(_this.closeButtonHtml);
             $("#usernotes #removenotebutton").click(function () {
@@ -105,7 +105,7 @@ var note = function (note, index, coord) {
         }
         //position close button
         var removenotebutton = $("#usernotes #removenotebutton");
-        removenotebutton.css({ top: event.currentTarget.offsetTop + event.currentTarget.offsetHeight - 10, left: event.currentTarget.clientWidth + 5 });
+        removenotebutton.css({ top: event.currentTarget.offsetTop + 2 * event.currentTarget.offsetHeight, left: event.currentTarget.clientWidth + 5 });
         removenotebutton.attr("parent-note-index", _this.noteIndex());
     };
 
@@ -123,7 +123,8 @@ var notesmodel = new (function () {
 
     _this.charactersToType = ko.observable(_this.note_text_limit);
 
-    var refreshIndeices = function () {
+    //reevaluates indeices in array and all reltaed components of binded UI
+    var refreshIndecies = function () {
         for (var i = 0; i < _this.notes().length; i++) {
             var originalIndex = _this.notes()[i].noteIndex();
             var newIndex = i + 1;
@@ -139,7 +140,7 @@ var notesmodel = new (function () {
             _this.notes.splice(noteIndex, 1);
             $("#usernotes #removenotebutton").remove();
 
-            refreshIndeices();
+            refreshIndecies();
         }
     };
 
@@ -156,13 +157,13 @@ var notesmodel = new (function () {
     };
 
     _this.accordionHtml = "<div id='notesaccordion' class='accordion' data-bind='foreach: notes'>" +
-                            "<div class='accordion-group' data-bind='event:{mouseover:mouseOver.bind($data)}, mouseoverBubble: false'>" +
-                                "<div class='accordion-heading'>" +
+                            "<div class='accordion-group'> " +
+                                "<div class='accordion-heading' data-bind='event:{mouseover:mouseOver.bind($parent)}, mouseoverBubble: false'>" +
                                     "<span class='badge badge-inverse' data-bind='text:noteIndex'></span>" +
-                                    "<a class='accordion-toggle collapsed' data-toggle='collapse' data-bind='text:shortDescription, attr: { href: collapseHref }' data-parent='#notesaccordion'></a>" +
+                                    "<a id='noteshortdescription' class='accordion-toggle collapsed' data-toggle='collapse' data-bind='text:shortDescription, attr: { href: collapseHref }' data-parent='#notesaccordion'></a>" +
                                 "</div>" +
                                 "<div data-bind='attr: { id: collapseId }' class='accordion-body collapse in'>" +
-                                    "<div class='accordion-inner' data-bind='text:text'></div>" +
+                                    "<div class='accordion-inner'><textarea  data-bind='text:text' rows=6 readonly></textarea></div>" +
                                 "</div>" +
                             "</div>" +
                           "</div>";

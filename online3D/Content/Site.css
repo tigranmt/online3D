@@ -210,7 +210,7 @@ ribbon {
 }
 
 
-#usernotes 
+.usernotes 
 {
     position: absolute;
     bottom: 10px;
@@ -224,19 +224,19 @@ ribbon {
     overflow: overlay;
 }
 
-#usernotes #notesaccordion
+#notesaccordion
 {
     margin:5px;
     top: 35px;
     position: relative;
 }
 
-#usernotes #notesaccordion a
+#noteshortdescription
 {
   display: inline;
 }
 
-#usernotes #collapsenotesbutton 
+#collapsenotesbutton 
 {
     top: -10px;
     position: absolute;
