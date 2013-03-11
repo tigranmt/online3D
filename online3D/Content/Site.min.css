@@ -22,4 +22,5 @@ ribbon{background-color:#a00;overflow:hidden;position:absolute;left:-3em;top:2.5
 {margin:5px;top:35px;position:relative;}#noteshortdescription
 {display:inline;}#collapsenotesbutton
 {top:-10px;position:absolute;right:1px;}#notetextarea
-{width:280px;height:350px;margin:5px;top:35px;left:1px;position:absolute;}
+{width:280px;height:350px;margin:5px;top:35px;left:1px;position:absolute;}#removenotebutton
+{color:rgb(236,22,142);opacity:1;}
