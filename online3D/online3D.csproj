@@ -50,6 +50,7 @@
       <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -84,6 +85,7 @@
     <Compile Include="Helpers\AuthenticationRequiered.cs" />
     <Compile Include="Helpers\CacheChecker.cs" />
     <Compile Include="Helpers\Compressor.cs" />
+    <Compile Include="Helpers\JsonHelper.cs" />
     <Compile Include="Helpers\LayoutAttribute.cs" />
     <Compile Include="Helpers\UserModel.cs" />
     <Compile Include="Models\LogEntry.cs" />

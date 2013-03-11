@@ -12,6 +12,7 @@ using System.Text;
 using System.Globalization;
 using online3D.Helpers;
 using System.Web.Script.Serialization;
+using System.Runtime.Serialization.Json;
 
 namespace online3D.Models
 {
@@ -19,6 +20,7 @@ namespace online3D.Models
     {
 
         private const char SEPARATOR = ' ';
+        private const char SEPARATOR_NOTES = '#';
 
         public MongoDataAccess()
         {
@@ -68,13 +70,13 @@ namespace online3D.Models
                 mi.FaceColors = faceColors;
 
 
-                deCompressed = Compressor.Decompress(bson["Notes"].AsString).Split(new char[] { SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+                var notesString = bson["Notes"].AsString.Split(new char[] { SEPARATOR_NOTES }, StringSplitOptions.RemoveEmptyEntries);
                 var notes = new List<Note>();
-                for (int i = 0; i < deCompressed.Length; i++)
+                for (int i = 0; i < notesString.Length; i++)
                 {
                     try
                     {
-                        notes.Add(new JavaScriptSerializer().Deserialize(deCompressed[i], typeof(Note)) as Note);
+                        notes.Add(JsonHelper.JsonDeserialize<Note>(notesString[i]));
                     }
                     catch (Exception ex)
                     {
@@ -128,13 +130,16 @@ namespace online3D.Models
             {
                 if(n.NoteText.Length > 300)
                     n.NoteText = n.NoteText.Substring(0, 300);
+                
+                n.NoteText = n.NoteText.Replace(SEPARATOR_NOTES, ' ');
+                 
+                sb.Append(JsonHelper.JsonSerializer<Note>(n));
+                sb.Append(SEPARATOR_NOTES);
 
-                sb.Append(new JavaScriptSerializer().Serialize(n));
-                sb.Append(SEPARATOR);
             }
 
-            var compressed = Compressor.Compress(sb.ToString());
-            return new BsonString(compressed);
+           
+            return new BsonString(sb.ToString());
         }
 
 

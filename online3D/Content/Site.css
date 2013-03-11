@@ -253,4 +253,10 @@ ribbon {
     position: absolute;
 }
 
+#removenotebutton
+{
+    color: rgb(236, 22, 142);
+    opacity: 1;
+}
+
 

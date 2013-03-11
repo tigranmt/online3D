@@ -105,7 +105,7 @@ var note = function (note, index, coord) {
         }
         //position close button
         var removenotebutton = $("#usernotes #removenotebutton");
-        removenotebutton.css({ top: event.currentTarget.offsetTop + 2 * event.currentTarget.offsetHeight, left: event.currentTarget.clientWidth + 5 });
+        removenotebutton.css({ top: event.currentTarget.offsetTop + 2 * event.currentTarget.offsetHeight + 10, left: event.currentTarget.clientWidth - 10 });
         removenotebutton.attr("parent-note-index", _this.noteIndex());
     };
 
