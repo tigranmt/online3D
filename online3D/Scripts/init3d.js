@@ -181,7 +181,8 @@
             {
                 var pointClicked = TOOLS.getVertexFromMouseCoord(e);
                 if (pointClicked !== undefined) {
-                    _this.sceneTracker.center = pointClicked;                              
+                    //_this.sceneTracker.center = pointClicked;                              
+                    _this.sceneTracker.target = pointClicked;                              
                     _this.spotlight.position = _this.glCamera.position;
                     _this.spotlight.target.position = pointClicked;
                 }
@@ -833,7 +834,8 @@ init.prototype.lookFrom = function (vector, offset, axis, bounds) {
     center.y = (bounds.min.y + bounds.max.y) / 2;
     center.z = (bounds.min.z + bounds.max.z) / 2;
 
-    this.sceneTracker.center = center;
+    //this.sceneTracker.center = center;
+    this.sceneTracker.target = center;
 
     var diag = new THREE.Vector3();
     diag = diag.subVectors(bounds.max, bounds.min);
