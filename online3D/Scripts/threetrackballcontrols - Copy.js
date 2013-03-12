@@ -7,7 +7,7 @@ THREE.TrackballControls = function (object, domElement) {
     THREE.EventDispatcher.call(this);
 
     var _this = this;
-    var STATE = { NONE: -1, ROTATE: 2, ZOOM: 1, PAN: 2, TOUCH_ROTATE: 3, TOUCH_ZOOM: 4, TOUCH_PAN: 5 };
+    var STATE = { NONE: -1, ROTATE: 2, ZOOM: 1, PAN: 0, TOUCH_ROTATE: 3, TOUCH_ZOOM: 4, TOUCH_PAN: 5 };
 
     this.object = object;
     this.domElement = (domElement !== undefined) ? domElement : document;
@@ -342,6 +342,16 @@ THREE.TrackballControls = function (object, domElement) {
 
     }
 
+
+    function isPanState(event) {
+        if ((_state === STATE.ROTATE && event.button === STATE.PAN) || 
+                (_state === STATE.PAN  && event.button === STATE.ROTATE)) {                
+                return true;                
+         }
+
+         return false;
+    }
+
     function mousedown(event) {
 
         if (_this.enabled === false) return;
@@ -355,19 +365,25 @@ THREE.TrackballControls = function (object, domElement) {
 
         }
 
-        //Only if ctrl key is NOT pressed
-        if (_state === STATE.ROTATE && !_this.noRotate && !event.ctrlKey) {
-
-            _rotateStart = _rotateEnd = _this.getMouseProjectionOnBall(event.clientX, event.clientY);
-
-        } else if (_state === STATE.ZOOM && !_this.noZoom) {
-
-            _zoomStart = _zoomEnd = _this.getMouseOnScreen(event.clientX, event.clientY);
-
-        } else if (_state === STATE.PAN && !_this.noPan && event.ctrlKey) { //only ic ctrl key IS pressed
-
+        if(isPanState(event)) {
             _panStart = _panEnd = _this.getMouseOnScreen(event.clientX, event.clientY);
+        }
+        else {
 
+            if (_state === STATE.ROTATE && !_this.noRotate) {
+
+                _rotateStart = _rotateEnd = _this.getMouseProjectionOnBall(event.clientX, event.clientY);
+
+            } else if (_state === STATE.ZOOM && !_this.noZoom) {
+
+                _zoomStart = _zoomEnd = _this.getMouseOnScreen(event.clientX, event.clientY);
+
+            } 
+//                else if (_state === STATE.PAN && !_this.noPan) {
+
+//                _panStart = _panEnd = _this.getMouseOnScreen(event.clientX, event.clientY);
+
+//            }
         }
 
         document.addEventListener('mousemove', mousemove, false);
@@ -382,19 +398,25 @@ THREE.TrackballControls = function (object, domElement) {
         event.preventDefault();
         event.stopPropagation();
 
-        //Only if ctrl key is NOT pressed
-        if (_state === STATE.ROTATE && !_this.noRotate && !event.ctrlKey) {
-
-            _rotateEnd = _this.getMouseProjectionOnBall(event.clientX, event.clientY);
-
-        } else if (_state === STATE.ZOOM && !_this.noZoom) {
-
-            _zoomEnd = _this.getMouseOnScreen(event.clientX, event.clientY);
-
-        } else if (_state === STATE.PAN && !_this.noPan && event.ctrlKey) {//only ic ctrl key IS pressed
-
+        if(isPanState(event)) {
             _panEnd = _this.getMouseOnScreen(event.clientX, event.clientY);
+        }
+        else {
 
+            if (_state === STATE.ROTATE && !_this.noRotate) {
+
+                _rotateEnd = _this.getMouseProjectionOnBall(event.clientX, event.clientY);
+
+            } else if (_state === STATE.ZOOM && !_this.noZoom) {
+
+                _zoomEnd = _this.getMouseOnScreen(event.clientX, event.clientY);
+
+            } 
+//            else if (_state === STATE.PAN && !_this.noPan) {
+
+//                _panEnd = _this.getMouseOnScreen(event.clientX, event.clientY);
+
+//            }
         }
 
     }
