@@ -204,7 +204,8 @@ init.prototype.extensionIsOk = function (file) {
 
 //setups the tracking of the mouse pointer (rotating, moving... the camera)
 init.prototype.setupSceneTracking = function () {
-    this.sceneTracker = new THREE.OrbitControls(this.glCamera, $("#3DArea")[0]);
+    //this.sceneTracker = new THREE.OrbitControls(this.glCamera, $("#3DArea")[0]);
+    this.sceneTracker = new THREE.TrackballControls(this.glCamera, $("#3DArea")[0]);
     this.sceneTracker.addEventListener('change', this.render);
 }
 

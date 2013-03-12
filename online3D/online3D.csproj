@@ -194,6 +194,8 @@
     <Content Include="Scripts\Tools\tools.js" />
     <Content Include="Scripts\Tools\tools.min.js" />
     <Content Include="Scripts\Tools\pointmeasurer.js" />
+    <Content Include="Scripts\threetrackballcontrols.js" />
+    <Content Include="Scripts\threetrackballcontrols.min.js" />
     <Content Include="Scripts\userlogin.js" />
     <Content Include="Scripts\model_loader.js" />
     <Content Include="Scripts\modernizr-1.7.min.js" />
@@ -285,6 +287,7 @@ type "$(ProjectDir)Scripts\Tools\tools.js" |  "$(ProjectDir)Binaries\jsmin" &gt;
 type "$(ProjectDir)Scripts\Tools\pointmeasurer.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Tools\pointmeasurer.min.js"
 type "$(ProjectDir)Scripts\Tools\meshpencil.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Tools\meshpencil.min.js"
 type "$(ProjectDir)Scripts\Tools\colorpicker.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Tools\colorpicker.min.js"
+type "$(ProjectDir)Scripts\threetrackballcontrols.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\threetrackballcontrols.min.js"
 type "$(ProjectDir)Content\Site.css" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Content\Site.min.css"
 type "$(ProjectDir)Content\toastr.css" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Content\toastr.min.css"
 
