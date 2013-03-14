@@ -19,7 +19,7 @@
     this.start = function () {
         console.log("Start mesh pencil");
         document.addEventListener('mousemove', onMouseMove, false);
-        document.addEventListener('mousedown', onMouseDown, false);
+        document.addEventListener('mousedown', onMouseDown, true);
         document.addEventListener('mouseup', onMouseUp, false);
         TOOLS.current = _this;
 
@@ -38,7 +38,7 @@
     this.stop = function () {
         console.log("Stop mesh pencil");
         document.removeEventListener('mousemove', onMouseMove, false);
-        document.removeEventListener('mousedown', onMouseDown, false);
+        document.removeEventListener('mousedown', onMouseDown, true);
         document.removeEventListener('mouseup', onMouseUp, false);
     };
 
