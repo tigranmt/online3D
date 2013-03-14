@@ -878,7 +878,18 @@ init.prototype.fitCamera = function (scene, camera, tracker, bounds) {
     if(this.spotlight === undefined) {
         this.spotlight = new THREE.SpotLight(0xFFFFFF, 0.9);              
         scene.add(this.spotlight);
+    }
 
+
+    if(this.directionalLight === undefined) {
+        this.directionalLight = new THREE.DirectionalLight( 0xffffff, 0.1 );
+	    this.directionalLight.position.set( camera.position.x, camera.position.y, camera.position.z );
+        scene.add(this.directionalLight);
+    }
+
+    if(this.ambientLight === undefined)  {
+        this.ambientLight = new THREE.AmbientLight( 0x444444 );
+        scene.add(this.ambientLight);
     }
 
     this.spotlight.position = camera.position;
