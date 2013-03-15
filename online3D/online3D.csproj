@@ -190,6 +190,7 @@
     <Content Include="Scripts\Tools\meshpencil.js" />
     <Content Include="Scripts\Tools\meshpencil.min.js" />
     <Content Include="Scripts\Tools\notesmanager.js" />
+    <Content Include="Scripts\Tools\notesmanager.min.js" />
     <Content Include="Scripts\Tools\pointmeasurer.min.js" />
     <Content Include="Scripts\Tools\tools.js" />
     <Content Include="Scripts\Tools\tools.min.js" />
@@ -287,6 +288,9 @@ type "$(ProjectDir)Scripts\Tools\tools.js" |  "$(ProjectDir)Binaries\jsmin" &gt;
 type "$(ProjectDir)Scripts\Tools\pointmeasurer.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Tools\pointmeasurer.min.js"
 type "$(ProjectDir)Scripts\Tools\meshpencil.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Tools\meshpencil.min.js"
 type "$(ProjectDir)Scripts\Tools\colorpicker.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Tools\colorpicker.min.js"
+type "$(ProjectDir)Scripts\Tools\notesmanager.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Tools\notesmanager.min.js"
+
+
 type "$(ProjectDir)Scripts\threetrackballcontrols.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\threetrackballcontrols.min.js"
 type "$(ProjectDir)Content\Site.css" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Content\Site.min.css"
 type "$(ProjectDir)Content\toastr.css" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Content\toastr.min.css"

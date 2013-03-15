@@ -89,8 +89,8 @@ var note = function (note, index, coord) {
     _this.shortDescription = note.substring(0, 10) + "...";
     _this.vertex = coord;
     _this.noteIndex = ko.observable(index);
-    _this.collapseId = ko.observable("usernotecollapse" + index);
-    _this.collapseHref = ko.observable("#usernotecollapse" + index);
+    _this.collapseId = ko.observable(notesmodel.id_prefix + index);
+    _this.collapseHref = ko.observable("#" + notesmodel.id_prefix + index);
     _this.noteRemoveRequest = undefined;
 
     _this.mouseOver = function (data, event) {
@@ -109,12 +109,16 @@ var note = function (note, index, coord) {
         removenotebutton.attr("parent-note-index", _this.noteIndex());
     };
 
+    
+
 
 };
 
 
 var notesmodel = new (function () {
     var _this = this;
+
+    _this.id_prefix = "usernotescollapse";
 
     _this.note_text_limit = 300;
     _this.notes = ko.observableArray();
@@ -123,6 +127,33 @@ var notesmodel = new (function () {
 
     _this.charactersToType = ko.observable(_this.note_text_limit);
 
+    _this.notesmanager = TOOLS.startAgent(TOOLS.NOTES_MANAGER);
+    TOOLS.stopAgent(TOOLS.NOTES_MANAGER);
+
+    $("#usernotes").on("shown", function (data) {
+
+        var idstring = data.target.id.split(_this.id_prefix)[1];
+        var idInt = parseInt(idstring) - 1;
+        if (idInt >= 0 && idInt < _this.notes().length) {
+            var note = _this.notes()[idInt];
+            var vertex = note.vertex;
+
+            //empty vertex
+            if (vertex.x === 0 && vertex.y === 0 && vertex.z === 0)
+                return;
+
+            _this.notesmanager.addPoint(vertex);
+            
+        }
+    });
+
+
+    $("#usernotes").on("hidden", function (data) {
+
+        _this.notesmanager.removeLastPoint();
+
+    });
+
     //reevaluates indeices in array and all reltaed components of binded UI
     var refreshIndecies = function () {
         for (var i = 0; i < _this.notes().length; i++) {
@@ -130,8 +161,8 @@ var notesmodel = new (function () {
             var newIndex = i + 1;
 
             _this.notes()[i].noteIndex(newIndex);
-            _this.notes()[i].collapseId("usernotecollapse" + newIndex);
-            _this.notes()[i].collapseHref("#usernotecollapse" + newIndex);
+            _this.notes()[i].collapseId(_this.id_prefix + newIndex);
+            _this.notes()[i].collapseHref("#" + _this.id_prefix + newIndex);
         }
     };
 
@@ -141,6 +172,8 @@ var notesmodel = new (function () {
             $("#usernotes #removenotebutton").remove();
 
             refreshIndecies();
+
+            _this.notesmanager.startAgent();
         }
     };
 
@@ -163,7 +196,7 @@ var notesmodel = new (function () {
                                     "<a id='noteshortdescription' class='accordion-toggle collapsed' data-toggle='collapse' data-bind='text:shortDescription, attr: { href: collapseHref }' data-parent='#notesaccordion'></a>" +
                                 "</div>" +
                                 "<div data-bind='attr: { id: collapseId }' class='accordion-body collapse in'>" +
-                                    "<div class='accordion-inner'><textarea  data-bind='text:text' rows=6 readonly></textarea></div>" +
+                                    "<div class='accordion-inner'><textarea  data-bind='text:text' rows=4 readonly></textarea></div>" +
                                 "</div>" +
                             "</div>" +
                           "</div>";
@@ -193,6 +226,7 @@ var notesmodel = new (function () {
         var userNotes = $("#usernotes");
         userNotes.animate({ width: "3em", height: "2em" }, 400);
         userNotes.html("<button id='expandnotes' class='btn btn-mini btn-success'  data-bind='click:expand.bind($data)' type='button'>Notes</button>");
+        _this.notesmanager.stopAgent();
         raiseHtmlChangedEvent();
     };
 
@@ -218,12 +252,17 @@ var notesmodel = new (function () {
         });
 
 
+        _this.notesmanager.startAgent();
+
         raiseHtmlChangedEvent();
 
     };
 
     var closeNoteEdit = function () {
         _this.expand(false);
+
+        _this.notesmanager.stopAgent();
+
     };
 
     _this.cancelNote = function (data) {
@@ -234,21 +273,19 @@ var notesmodel = new (function () {
 
         var noteText = $("#usernotes #notetextarea")[0].value;
         var nextindex = _this.notes().length + 1;
-        _this.addNoteToList(noteText, nextindex, new THREE.Vector3());
+
+
+        _this.addNoteToList(noteText, nextindex, _this.notesmanager.getPoint());
 
         closeNoteEdit();
-
-
     };
 
     _this.addNoteToList = function (noteText, noteIndex, vertex) {
-        var singlenote = new note(noteText, noteIndex, new THREE.Vector3());
+        var singlenote = new note(noteText, noteIndex, vertex);
         singlenote.noteRemoveRequest = noteRemove;
         _this.notes.push(singlenote);
     }
 
-    _this.addPin = function (data) {
-    };
 
     _this.count = ko.computed(function () {
         return _this.notes().length;

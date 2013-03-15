@@ -2,7 +2,7 @@
 
     POINT_TO_POINT_MEASURER: "Point to point Measurer",
     MESH_PENCIL: "Mesh pencil",
-    NOTES_MANAGER : "Notes manager",
+    NOTES_MANAGER: "Notes manager",
 
     toolsarray: {},
 
@@ -22,26 +22,33 @@
 
         //on close button click stops current tool and removes the tool div
         $("#closebutton").click(function (event) {
-            TOOLS.stopcurrenttool();
+            TOOLS.stopCurrentTool();
         });
     },
 
-    //starts sepcified tool like an agent, no STOP call expected to it
-    startTooAgent: function (tooname) {
-        var _t = this.toolsarray[toolname];
+    //starts sepcified tool like an agent
+    startAgent: function (agentName) {
+        var _t = this.toolsarray[agentName];
         if (_t === undefined) {
-            _t = this.toolFromName(toolname);
-            this.toolsarray[toolname] = _t;
+            _t = this.toolFromName(agentName);
+            this.toolsarray[agentName] = _t;
         }
 
-        this.createUiForTool(_t);
+        //NO UI for agents expected
+
         _t.startAgent();
+        return _t;
+
+    },
+
+    stopAgent: function (agentName) {
+        this.toolsarray[agentName].stopAgent();
     },
 
     startTool: function (toolname) {
 
         if (this.current !== undefined)
-            this.stopcurrenttool();
+            this.stopCurrentTool();
 
         var _t = this.toolsarray[toolname];
         if (_t === undefined) {
@@ -51,9 +58,11 @@
 
         this.createUiForTool(_t);
         _t.start();
+
+        return _t;
     },
 
-    stopcurrenttool: function () {
+    stopCurrentTool: function () {
 
         if (TOOLS.current !== undefined) {
             TOOLS.current.stop();
@@ -82,6 +91,7 @@
         this.scene.remove(mesh);
     },
 
+  
     getViewDirection: function (event) {
 
         var x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -101,7 +111,7 @@
         return viewDirection;
     },
 
-    getIntersectionFromMouseCoord: function (event) {
+    getIntersectionFromMouseCoord: function (event, nearViewer) {
         var viewDirection = this.getViewDirection(event);
         var cameraPosition = this.camera.position;
 
@@ -111,8 +121,9 @@
         //get all meshes from scene
         var objects = [];
         this.forEachMesh(function (mesh) {
-            if (mesh.visible)
+            if (mesh.visible) {
                 objects.push(mesh.children[0]);
+            }
         });
 
 
@@ -124,7 +135,21 @@
         var point = new THREE.Vector3();
 
         if (intersects.length > 0) {
-            return intersects[0];
+            //find an intersection mearest to viewer
+            if (nearViewer === true) {
+                var minimum = { curDist: 9999999 };
+                for (var i = 0; i < intersects.length; i++) {
+                    var dist = this.camera.position.distanceTo(intersects[i].point);
+                    if (minimum.curDist > dist) {
+                        minimum.curDist = dist;
+                        minimum.inter = intersects[i];
+                    }
+                }
+
+                return minimum.inter;
+            }
+            else //just return the first one
+                return intersects[0];
         }
     },
 
@@ -178,9 +203,10 @@
         return boundingBox;
     },
 
-    attach: function (scene3D, camera3D) {
+    attach: function (scene3D, camera3D, tracker3D) {
         this.scene = scene3D;
         this.camera = camera3D;
+        this.tracker = tracker3D;
 
         //assign iterator function to scene
         this.forEachMesh = function (callback, next) {
