@@ -89,8 +89,8 @@ var note = function (note, index, coord) {
     _this.shortDescription = note.substring(0, 10) + "...";
     _this.vertex = coord;
     _this.noteIndex = ko.observable(index);
-    _this.collapseId = ko.observable(index);
-    _this.collapseHref = ko.observable("#" + index);
+    _this.collapseId = ko.observable("usernotecollapse" + index);
+    _this.collapseHref = ko.observable("#usernotecollapse" + index);
     _this.noteRemoveRequest = undefined;
 
     _this.mouseOver = function (data, event) {
@@ -130,8 +130,8 @@ var notesmodel = new (function () {
             var newIndex = i + 1;
 
             _this.notes()[i].noteIndex(newIndex);
-            _this.notes()[i].collapseId(newIndex);
-            _this.notes()[i].collapseHref("#" + newIndex);
+            _this.notes()[i].collapseId("usernotecollapse" + newIndex);
+            _this.notes()[i].collapseHref("#usernotecollapse" + newIndex);
         }
     };
 
