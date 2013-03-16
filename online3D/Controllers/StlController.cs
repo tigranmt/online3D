@@ -47,7 +47,12 @@ namespace ModelViewer3D.Controllers
             {
                 MongoDataAccess access = new MongoDataAccess();
                 var models = access.ReadModelCollection(id, false);
-                ViewBag.ID = models.First().ID;
+                var first = models.First();
+                ViewBag.DownloadLink = first.ID;
+
+                var identity = this.User.Identity;
+                ViewBag.Auth = (identity.IsAuthenticated && first.User == identity.Name);                   
+
             }
             catch(Exception ex)
             {

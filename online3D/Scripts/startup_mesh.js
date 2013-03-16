@@ -11,8 +11,9 @@
   if (bag.length !== 0){ //load a data from the server
         
         var text = bag.text();
-        bag.remove();
+        bag.remove();       
         stlscene.graphics.LoadFromServer(text);
+       
     }
   else {
     stlscene.graphics.LoadFileData(); //load data from local file

@@ -61,7 +61,6 @@ function StlToMesh() {
 
         if (isAcii) {
             stlLoader = new asciStlFileLoader();
-
         }
         else {
             stlLoader = new binaryStlFileLoader();
