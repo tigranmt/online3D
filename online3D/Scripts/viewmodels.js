@@ -195,7 +195,7 @@ var notesmodel = new (function () {
                                     "<span class='badge badge-inverse' data-bind='text:noteIndex'></span>" +
                                     "<a id='noteshortdescription' class='accordion-toggle collapsed' data-toggle='collapse' data-bind='text:shortDescription, attr: { href: collapseHref }' data-parent='#notesaccordion'></a>" +
                                 "</div>" +
-                                "<div data-bind='attr: { id: collapseId }' class='accordion-body collapse in'>" +
+                                "<div data-bind='attr: { id: collapseId }' class='accordion-body collapse'>" +
                                     "<div class='accordion-inner'><textarea  data-bind='text:text' rows=4 readonly></textarea></div>" +
                                 "</div>" +
                             "</div>" +
