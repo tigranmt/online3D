@@ -19,7 +19,7 @@
     this.stopAgent = function () {
         console.log("No stop call for " + this.title + " expected");
 
-        this.removeLastPoint();
+        this.removeAllPoints();
 
         lastAddedNotePoint = undefined;
         document.removeEventListener('mouseup', onMouseUp, false);
@@ -42,7 +42,7 @@
     this.addPoint = function (point) {
 
         if (point.x === 0 && point.y === 0 && point.z === 0)
-            return; 
+            return;
 
         var meshSphere = createMeshFromPoint(point);
         lastAddedNotePoint = meshSphere;
@@ -50,12 +50,26 @@
     };
 
 
-    this.removeLastPoint = function () {
-        if (lastAddedNotePoint !== undefined) {
-            TOOLS.removeMesh(lastAddedNotePoint);
-            lastAddedNotePoint = undefined;
+    this.removeAllPoints = function () {
+
+        if (TOOLS.forEachMesh === undefined) return;
+
+        var points = [];
+        TOOLS.forEachMesh(function (mesh) {
+            if (mesh.notePoint !== undefined) {
+                points.push(mesh);
+            }
+
+        }, function (mesh) {
+            return true;
+        });
+
+        for (var i = 0; i < points.length; i++) {
+            TOOLS.removeMesh(points[i]);
         }
-    }
+
+    };
+
 
     var createMeshFromPoint = function (point) {
 
@@ -77,11 +91,13 @@
 
         if (event.button !== 0) return;
 
+        if (event.target.id !== "canvas") return;
+
         var intersection = TOOLS.getIntersectionFromMouseCoord(event);
         if (intersection !== undefined) {
 
             //remove last added 
-            _this.removeLastPoint();
+            _this.removeAllPoints();
             _this.addPoint(intersection.point);
         }
 

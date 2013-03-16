@@ -111,7 +111,7 @@
         return viewDirection;
     },
 
-    getIntersectionFromMouseCoord: function (event, nearViewer) {
+    getIntersectionFromMouseCoord: function (event) {
         var viewDirection = this.getViewDirection(event);
         var cameraPosition = this.camera.position;
 
@@ -135,21 +135,8 @@
         var point = new THREE.Vector3();
 
         if (intersects.length > 0) {
-            //find an intersection mearest to viewer
-            if (nearViewer === true) {
-                var minimum = { curDist: 9999999 };
-                for (var i = 0; i < intersects.length; i++) {
-                    var dist = this.camera.position.distanceTo(intersects[i].point);
-                    if (minimum.curDist > dist) {
-                        minimum.curDist = dist;
-                        minimum.inter = intersects[i];
-                    }
-                }
-
-                return minimum.inter;
-            }
-            else //just return the first one
-                return intersects[0];
+            //just return the first one
+            return intersects[0];
         }
     },
 

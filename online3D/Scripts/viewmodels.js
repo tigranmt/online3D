@@ -132,6 +132,8 @@ var notesmodel = new (function () {
 
     $("#usernotes").on("shown", function (data) {
 
+        _this.notesmanager.removeAllPoints();
+
         var idstring = data.target.id.split(_this.id_prefix)[1];
         var idInt = parseInt(idstring) - 1;
         if (idInt >= 0 && idInt < _this.notes().length) {
@@ -141,18 +143,20 @@ var notesmodel = new (function () {
             //empty vertex
             if (vertex.x === 0 && vertex.y === 0 && vertex.z === 0)
                 return;
-
+            
             _this.notesmanager.addPoint(vertex);
             
         }
     });
 
-
+     
     $("#usernotes").on("hidden", function (data) {
 
-        _this.notesmanager.removeLastPoint();
+        _this.notesmanager.removeAllPoints();
 
-    });
+   });
+
+
 
     //reevaluates indeices in array and all reltaed components of binded UI
     var refreshIndecies = function () {
@@ -172,8 +176,7 @@ var notesmodel = new (function () {
             $("#usernotes #removenotebutton").remove();
 
             refreshIndecies();
-
-            _this.notesmanager.startAgent();
+            _this.notesmanager.removeAllPoints();            
         }
     };
 
@@ -251,7 +254,7 @@ var notesmodel = new (function () {
             _this.charactersToType(_this.note_text_limit - curLength);
         });
 
-
+        _this.notesmanager.removeAllPoints();
         _this.notesmanager.startAgent();
 
         raiseHtmlChangedEvent();
@@ -261,6 +264,7 @@ var notesmodel = new (function () {
     var closeNoteEdit = function () {
         _this.expand(false);
 
+        _this.notesmanager.removeAllPoints();
         _this.notesmanager.stopAgent();
 
     };
