@@ -756,6 +756,70 @@ init.prototype.removeAxis = function() {
 
 }
 
+init.prototype.drawAxis = function(scene, length) {
+    
+    var cylinder = new THREE.CylinderGeometry(0.06,0.06, length, 28, 28);
+    var cone     = new THREE.CylinderGeometry(0.18,0.01,1, 16,16);
+  
+
+    //X axis
+    var materialx = new THREE.MeshPhongMaterial({color: 0xFF0000});
+    var xAxis = new THREE.Mesh(cylinder, materialx);
+   
+    var conex     = new THREE.Mesh(cone, materialx);
+    conex.position.y += -length/2;
+    
+    var compositex = new THREE.Object3D();
+    compositex.add(xAxis);
+    compositex.add(conex);
+    
+    compositex.rotation.z = 90 * Math.PI/180;
+    compositex.position.x += length/2;
+
+    compositex.arrow = true;
+    scene.add(compositex);
+
+    //Y axis
+    var materialy = new THREE.MeshPhongMaterial({color: 0x00FF00});   
+    var yAxis = new THREE.Mesh(cylinder, materialy);  
+
+    var coney     = new THREE.Mesh(cone, materialy);
+    coney.position.y += length/2;
+    coney.rotation.x = Math.PI;
+
+    var compositey = new THREE.Object3D();
+    compositey.add(yAxis);
+    compositey.add(coney);
+
+    compositey.position.y += length/2;
+    compositey.arrow = true;
+    scene.add(compositey);
+
+    //Z axis
+    var materialz = new THREE.MeshPhongMaterial({color: 0x0000FF});   
+    var zAxis = new THREE.Mesh(cylinder, materialz);  
+
+    var conez     = new THREE.Mesh(cone, materialz);
+    conez.position.y += length/2;
+    conez.rotation.x = Math.PI;
+
+    var compositez = new THREE.Object3D();
+    compositez.add(zAxis);
+    compositez.add(conez);
+
+    compositez.rotation.x = 90 * Math.PI/180;
+    compositez.position.z += length/2;
+    compositez.arrow = true;
+    scene.add(compositez);
+
+    //center 
+
+    var centerMesh = new THREE.Mesh(new THREE.SphereGeometry(0.15,18,18), new THREE.MeshPhongMaterial({color: 0x111111}));
+    centerMesh.arrow = true;
+    scene.add(centerMesh);
+   
+}
+
 
 init.prototype.showAxis = function() {
 
@@ -770,9 +834,11 @@ init.prototype.showAxis = function() {
          var diagLength = diag.length();
 
         //create axis
-         var axis = new THREE.AxisHelper(diagLength);    
-         axis.arrow = true;
-         this.glScene.add( axis );      
+//         var axis = new THREE.AxisHelper(diagLength);    
+//         axis.arrow = true;
+//         this.glScene.add( axis );      
+
+         this.drawAxis(this.glScene, diagLength);
 
          //x text
          var shapex = new THREE.TextGeometry("X", {font: 'helvetiker', height:0.5, size:2});

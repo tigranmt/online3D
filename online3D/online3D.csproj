@@ -79,6 +79,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\IntroController.cs" />
     <Compile Include="Controllers\StlController.cs" />
+    <Compile Include="Controllers\TestsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -128,6 +129,7 @@
     <Content Include="Content\Images\tvs.png" />
     <Content Include="Content\Images\wireframes.png" />
     <Content Include="Content\Site.min.css" />
+    <Content Include="Content\tests\qunit-1.11.0.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -182,6 +184,7 @@
     <Content Include="Scripts\screenshot.js" />
     <Content Include="Scripts\startup_mesh.min.js" />
     <Content Include="Scripts\storage.min.js" />
+    <Content Include="Scripts\Tests\qunit-1.11.0.js" />
     <Content Include="Scripts\threeorbitcontrol.js" />
     <Content Include="Scripts\threeorbitcontrol.min.js" />
     <Content Include="Scripts\toastr.min.js" />
@@ -237,6 +240,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\Error.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Tests\TestsView.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\TestsLayout.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

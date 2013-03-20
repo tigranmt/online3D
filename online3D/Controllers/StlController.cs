@@ -47,11 +47,20 @@ namespace ModelViewer3D.Controllers
             {
                 MongoDataAccess access = new MongoDataAccess();
                 var models = access.ReadModelCollection(id, false);
-                var first = models.First();
-                ViewBag.DownloadLink = first.ID;
 
-                var identity = this.User.Identity;
-                ViewBag.Auth = (identity.IsAuthenticated && first.User == identity.Name);                   
+                if (models.Count() > 0)
+                {
+                    var first = models.First();
+                    ViewBag.DownloadLink = first.ID;
+
+                    var identity = this.User.Identity;
+                    ViewBag.Auth = (identity.IsAuthenticated && first.User == identity.Name);
+                }
+                else
+                {
+                    //no session found in given link
+                    return Json("wrongpath", JsonRequestBehavior.AllowGet);
+                }
 
             }
             catch(Exception ex)
