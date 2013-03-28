@@ -18,5 +18,11 @@ namespace online3D.Controllers
             return View("TestsView");
         }
 
+
+        public ActionResult ConnectionTest()
+        {
+            return View("ConnectionTestsView");
+        }
+
     }
 }

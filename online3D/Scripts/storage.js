@@ -16,7 +16,7 @@
         console.log(e.toString());
     }
 
-    window.indexedFiles.deletebase = function() {
+    window.indexedFiles.deletebase = function(complete) {
 
        try {
 
@@ -24,6 +24,8 @@
            dbreq.onsuccess = function (event) {
                var db = event.result;
                console.log("indexedDB: " + dbName + " deleted");
+               if(complete!== undefined) 
+                    complete();
            }
 
            dbreq.onerror = function (event) {
@@ -38,7 +40,7 @@
    }
     
     //create store in most update way FireFox
-    var createStore = function() {
+    var createStore = function(complete) {
         var v = "1.0"; 
         var request = window.indexedFiles.db.open(dbName,v); 
         request.onupgradeneeded = function(e) {
@@ -49,6 +51,8 @@
            }
 
            var store = db.createObjectStore(storeName,{ keyPath: "fileName" });
+           if(complete!== undefined)
+               complete();
            
         }
         
@@ -85,7 +89,7 @@
     }
 
 
-    window.indexedFiles.openbase = function () {
+    window.indexedFiles.openbase = function (complete) {
         window.indexedFiles.deletebase();
         
         //no more this code as in updated version of Chrome it treats IndexedDB as Firefox does
@@ -93,7 +97,7 @@
             createStoreOld();         
         }*/
         //else{
-            createStore();     //updated latest way to open Indexed base
+            createStore(complete);     //updated latest way to open Indexed base
       //  }
     }
 
@@ -159,5 +163,7 @@
      window.indexedFiles.clearStore = function(){
         window.indexedFiles.db.deleteObjectStore(storeName);
      }
+
+
 
 })();

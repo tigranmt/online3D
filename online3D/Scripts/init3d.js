@@ -145,6 +145,8 @@
                                 ASPECT,
                                 NEAR,
                                 FAR);
+
+      
         this.glCamera.updateProjectionMatrix();
 
         this.glScene = new THREE.Scene(); //create scene            
