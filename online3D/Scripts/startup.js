@@ -47,13 +47,14 @@
     this.openGoogleDrive = function () {
 
         // Use the Google Loader script to load the google.picker script.
-        google.setOnLoadCallback(createPicker);
-        google.load('picker', '1');
+        //google.setOnLoadCallback(createPicker);
+        google.load('picker', '1', { "callback": createPicker });
 
         // Create and render a Picker object for searching images.
         function createPicker() {
+
             var view = new google.picker.View(google.picker.ViewId.DOCS);
-            view.setMimeTypes("image/png,image/jpeg,image/jpg");
+            //view.setMimeTypes("image/png,image/jpeg,image/jpg");
             var picker = new google.picker.PickerBuilder()
           .enableFeature(google.picker.Feature.NAV_HIDDEN)
           .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
@@ -69,9 +70,39 @@
         // A simple callback implementation.
         function pickerCallback(data) {
             if (data.action == google.picker.Action.PICKED) {
-                var fileId = data.docs[0].id;
-                alert('The user selected: ' + fileId);
+                getFilesFromServer(data.docs);
             }
+        }
+
+
+        function downloadFile(file, callback) {
+            if (file.url) {
+                //var accessToken = gapi.auth.getToken().access_token;
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', file.url);
+                //xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+                xhr.onload = function () {
+                    callback(xhr.responseText);
+                };
+                xhr.onerror = function () {
+                    callback(null);
+                };
+                xhr.send();
+            } else {
+                callback(null);
+            }
+        }
+
+        function getFilesFromServer(files) {
+            for (var i = 0; i < files.length; i++) {
+                var f = files[i];
+                downloadFile(f, getFileCallback);
+            }
+        }
+
+
+        function getFileCallback(data) {
+
         }
 
     }
