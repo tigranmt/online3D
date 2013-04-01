@@ -1,5 +1,7 @@
 ﻿var startup = new (function () {
 
+    "use strict";
+
     window.indexedFiles.openbase();
 
     var _this = this;
@@ -44,68 +46,25 @@
     this.openDropboxDrive = function () {
     }
 
+    this.openSkyDrive = function () {
+        var fileSelected = function () {
+        }
+
+        var fileDownloaded = function () {
+        }
+
+        skydrive.showUI(fileSelected, fileDownloaded);
+    }
+
     this.openGoogleDrive = function () {
 
-        // Use the Google Loader script to load the google.picker script.
-        //google.setOnLoadCallback(createPicker);
-        google.load('picker', '1', { "callback": createPicker });
-
-        // Create and render a Picker object for searching images.
-        function createPicker() {
-
-            var view = new google.picker.View(google.picker.ViewId.DOCS);
-            //view.setMimeTypes("image/png,image/jpeg,image/jpg");
-            var picker = new google.picker.PickerBuilder()
-          .enableFeature(google.picker.Feature.NAV_HIDDEN)
-          .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
-          .setAppId('938624936690.apps.googleusercontent.com')
-            //.setOAuthToken(AUTH_TOKEN) //Optional: The auth token used in the current Drive API session.
-          .addView(view)
-          .addView(new google.picker.DocsUploadView())
-          .setCallback(pickerCallback)
-          .build();
-            picker.setVisible(true);
+        var fileSelected = function () {
         }
 
-        // A simple callback implementation.
-        function pickerCallback(data) {
-            if (data.action == google.picker.Action.PICKED) {
-                getFilesFromServer(data.docs);
-            }
+        var fileDownloaded = function () {
         }
 
-      
-
-        function downloadFile(file, callback) {
-            if (file.url) {
-                //var accessToken = gapi.auth.getToken().access_token;
-                var xhr = new XMLHttpRequest();
-                xhr.open('GET', file.url);
-                //xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-                xhr.onload = function () {
-                    callback(xhr.responseText);
-                };
-                xhr.onerror = function () {
-                    callback(null);
-                };
-                xhr.send();
-            } else {
-                callback(null);
-            }
-        }
-
-        function getFilesFromServer(files) {
-            for (var i = 0; i < files.length; i++) {
-                var f = files[i];
-                downloadFile(f, getFileCallback);
-            }
-        }
-
-
-        function getFileCallback(data) {
-
-        }
-
+        gdrive.showUI(fileSelected, fileDownloaded);
     }
 
 
@@ -290,9 +249,11 @@
             success: function (data) {
                 if (complete !== undefined)
                     complete(true);
-                $("#sample_preview").css('visibility', 'visible');
-                data.ModelName = "View sample ( " + data.ModelName + " )";
-                ko.applyBindings(data, $("#sample_preview")[0]);
+                if (data !== false) {
+                    $("#sample_preview").css('visibility', 'visible');
+                    data.ModelName = "View sample ( " + data.ModelName + " )";
+                    ko.applyBindings(data, $("#sample_preview")[0]);
+                }
             },
             error: function (data) {
                 if (complete !== undefined)

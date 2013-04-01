@@ -17,9 +17,10 @@
         <script src="@Url.Content("~/Scripts/toastr.js")" type="text/javascript"></script>
         <script src="@Url.Content("~/Scripts/userlogin.js")" type="text/javascript"></script>   
         <script src="@Url.Content("~/Scripts/startup.js")" type="text/javascript"></script>
-        <script src="http://www.google.com/jsapi"></script>
-
-
+        <script src="@Url.Content("~/Scripts/Drives/gdrive.js")" type="text/javascript"></script>
+        <script src='http://www.google.com/jsapi?key=938624936690.apps.googleusercontent.com'></script>
+        <script src="//js.live.net/v5.0/wl.js"></script>
+        <script src="@Url.Content("~/Scripts/Drives/skydrive.js")" type="text/javascript"></script>
    }
    else
    {
@@ -34,7 +35,11 @@
         <script src="@Url.Content("~/Scripts/toastr.min.js")" type="text/javascript"></script>
         <script src="@Url.Content("~/Scripts/userlogin.min.js")" type="text/javascript"></script>   
         <script src="@Url.Content("~/Scripts/startup.min.js")" type="text/javascript"></script>
-        <script src="http://www.google.com/jsapi?key=Tqz9lL40NgIlV4lbpzrCvxxm"></script>
+        <script src="@Url.Content("~/Scripts/Drives/gdrive.min.js")" type="text/javascript"></script>
+        <script src='http://www.google.com/jsapi?key=Tqz9lL40NgIlV4lbpzrCvxxm'></script>
+        <script src="//js.live.net/v5.0/wl.js"></script>
+        <script src="@Url.Content("~/Scripts/Drives/skydrive.min.js")" type="text/javascript"></script>
+       
        
    }
    
@@ -61,7 +66,7 @@
            @*  <button id="selectfile_button" class="btn btn-large  btn-primary" style="font-size: 25px;" onclick="startup.openFileDialog()" type="button">Load from disk</button>
        *@
 
-           <div class="btn-group">
+           <div class="btn-group" id="selectfile_button">
                 <button class="btn btn-large  btn-primary" style="font-size: 23px;" data-toggle="dropdown" href="#">
                     Open file
                 <span class="caret"></span>
@@ -69,6 +74,7 @@
                 <ul class="dropdown-menu">
                     <li> <a href="#" onclick="startup.openFileDialog();">Computer</a> </li>
                     <li> <a href="#"  onclick="startup.openDropboxDrive();">Dropbox</a></li>
+                    <li> <a href="#"  onclick="startup.openSkyDrive();">Sky Drive</a></li>
                     <li> <a href="#"  onclick="startup.openGoogleDrive();">Google Drive</a></li>
                    
                 </ul>
@@ -84,6 +90,9 @@ position: relative;">
            <img  src="@Url.Content("~/Content/Images/intro.png")">               
         </div>   
 
+
+
+
         <div id="sample_preview" style="padding: 33px;position: absolute;top: 420px;visibility:hidden">
              <div class="span4" style="padding: 5px 5px 2px 5px;">    
                                             
@@ -96,5 +105,6 @@ position: relative;">
         </div>
       
 
+      <div id="downloadFile_div"></div>
 </body>
 </html>

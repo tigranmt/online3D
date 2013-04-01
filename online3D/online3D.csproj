@@ -171,6 +171,10 @@
     <Content Include="Scripts\Converters\stl_to_mesh.min.js" />
     <Content Include="Scripts\Converters\vertex_to_mesh.js" />
     <Content Include="Scripts\Converters\vertex_to_mesh.min.js" />
+    <Content Include="Scripts\Drives\gdrive.js" />
+    <Content Include="Scripts\Drives\gdrive.min.js" />
+    <Content Include="Scripts\Drives\skydrive.js" />
+    <Content Include="Scripts\Drives\skydrive.min.js" />
     <Content Include="Scripts\init3d.min.js" />
     <Content Include="Scripts\model_loader.min.js" />
     <Content Include="Scripts\screenshot.min.js" />
@@ -301,6 +305,8 @@ type "$(ProjectDir)Scripts\Tools\pointmeasurer.js" |  "$(ProjectDir)Binaries\jsm
 type "$(ProjectDir)Scripts\Tools\meshpencil.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Tools\meshpencil.min.js"
 type "$(ProjectDir)Scripts\Tools\colorpicker.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Tools\colorpicker.min.js"
 type "$(ProjectDir)Scripts\Tools\notesmanager.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Tools\notesmanager.min.js"
+type "$(ProjectDir)Scripts\Drives\gdrive.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Drives\gdrive.min.js"
+type "$(ProjectDir)Scripts\Drives\skydrive.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Drives\skydrive.min.js"
 
 
 type "$(ProjectDir)Scripts\threetrackballcontrols.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\threetrackballcontrols.min.js"

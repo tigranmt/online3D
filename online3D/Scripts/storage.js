@@ -1,6 +1,8 @@
 
 (function () {
 
+    "use strict";
+
     var dbName = "files";
     var storeName = "fileData";
     var keyPropertyName = "fileName";
