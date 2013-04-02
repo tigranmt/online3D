@@ -4,8 +4,10 @@
 
     var _this = this;
     var selected, downloaded;
+    var scopes = 'https://www.googleapis.com/auth/driv; http://online3d.apphb.com; http://http://localhost:56994/'
 
     function createPicker() {
+
 
         var view = new google.picker.View(google.picker.ViewId.DOCS);
 
@@ -18,7 +20,6 @@
           .setAppId('938624936690.apps.googleusercontent.com')
 
         //.setOAuthToken(AUTH_TOKEN) //Optional: The auth token used in the current Drive API session.
-
           .addView(view)
           .addView(new google.picker.DocsUploadView())
           .setCallback(pickerCallback)
@@ -38,36 +39,39 @@
     function downloadFile(file, callback) {
         if (file.url) {
             //var accessToken = gapi.auth.getToken().access_token;
-
+            gapi.client.setApiKey('938624936690.apps.googleusercontent.com');
             gapi.client.load('drive', 'v2', function () {
-                gapi.client.setApiKey('938624936690.apps.googleusercontent.com');
-                var scopes = 'https://www.googleapis.com/auth/plus.me';
-                gapi.auth.authorize({ client_id: "938624936690.apps.googleusercontent.com", scope: scopes, immediate: true }, 
-                function() {
 
+                //var scopes = 'https://www.googleapis.com/auth/drive, http://online3d.apphb.com, http://';
+                //gapi.auth.authorize({ client_id: "938624936690.apps.googleusercontent.com", scope: scopes, immediate: true },
+                //function () {
+
+                    var myToken = gapi.auth.getToken();
                     gapi.client.request({
-                    'path': '/drive/v2/files/' + file.id,
-                    'method': 'GET',
-                    callback: function (theResponseJS, theResponseTXT) {
-                        var myToken = gapi.auth.getToken();
-                        var myXHR = new XMLHttpRequest();
-                        myXHR.open('GET', theResponseJS.downloadUrl, true);
-                        myXHR.setRequestHeader('Authorization', 'Bearer ' + myToken.access_token);
-                        myXHR.onreadystatechange = function (theProgressEvent) {
-                            if (myXHR.readyState == 4) {
-                            //          1=connection ok, 2=Request received, 3=running, 4=terminated
-                                if (myXHR.status == 200) {
-                                    //              200=OK
-                                    console.log(myXHR.response);
+                        'path': '/drive/v2/files/' + file.id,
+                        'method': 'GET',
+                        callback: function (theResponseJS, theResponseTXT) {
+
+                            var myXHR = new XMLHttpRequest();
+                            myXHR.open('GET', theResponseJS.downloadUrl, true);
+                           // myXHR.setRequestHeader('Authorization', 'Bearer ' + myToken.access_token);
+                            myXHR.onreadystatechange = function (theProgressEvent) {
+                                if (myXHR.readyState == 4) {
+                                    //          1=connection ok, 2=Request received, 3=running, 4=terminated
+                                    if (myXHR.status == 200) {
+                                        //              200=OK
+                                        console.log(myXHR.response);
+                                    }
                                 }
                             }
+                            myXHR.send();
                         }
-                        myXHR.send();
-                    }
-                });
-            });
+                    });
+                //}
+                
+               // );
 
-        });
+            });
 
         }
     }
