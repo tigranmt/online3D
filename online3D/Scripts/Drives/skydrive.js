@@ -78,7 +78,8 @@
 
                     //path: file.id + "/content"
                     var url = file.link;
-                    WL.api({ path : url,
+                    WL.api({ path: url,
+
                         method: "GET"
                     }).then(
                          function (response) {
