@@ -36,14 +36,14 @@
 
         WL.init({ client_id: "00000000480EF140", redirect_uri: "http://online3d.apphb.com" });
 
-//        WL.ui({
-//            name: "skydrivepicker",
-//            element: "downloadFile_div",
-//            mode: "open",
-//            select: "multi",
-//            onselected: onDownloadFileCompleted,
-//            onerror: onDownloadFileError
-//        });
+        //        WL.ui({
+        //            name: "skydrivepicker",
+        //            element: "downloadFile_div",
+        //            mode: "open",
+        //            select: "multi",
+        //            onselected: onDownloadFileCompleted,
+        //            onerror: onDownloadFileError
+        //        });
 
         WL.login({ "scope": "wl.skydrive wl.signin" }).then(
             function (response) {
@@ -67,7 +67,13 @@
                 for (var i = 0; i < files.length; i++) {
                     var file = files[i];
                     log(file.name);
-                    WL.download({ "path": file.id + "/content" });
+                    WL.download({ "path": file.id + "/content" }).then(
+                        function (response) {
+                            
+                        },
+                        function (responseFailed) {
+                            log("Error downloading file: " + responseFailed.error.message);
+                    }); 
                 }
             },
             function (errorResponse) {
@@ -77,10 +83,7 @@
         }
 
         function log(message) {
-            var child = document.createTextNode(message);
-            var parent = document.getElementById('JsOutputDiv') || document.body;
-            parent.appendChild(child);
-            parent.appendChild(document.createElement("br"));
+            console.log(message);
         }
 
         function onDownloadFileCompleted(response) {
