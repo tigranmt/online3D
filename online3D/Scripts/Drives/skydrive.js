@@ -45,7 +45,8 @@
         //            onerror: onDownloadFileError
         //        });
 
-        WL.login({ "scope": "wl.skydrive wl.signin" }).then(
+        //WL.login({ "scope": "wl.skydrive wl.signin" }).then(
+        WL.login({ "scope": "wl.skydrive" }).then(
             function (response) {
                 openFromSkyDrive();
             },
@@ -69,11 +70,11 @@
                     log(file.name);
                     WL.download({ "path": file.id + "/content" }).then(
                         function (response) {
-                            
+                            var r = response;
                         },
                         function (responseFailed) {
                             log("Error downloading file: " + responseFailed.error.message);
-                    }); 
+                        });
                 }
             },
             function (errorResponse) {
