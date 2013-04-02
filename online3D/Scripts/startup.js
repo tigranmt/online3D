@@ -44,6 +44,29 @@
     }
 
     this.openDropboxDrive = function () {
+        var options = {
+            linkType: "direct",
+                   
+            success: function(files) {
+
+                var client = new Dropbox.Client({
+                    key: "yWOZSH52E4A=|T2ekvhxsvcdVKgv4Z7+x97hn7eXaAg==", sandbox: true
+                });
+
+                client.readFile("hello_world.txt", function (error, data) {
+                    if (error) {
+                        return console.log(error);  // Something went wrong.
+                    }
+
+                    alert(data);  // data has the file's contents
+                });
+            },
+            cancel:  function() {
+            
+            }
+        };
+
+        Dropbox.choose(options);
     }
 
     this.openSkyDrive = function () {
