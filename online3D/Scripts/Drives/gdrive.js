@@ -39,31 +39,36 @@
         if (file.url) {
             //var accessToken = gapi.auth.getToken().access_token;
 
+            gapi.client.load('drive', 'v2', function () {
+                gapi.client.setApiKey('938624936690.apps.googleusercontent.com');
+                var scopes = 'https://www.googleapis.com/auth/plus.me';
+                gapi.auth.authorize({ client_id: "938624936690.apps.googleusercontent.com", scope: scopes, immediate: true }, 
+                function() {
 
-            $.ajax({
-                type: 'GET',
-                url: file.url,
-                crossDomain: true,               
-                success: function(responseData, textStatus, jqXHR) {
-                    var value = responseData.someKey;
-                },
-                error: function (responseData, textStatus, errorThrown) {
-                    alert('POST failed.');
-                }
+                    gapi.client.request({
+                    'path': '/drive/v2/files/' + file.id,
+                    'method': 'GET',
+                    callback: function (theResponseJS, theResponseTXT) {
+                        var myToken = gapi.auth.getToken();
+                        var myXHR = new XMLHttpRequest();
+                        myXHR.open('GET', theResponseJS.downloadUrl, true);
+                        myXHR.setRequestHeader('Authorization', 'Bearer ' + myToken.access_token);
+                        myXHR.onreadystatechange = function (theProgressEvent) {
+                            if (myXHR.readyState == 4) {
+                            //          1=connection ok, 2=Request received, 3=running, 4=terminated
+                                if (myXHR.status == 200) {
+                                    //              200=OK
+                                    console.log(myXHR.response);
+                                }
+                            }
+                        }
+                        myXHR.send();
+                    }
+                });
             });
 
-           /* var xhr = new XMLHttpRequest();
-            xhr.open('GET', file.url);
-            //xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-            xhr.onload = function () {
-                downloaded(xhr.responseText);
-            };
-            xhr.onerror = function () {
-                downloaded(null);
-            };
-            xhr.send();
-        } else {
-            downloaded(null);*/
+        });
+
         }
     }
 
@@ -75,16 +80,17 @@
     }
 
 
-   
+
 
     _this.showUI = function (selectCallback, fileLoadedCallback) {
 
         google.load('picker', '1', { "callback": createPicker });
 
+
+
         selected = selectCallback;
         downloaded = fileLoadedCallback;
-        // Create and render a Picker object for searching images.
-        createPicker();
+
     }
 
 })
