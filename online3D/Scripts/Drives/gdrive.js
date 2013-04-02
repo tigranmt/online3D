@@ -38,7 +38,21 @@
     function downloadFile(file, callback) {
         if (file.url) {
             //var accessToken = gapi.auth.getToken().access_token;
-            var xhr = new XMLHttpRequest();
+
+
+            $.ajax({
+                type: 'GET',
+                url: file.url,
+                crossDomain: true,               
+                success: function(responseData, textStatus, jqXHR) {
+                    var value = responseData.someKey;
+                },
+                error: function (responseData, textStatus, errorThrown) {
+                    alert('POST failed.');
+                }
+            });
+
+           /* var xhr = new XMLHttpRequest();
             xhr.open('GET', file.url);
             //xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
             xhr.onload = function () {
@@ -49,7 +63,7 @@
             };
             xhr.send();
         } else {
-            downloaded(null);
+            downloaded(null);*/
         }
     }
 

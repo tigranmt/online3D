@@ -68,28 +68,13 @@
                 for (var i = 0; i < files.length; i++) {
                     var file = files[i];
                     log(file.name);
-                    //                    WL.download({ "path": file.id + "/content" }, onDownloadFileCompleted).then(
-                    //                        function (response) {
-                    //                            var r = response;
-                    //                        },
-                    //                        function (responseFailed) {
-                    //                            log("Error downloading file: " + responseFailed.error.message);
-                    //                   });
-
-                    //path: file.id + "/content"
-                    var url = file.link;
-                    WL.api({ path: url,
-
-                        method: "GET"
-                    }).then(
-                         function (response) {
-                             log("Downloaded : " + response.name + ", ID: " + response.id)
-                         },
+                    WL.download({ "path": file.id + "/content" }, onDownloadFileCompleted).then(
+                        function (response) {
+                            var r = response;
+                        },
                         function (responseFailed) {
-                            "Error calling API: " + responseFailed.error.message;
-                        }
-                    );
-
+                            log("Error downloading file: " + responseFailed.error.message);
+                    });
                 }
             },
             function (errorResponse) {
