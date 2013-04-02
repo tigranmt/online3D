@@ -50,7 +50,7 @@
             success: function(files) {
 
                 var client = new Dropbox.Client({
-                    key: "yWOZSH52E4A=|T2ekvhxsvcdVKgv4Z7+x97hn7eXaAg==", sandbox: true
+                    key: "li6cyy4xgngfash", sandbox: true
                 });
 
                 client.readFile("hello_world.txt", function (error, data) {
