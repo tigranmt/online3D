@@ -17,7 +17,9 @@
         var picker = new google.picker.PickerBuilder()
           .enableFeature(google.picker.Feature.NAV_HIDDEN)
           .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
-          .setAppId('938624936690.apps.googleusercontent.com')
+        //.setAppId('938624936690.apps.googleusercontent.com')
+        .setAppId('938624936690')
+        
 
         //.setOAuthToken(AUTH_TOKEN) //Optional: The auth token used in the current Drive API session.
           .addView(view)
@@ -43,7 +45,7 @@
             gapi.client.load('drive', 'v2', function () {
 
                 var scopes = 'https://www.googleapis.com/auth/drive';
-                gapi.auth.authorize({ client_id: "938624936690.apps.googleusercontent.com", scope: scopes, immediate: true },
+                gapi.auth.authorize({ client_id: "938624936690.apps.googleusercontent.com", scope: scopes, immediate: true },              
                 function () {
 
                     var myToken = gapi.auth.getToken();
