@@ -76,7 +76,9 @@
                     //                            log("Error downloading file: " + responseFailed.error.message);
                     //                   });
 
-                    WL.api({ path: file.id + "/content",
+                    //path: file.id + "/content"
+                    var url = file.link;
+                    WL.api({ path : url,
                         method: "GET"
                     }).then(
                          function (response) {
