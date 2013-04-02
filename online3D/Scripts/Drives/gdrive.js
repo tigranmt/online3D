@@ -21,7 +21,7 @@
 
         //.setOAuthToken(AUTH_TOKEN) //Optional: The auth token used in the current Drive API session.
           .addView(view)
-          .addView(new google.picker.DocsUploadView())
+         // .addView(new google.picker.DocsUploadView())
           .setCallback(pickerCallback)
           .build();
         picker.setVisible(true);
@@ -39,12 +39,12 @@
     function downloadFile(file, callback) {
         if (file.url) {
             //var accessToken = gapi.auth.getToken().access_token;
-            gapi.client.setApiKey('938624936690.apps.googleusercontent.com');
+            gapi.client.setApiKey('AIzaSyBznqXImd7XlnTp8bdOWprHTjOQNDCPX5o');
             gapi.client.load('drive', 'v2', function () {
 
-                //var scopes = 'https://www.googleapis.com/auth/drive, http://online3d.apphb.com, http://';
-                //gapi.auth.authorize({ client_id: "938624936690.apps.googleusercontent.com", scope: scopes, immediate: true },
-                //function () {
+                var scopes = 'https://www.googleapis.com/auth/drive';
+                gapi.auth.authorize({ client_id: "938624936690.apps.googleusercontent.com", scope: scopes, immediate: true },
+                function () {
 
                     var myToken = gapi.auth.getToken();
                     gapi.client.request({
@@ -53,7 +53,7 @@
                         callback: function (theResponseJS, theResponseTXT) {
 
                             var myXHR = new XMLHttpRequest();
-                            myXHR.open('GET', theResponseJS.downloadUrl, true);
+                            myXHR.open('GET', theResponseJS.downloadUrl, true);                           
                            // myXHR.setRequestHeader('Authorization', 'Bearer ' + myToken.access_token);
                             myXHR.onreadystatechange = function (theProgressEvent) {
                                 if (myXHR.readyState == 4) {
@@ -67,9 +67,9 @@
                             myXHR.send();
                         }
                     });
-                //}
+                }
                 
-               // );
+                );
 
             });
 
