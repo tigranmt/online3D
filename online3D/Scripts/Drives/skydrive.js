@@ -68,13 +68,13 @@
                 for (var i = 0; i < files.length; i++) {
                     var file = files[i];
                     log(file.name);
-                    WL.download({ "path": file.id + "/content" }).then(
+                    WL.download({ "path": file.id + "/content" }, onDownloadFileCompleted).then(
                         function (response) {
                             var r = response;
                         },
                         function (responseFailed) {
                             log("Error downloading file: " + responseFailed.error.message);
-                        });
+                   });
                 }
             },
             function (errorResponse) {
