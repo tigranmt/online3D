@@ -53,7 +53,7 @@
                 console.log(files);
                 var appKey = { key: '254hrzt7wfhcmxv', secret: 'i9f2dtdx5y67wui', sandbox: true };
                 var client = new Dropbox.Client(appKey);
-
+                client.authDriver(new Dropbox.Drivers.Popup());
 
                 client.authenticate(function (error, client) {
                     if (error) {
