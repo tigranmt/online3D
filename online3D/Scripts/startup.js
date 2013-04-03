@@ -46,23 +46,26 @@
     this.openDropboxDrive = function () {
         var options = {
             linkType: "direct",
-                   
-            success: function(files) {
 
-                var client = new Dropbox.Client({
-                    key: "li6cyy4xgngfash", sandbox: true
-                });
+            success: function (files) {
 
-                client.readFile("hello_world.txt", function (error, data) {
-                    if (error) {
-                        return console.log(error);  // Something went wrong.
-                    }
+                console.log(files);
+                var appKey = { key: '254hrzt7wfhcmxv', secret: 'i9f2dtdx5y67wui', sandbox: true };
+                var client = new Dropbox.Client(appKey);
 
-                    alert(data);  // data has the file's contents
-                });
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    client.readFile(file.name, function (error, data) {
+                        if (error) {
+                            return console.log(error);  // Something went wrong.
+                        }
+
+                        alert(data);  // data has the file's contents
+                    });
+                }
             },
-            cancel:  function() {
-            
+            cancel: function () {
+
             }
         };
 
