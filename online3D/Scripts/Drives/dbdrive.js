@@ -40,8 +40,8 @@
         }
 
         var authenticateClient = function() {
-            
-                client.authDriver(new Dropbox.Drivers.Redirect());
+                var redirectOption = {rememberUser : true};
+                client.authDriver(new Dropbox.Drivers.Redirect(redirectOption));
 
                 client.authenticate(function (error, client) {
                     if (error) {
