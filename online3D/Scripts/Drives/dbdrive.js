@@ -11,9 +11,10 @@
 
                 success: function (files) {
                     if(!client.isAuthenticated())
-                        authenticateClient();
+                        authenticateClient(files);
                     else {
-                        console.log(files);
+                        console.log("Loading files..");
+                        downloadFiles(files);
                     }              
                 },
 
@@ -29,7 +30,7 @@
             // var read_options = {arrayBuffer: true};
             for (var i = 0; i < files.length; i++) {
                 var file = files[i];
-                client.readFile(file.link, function (error, data) {
+                client.readFile(file.name, function (error, data) {
                     if (error) {
                         return console.log(error);  // Something went wrong.
                     }
@@ -39,9 +40,11 @@
             }
         }
 
-        var authenticateClient = function() {
-                var redirectOption = {rememberUser : true};
-                client.authDriver(new Dropbox.Drivers.Redirect(redirectOption));
+        var authenticateClient = function(files) {
+                //var redirectOption = {rememberUser : true};
+                //client.authDriver(new Dropbox.Drivers.Redirect(redirectOption));
+                var popuOptions = {receiverUrl: "http://localhost:56994/"};
+                client.authDriver(new Dropbox.Drivers.Popup(popuOptions));
 
                 client.authenticate(function (error, client) {
                     if (error) {
