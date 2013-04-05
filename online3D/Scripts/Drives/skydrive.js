@@ -34,7 +34,7 @@
     _this.showUI = function (selectCallback, fileLoadedCallback) {
 
 
-        WL.init({ client_id: "00000000480EF140", redirect_uri: window.location });
+        WL.init({ client_id: "00000000480EF140", redirect_uri: window.location.origin});
 
         //        WL.ui({
         //            name: "skydrivepicker",

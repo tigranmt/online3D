@@ -2,6 +2,8 @@
 
 (function () {
 
+
+
         var appKey = { key: '254hrzt7wfhcmxv', secret: 'i9f2dtdx5y67wui', sandbox: true };
         var client = new Dropbox.Client(appKey);
 
@@ -43,7 +45,7 @@
         var authenticateClient = function(files) {
                 //var redirectOption = {rememberUser : true};
                 //client.authDriver(new Dropbox.Drivers.Redirect(redirectOption));
-                var popupOptions = {receiverUrl: window.location};
+                var popupOptions = {receiverUrl: window.location.origin};
                 client.authDriver(new Dropbox.Drivers.Popup(popupOptions));
 
                 client.authenticate(function (error, client) {
