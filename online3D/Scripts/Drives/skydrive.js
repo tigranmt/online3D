@@ -58,7 +58,7 @@
         function openFromSkyDrive() {
             WL.fileDialog({
                 mode: 'open',
-                select: 'multiple'
+                select: 'multi'
             }).then(
             function (response) {
                 log("The following file is being downloaded:");
