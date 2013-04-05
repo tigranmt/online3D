@@ -41,7 +41,7 @@ var viewmodels = new (function () {
     _this.gotoHome = function (event) {
 
         var home = window.location.href.split('/');
-        window.open(home[0] + "//" + home[2]);
+        window.open(home[0] + "//" + home[2] );
     }
 
 

@@ -53,8 +53,10 @@
 
         var fileLoadingFinished = function (files) {
             showProgress(false);
-            loadFilesFromRemoteDriveAsync(files);
+            //loadFilesFromRemoteDriveAsync(files);
+            loadFiles(files);
         }
+
 
         dbdrive.chooseFiles(filesLoadingStarted, fileLoadingFinished);
     }
@@ -113,13 +115,16 @@
             index--;
 
             //iteration trminated
-            if (index < 0 && !error) {
-                var f0 = files[0];
-                //send to another page of the extension of the FIRST file in the sequence, if there are more then one
-                var extension = f0.name.split('.').pop();
-                var path = rootMap[extension.toUpperCase()];
-                if (path) {
-                    window.location.replace(path);
+            if (index < 0) {
+
+                if (!error) {
+                    var f0 = files[0];
+                    //send to another page of the extension of the FIRST file in the sequence, if there are more then one
+                    var extension = f0.name.split('.').pop();
+                    var path = rootMap[extension.toUpperCase()];
+                    if (path) {
+                        window.location.replace(path);
+                    }
                 }
                 return;
             }
@@ -135,7 +140,7 @@
                 showProgress(false);
                 window.indexedFiles.deletebase();
                 index--;
-                error = true; 
+                error = true;
                 return;
             }
 

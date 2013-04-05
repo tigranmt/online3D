@@ -5,14 +5,22 @@
 
         var totalFilesSelected = 0; 
 
-        var appKey = { key: '254hrzt7wfhcmxv', secret: 'i9f2dtdx5y67wui', sandbox: false, dropbox: true };
+        var appKey = { key: '254hrzt7wfhcmxv', secret: 'i9f2dtdx5y67wui', sandbox: false};
         var client = new Dropbox.Client(appKey);
         var ready = {};
         var start = {};
         var filesChosen = new Array(); 
 
-        Dropbox.Drivers.Popup.oauthReceiver();
+        var isUserAuthenticated = function() {
+            var firtsKey = localStorage.key(0);
+            var retrievedObject = localStorage.getItem(firtsKey);
 
+            if(retrievedObject === undefined || retrievedObject === null) 
+                return false; 
+
+            return (retrievedObject.key === appKey.key && retrievedObject.secret == appKey.secret);
+        }
+      
         dbdrive.chooseFiles = function(startCallback, readyCallback) {
 
             ready = readyCallback;
@@ -21,8 +29,9 @@
                 linkType: "direct",
 
                 success: function (files) {
-                    if(!client.isAuthenticated())
+                    if(!isUserAuthenticated()){
                         authenticateClient(files);
+                    }
                     else {
                         console.log("Loading files..");
                         console.log(files);
@@ -51,9 +60,10 @@
 
             for (var i = 0; i < length; i++) {
                 var file = files[i];
-                client.readFile("Public/" + file.name, function (error, data) {
-                    if (error) {
 
+                var readOptions = {blob  : true};
+                client.readFile("Public/" + file.name, readOptions, function (error, data) {
+                    if (error) {
                        //all files are loaded so call READY
                        if(filesChosen.length === length) 
                             ready(filesChosen);
@@ -63,7 +73,7 @@
                     
                     var fileData = {
                         name : file.name, 
-                        size : data.length,
+                        size : data.size,
                         data : data
                     };
                     filesChosen.push(fileData); 
@@ -77,10 +87,12 @@
         }
 
         var authenticateClient = function(files) {
-                //var redirectOption = {rememberUser : true};
-                //client.authDriver(new Dropbox.Drivers.Redirect(redirectOption));
-                var popupOptions = {receiverUrl: window.location.origin};
-                client.authDriver(new Dropbox.Drivers.Popup(popupOptions));
+
+             
+                var redirectOption = {rememberUser : true, useQuery : true};
+                client.authDriver(new Dropbox.Drivers.Redirect(redirectOption));
+               // var popupOptions = {receiverUrl: window.location.origin};
+               // client.authDriver(new Dropbox.Drivers.Popup(popupOptions));              
 
                 client.authenticate(function (error, client) {
                     if (error) {
@@ -92,5 +104,7 @@
                 });          
         };
 
+
+       
       
 })();
