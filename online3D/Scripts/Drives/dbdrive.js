@@ -43,7 +43,7 @@
         var authenticateClient = function(files) {
                 //var redirectOption = {rememberUser : true};
                 //client.authDriver(new Dropbox.Drivers.Redirect(redirectOption));
-                var popupOptions = {receiverUrl: "http://online3d.apphb.com/"};
+                var popupOptions = {receiverUrl: window.location};
                 client.authDriver(new Dropbox.Drivers.Popup(popupOptions));
 
                 client.authenticate(function (error, client) {

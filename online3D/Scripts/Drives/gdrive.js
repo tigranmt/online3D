@@ -4,7 +4,7 @@
 
     var _this = this;
     var selected, downloaded;
-    var scopes = 'https://www.googleapis.com/auth/driv; http://online3d.apphb.com; http://http://localhost:56994/'
+    var scopes = 'https://www.googleapis.com/auth/driv;'
 
     function createPicker() {
 
