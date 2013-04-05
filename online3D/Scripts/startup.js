@@ -43,8 +43,20 @@
         $("#fileLoader").click();
     }
 
+
+
     this.openDropboxDrive = function () {
-        dbdrive.chooseFiles();
+
+        var filesLoadingStarted = function () {
+            showProgress(true);
+        }
+
+        var fileLoadingFinished = function (files) {
+            showProgress(false);
+            loadFilesFromRemoteDriveAsync(files);
+        }
+
+        dbdrive.chooseFiles(filesLoadingStarted, fileLoadingFinished);
     }
 
     this.openSkyDrive = function () {
@@ -84,6 +96,54 @@
         $("#selectfile_button").css({ visibility: visibilityRest });
     }
 
+
+    function loadFilesFromRemoteDriveAsync(files) {
+
+        if (files.length === 0)
+            return;
+
+        var index = files.length;
+        var error = false;
+
+
+
+        (function loadSingleFile() {
+
+
+            index--;
+
+            //iteration trminated
+            if (index < 0 && !error) {
+                var f0 = files[0];
+                //send to another page of the extension of the FIRST file in the sequence, if there are more then one
+                var extension = f0.name.split('.').pop();
+                var path = rootMap[extension.toUpperCase()];
+                if (path) {
+                    window.location.replace(path);
+                }
+                return;
+            }
+
+            var f = files[index];
+            var fileData = {
+                "fileName": f.name,
+                "fileSize": f.size,
+                "fileData": f.data
+            }
+            if (addToStore(fileData, loadSingleFile) === false) {
+                toastr.error('Failed to load file ' + f.name, 'Error');
+                showProgress(false);
+                window.indexedFiles.deletebase();
+                index--;
+                error = true; 
+                return;
+            }
+
+
+        })();
+    }
+
+
     /*
     Load files in sequence
     */
@@ -107,7 +167,7 @@
                 index--;
                 //loop finished
                 if (index < 0) {
-                    window.indexedFiles.deletebase();
+                    //window.indexedFiles.deletebase();
                     (function (file) {
                         //send to another page of the extension of the FIRST file in the sequence, if there are more then one
                         var extension = file.name.split('.').pop();
