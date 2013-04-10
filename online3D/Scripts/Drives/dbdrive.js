@@ -27,7 +27,7 @@
             start = startCallback; 
             var options = {
                 linkType: "direct",
-
+                multiselect : true,
                 success: function (files) {
                     if(!isUserAuthenticated()){
                         authenticateClient(files);
