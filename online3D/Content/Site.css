@@ -30,6 +30,11 @@ body
     opacity: .99;
 }
 
+#iconImageSrc 
+{
+    display: inline;
+    position: absolute;
+}
 
 #flprogress 
 {

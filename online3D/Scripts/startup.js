@@ -353,6 +353,10 @@
             $('#access').on('click', function () {
                 userAccess.requestUserAuth();
             });
+
+            $("#introImageSrc").lazyload();
+            $("#iconImageSrc").lazyload();
+            
         }
     });
 
