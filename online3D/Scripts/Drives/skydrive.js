@@ -22,13 +22,11 @@
                 msg += "\n" + response.data.files[file].id;
             }
         }
-        //        document.getElementById("info").innerText =
-        //        "Selected folders/files:" + msg;
+      
     };
 
     function onDownloadFileError(responseFailed) {
-        //        document.getElementById("info").innerText =
-        //        "Error getting folder/file info: " + responseFailed.error.message;
+      
     }
 
     _this.showUI = function (selectCallback, fileLoadedCallback) {
@@ -36,16 +34,7 @@
 
         WL.init({ client_id: "00000000480EF140", redirect_uri: window.location.origin});
 
-        //        WL.ui({
-        //            name: "skydrivepicker",
-        //            element: "downloadFile_div",
-        //            mode: "open",
-        //            select: "multi",
-        //            onselected: onDownloadFileCompleted,
-        //            onerror: onDownloadFileError
-        //        });
-
-        //WL.login({ "scope": "wl.skydrive wl.signin" }).then(
+       
         WL.login({ "scope": "wl.skydrive" }).then(
             function (response) {
                 openFromSkyDrive();

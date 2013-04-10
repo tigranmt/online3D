@@ -216,8 +216,16 @@
                     showProgress(false);
                 };
 
-                //load all files in sequence                  
-                reader.readAsBinaryString(file);
+                //load all files in sequence    
+
+                //this is a BLOB obect  
+                if (file.blob !== undefined) {
+                    reader.readAsBinaryString(file.data);
+                }
+                else {
+                    //this is a FILE object
+                    reader.readAsBinaryString(file);
+                }
 
             };
             runLoad();
@@ -236,16 +244,24 @@
         var files = event.dataTransfer.files;
         // var file = files[0];
 
-        if (extensionIsOk(files))
+        if (extensionIsOk(files)) {
             loadFiles(files);
+        }
+        else {
+            toastr.error('Not supported file format', 'Error');
+        }
     }
 
     function loadFileFromDisk(event) {
         var files = event.target.files;
         // var file = files[0];
 
-        if (extensionIsOk(files))
+        if (extensionIsOk(files)) {
             loadFiles(files);
+        }
+        else {
+            toastr.error('Not supported file format', 'Error');
+        }
     }
 
     this.onDragEnter = function (event) {

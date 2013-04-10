@@ -74,7 +74,8 @@
                     var fileData = {
                         name : file.name, 
                         size : data.size,
-                        data : data
+                        data : data,
+                        blob: true
                     };
                     filesChosen.push(fileData); 
 
