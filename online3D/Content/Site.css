@@ -33,8 +33,10 @@ body
 #iconImageSrc 
 {
     display: inline;
-    position: absolute;
-    height: 100px;
+    position: absolute;   
+    height: 80px;
+    left: 10px;
+    top: 5px;
 }
 
 #flprogress 
@@ -63,6 +65,12 @@ body
 {
     bottom:5%;     
     height: 250px;
+}
+
+
+#fileDropDiv 
+{
+    width : 50%;
 }
 
 
