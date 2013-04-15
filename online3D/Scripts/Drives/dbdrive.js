@@ -57,15 +57,17 @@
                 return;
 
             start(); 
+            var curIndex = 0;
 
-            for (var i = 0; i < length; i++) {
-                var file = files[i];
+            (function downloadSingle(){               
+
+                var file = files[curIndex];
 
                 var readOptions = {blob  : true};
                 client.readFile("Public/" + file.name, readOptions, function (error, data) {
                     if (error) {
-                       //all files are loaded so call READY
-                       if(filesChosen.length === length) 
+                        //all files are loaded so call READY
+                        if(filesChosen.length === length) 
                             ready(filesChosen);
 
                         return console.log(error);  // Something went wrong.
@@ -79,11 +81,18 @@
                     };
                     filesChosen.push(fileData); 
 
-                     //all files are loaded so call ready
-                     if(filesChosen.length === length) 
+                    //all files are loaded so call ready
+                    if(filesChosen.length === length) 
                         ready(filesChosen);
+                    {
+                        if(curIndex <= length - 1) {
+                            curIndex++; 
+                            downloadSingle();
+                        }
+                    }
                 });
-            }
+                
+            })();
 
         }
 
