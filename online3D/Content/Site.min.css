@@ -8,7 +8,7 @@ body
 {width:300px;height:50px;background:white;position:absolute;top:90%;left:90px;border:1px solid;border-radius:5px;background:rgba(70,19,117,0.38);z-index:1;}.gridbody
 {background-color:none;background:url(Images/bg.png)repeat center top;}#basicPanel
 {bottom:5%;height:250px;}#fileDropDiv
-{width:50%;}.modelpreview,.thumbnail
+{width:60%;}.modelpreview,.thumbnail
 {background:rgba(10,18,60,0.66);}.basicPanel,#basicPanel
 {position:absolute;width:50px;box-shadow:0 0 20px 0#bbb;-moz-border-radius:5px;visibility:hidden;float:left;margin:15px;height:auto;padding:5px;z-index:400;}.fileInfo
 {float:right;visibility:hidden;width:30em;border:1px;border-radius:5px;-moz-border-radius:5px;position:absolute;top:100px;margin:20px;right:1%;z-index:100;box-shadow:0 0 10px 0#bbb;background:url(Images/bg.png)repeat bottom left;}.collapsedFileInfo
