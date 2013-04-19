@@ -4,12 +4,16 @@
     self.text = text;
     self.callback = callback;
     self.itemVisible = ko.computed(function () {
+
+        if (userAccess.logedIn === undefined)
+            userAccess.init();
+
         if (self.id === "logOutButton" ||
                self.id === "viewSavedModelsButton" ||
                self.id === "shareButton") {
             return userAccess.logedIn();
         }
-        else if (self.id === "logInButton") {
+        else if (self.id === "logInButton") {          
             return !userAccess.logedIn();
         }
         else {

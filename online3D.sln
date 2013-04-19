@@ -1,9 +1,9 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "online3D", "online3D\online3D.csproj", "{420B893E-F569-4989-AF59-6526B7F3F077}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 2012 for Web
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7FEFFC91-B697-4D6E-85CD-E1C5A736ABCC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "online3D", "online3D\online3D.csproj", "{420B893E-F569-4989-AF59-6526B7F3F077}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution

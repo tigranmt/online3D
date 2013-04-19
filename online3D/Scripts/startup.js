@@ -343,8 +343,8 @@
             }
         });
     }
-
-    $(document).ready(function () {
+    
+    this.init = function () {
         if (compatibilityChecks()) {
             setupDragDropEvents();
             setupFileLoadEvents();
@@ -356,9 +356,9 @@
 
             $("#introImageSrc").lazyload();
             $("#iconImageSrc").lazyload();
-            
+
         }
-    });
+    }
 
 })
 

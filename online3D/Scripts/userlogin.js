@@ -1,10 +1,17 @@
 ﻿
+var userAccess = userAccess || {};
+
 var userAccess = new (function(){
     
     var _this = this;
    
 
-   _this.logedIn = ko.observable(false);
+
+    this.init = function () {
+        _this.logedIn = ko.observable(false);
+    }
+
+   
    
 
    function getCookie(cookie)
