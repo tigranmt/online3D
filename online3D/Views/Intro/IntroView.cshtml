@@ -106,26 +106,14 @@ position: relative;">
  }
  else
  {
-        <script src="@Url.Content("~/Scripts/jquery-1.9.min.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/lazy-1.8.4.min.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/modernizr-1.7.min.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/bootstrap.min.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/storage.min.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/knockout-2.1.0.min.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/toastr.min.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/userlogin.min.js")" type="text/javascript"></script>   
-        <script src="@Url.Content("~/Scripts/startup.js")" type="text/javascript"></script>
-       @* <script src="@Url.Content("~/Scripts/Drives/gdrive.min.js")" type="text/javascript"></script>
-        <script src='http://www.google.com/jsapi?key=Tqz9lL40NgIlV4lbpzrCvxxm'></script>
-        <script src="https://apis.google.com/js/client.js?onload=load"></script>*@
-        <script src="//js.live.net/v5.0/wl.js"></script>
-        <script src="@Url.Content("~/Scripts/Drives/skydrive.min.js")" type="text/javascript"></script>
-        <script type="text/javascript" src="https://www.dropbox.com/static/api/1/dropbox.js" id="dropboxjs" data-app-key="li6cyy4xgngfash"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.9.1/dropbox.min.js"></script>
-        <script src="@Url.Content("~/Scripts/Drives/dbdrive.min.js")" type="text/javascript"></script>
-   @*     <script>Dropbox.Drivers.Popup.oauthReceiver();</script>*@
-      
-       
+       <script src="//js.live.net/v5.0/wl.js"></script>
+       <script src="//cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.9.1/dropbox.min.js"></script>
+       <script type="text/javascript" src="https://www.dropbox.com/static/api/1/dropbox.js" id="dropboxjs" data-app-key="li6cyy4xgngfash"></script>
+       <script src="@Url.Content("~/Scripts/knockout-2.1.0.min.js")" type="text/javascript"></script>
+
+       <!-- CDN link and non local JS loading--> 
+     
+       <script data-main="scripts/intro.min" src="scripts/require-2.1.5.min.js"></script>
  }
 
 </html>

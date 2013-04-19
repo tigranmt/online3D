@@ -3,7 +3,7 @@
         'lazy': ['jquery'],
         'bootstrap': ['jquery'] ,
         'userlogin': ['jquery'] ,
-        'start':  ['jquery', 'userlogin'] 
+        'start':  ['jquery', 'userlogin', 'lazy'] 
     },
     paths: {
         'jquery'    : 'jquery-1.9.min',
