@@ -20,8 +20,9 @@
     this.uiWidth = 300;
 
 
-    this.isCanvasClicked = function(event) {
-        return event.srcElement.localName.toLowerCase() === "canvas";
+    this.isCanvasClicked = function (event) {
+        var elementName = (event.srcElement)? event.srcElement.localName.toLowerCase() : event.originalTarget.localName.toLowerCase() ;
+        return elementName === "canvas";
     }
 
 
