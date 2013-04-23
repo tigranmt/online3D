@@ -742,8 +742,8 @@ init.prototype.LoadFromServer = function (unique) {
 init.prototype.finalizeLoading = function (meshes) {
     this.loadMeshesInformation.apply(this);
 
-    if (meshes && meshe.length > 0) {
-        var first = meshe[0];
+    if (meshes && meshes.length > 0) {
+        var first = meshes[0];
         var si = viewmodels.sessioninfo;
         si.sessionName = first.SessionName;
         si.userName = first.User;
