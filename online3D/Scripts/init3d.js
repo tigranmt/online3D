@@ -137,7 +137,7 @@
         // create a WebGL renderer, camera       
         this.glRenderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
 
-
+        
 
         //create PerspectiveCamera
         this.glCamera = new THREE.PerspectiveCamera(

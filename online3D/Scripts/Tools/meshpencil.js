@@ -9,11 +9,20 @@
     this.htmlUI = //"<div class='well'>" + 
 			        "<div class='input-append color' data-color='" + this.color + "'  id='cpcolor'>" +
 				        "<input type='text' class='span2' value='' readonly=''>" +
-				        "<span class='add-on' style='cursor:pointer;'><i style='background-color:" + this.color + ";'></i></span>" +
-			        "</div>";
+				        "<span class='add-on' style='cursor:pointer;'><i style='background-color:" + this.color + ";'></i></span>" +                      
+                    "</div>" + 
+                    "<div>" +
+                      "<button id='colorAllModelButton' type='button' class='btn btn-primary btn-small btn-success' data-toggle='buttons-radio'>Color all model</button>" + 
+                    "</div>"
+                    
     //"</div>";
 
     this.uiWidth = 300;
+
+
+    this.isCanvasClicked = function(event) {
+        return event.srcElement.localName.toLowerCase() === "canvas";
+    }
 
 
     this.start = function () {
@@ -22,9 +31,14 @@
         document.addEventListener('mousedown', onMouseDown, true);
         document.addEventListener('mouseup', onMouseUp, false);
         TOOLS.current = _this;
+        this.colorAllModel = false;
 
         $('#cpcolor').colorpicker().on('changeColor', function (ev) {
             _this.color = ev.color.toHex();
+        });
+
+        $("#colorAllModelButton").on('click', function () {
+            _this.colorAllModel = !_this.colorAllModel;
         });
 
     };
@@ -43,11 +57,32 @@
     };
 
     var onMouseDown = function (event) {
+        if (!_this.isCanvasClicked(event)) 
+            return;
+
         leftButtonPressed = event.button === 0;
+          
+        if (_this.colorAllModel && leftButtonPressed) {
+
+            //find intersections
+            var intersection = TOOLS.getIntersectionFromMouseCoord(event);
+            if (intersection !== undefined) {
+                //iterate over ALL faces of the model and set selected color
+                var faces = intersection.object.geometry.faces;
+                for (var n = 0; n < faces.length; n++)
+                    setColorOnFace(intersection.object.geometry, faces[n], _this.color);
+                intersection.object.geometry.colorsNeedUpdate = true;
+            }
+        }        
+
+      
+       
     };
 
     var onMouseUp = function (event) {
-        leftButtonPressed = false;
+
+     
+        leftButtonPressed = false;       
     };
 
     var keyfromVertex = function (v) {
@@ -98,7 +133,7 @@
         if (event.altKey || event.ctrlKey)
             return;
 
-        if (leftButtonPressed) {//left button
+        if (leftButtonPressed && !this.colorAllModel) {//left button
             var intersection = TOOLS.getIntersectionFromMouseCoord(event);
             if (intersection !== undefined) {
                 setColorOnFace(intersection.object.geometry, intersection.face, _this.color);
