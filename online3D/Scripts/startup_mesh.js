@@ -12,8 +12,7 @@
         
         var text = bag.text();
         bag.remove();       
-        stlscene.graphics.LoadFromServer(text);
-       
+        stlscene.graphics.LoadFromServer(text);       
     }
   else {
     stlscene.graphics.LoadFileData(); //load data from local file
@@ -39,7 +38,11 @@
     ko.applyBindings(viewmodels, basicPanel); 
 
     var home_Menu = $("#home")[0];
-    ko.applyBindings(viewmodels, home_Menu); 
+    ko.applyBindings(viewmodels, home_Menu);
+
+
+    var sinfo = $("#sessioninfo")[0];
+    ko.applyBindings(viewmodels, sinfo);
 
     var notes = $("#usernotes")[0];
     if(notes !== undefined) {

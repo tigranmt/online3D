@@ -121,8 +121,11 @@
 @if ((@ViewBag.DownloadLink) != null) 
 {
     <p id="bag" style="display:none">@(ViewBag.DownloadLink)</p>   
+    <div class="hero-unit" datsa-bind="sessionInfo" id="sessioninfo">           
+        <p data-bind="value:sessionName"></p>                     
+    </div>
 }
-@if(@ViewBag.DownloadLink == null || ViewBag.Auth)
+@if (@ViewBag.DownloadLink == null || ViewBag.Auth)
 {
     <span id="noteedit" style="display:none" data-value="<button id='addnewnotebutton' class='btn btn-mini btn-success' data-bind='click:startAddNewNote.bind($data)' type='button'>Add new note</button>"></span>
     <span id="noteelementclose" data-value="

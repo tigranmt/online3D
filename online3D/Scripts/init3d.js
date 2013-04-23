@@ -224,6 +224,8 @@ init.prototype.loadMeshesInformation = function () {
     var imIndex = 0;
     var _this = this;
 
+    var sessioninfo = undefined;
+
     //collect all meshes information into the view array
     TOOLS.forEachMesh(function (mesh) {
 
@@ -653,7 +655,7 @@ init.prototype.LoadFromServer = function (unique) {
 
    
 
-    var tempModel = {};
+   
     (function load() {
         $.ajax({
             url: '../GetModels/',
@@ -737,8 +739,17 @@ init.prototype.LoadFromServer = function (unique) {
 
 }
 
-init.prototype.finalizeLoading = function () {
+init.prototype.finalizeLoading = function (meshes) {
     this.loadMeshesInformation.apply(this);
+
+    if (meshes && meshe.length > 0) {
+        var first = meshe[0];
+        var si = viewmodels.sessioninfo;
+        si.sessionName = first.SessionName;
+        si.userName = first.User;
+        si.uploadDate = firs.SavedOn;
+
+    }
     
 }
 
@@ -1036,7 +1047,7 @@ init.prototype.loadMeshesFromServer = function (meshes) {
 
             _this.fitCamera.apply(_this, [_this.glScene, _this.glCamera, _this.sceneTracker]); //fit camera on end
             _this.renderOnScreen(); //render
-            _this.finalizeLoading.apply(_this);
+            _this.finalizeLoading.apply(_this, meshes);
             _this.showPanels(); //show panels       
             
             for(var i=0;i<notes.length;i++) {
