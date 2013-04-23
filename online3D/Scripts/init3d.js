@@ -224,7 +224,6 @@ init.prototype.loadMeshesInformation = function () {
     var imIndex = 0;
     var _this = this;
 
-    var sessioninfo = undefined;
 
     //collect all meshes information into the view array
     TOOLS.forEachMesh(function (mesh) {
