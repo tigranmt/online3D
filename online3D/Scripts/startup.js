@@ -12,7 +12,6 @@
     }
 
 
-
     //list of supported extensions
     var supportedExtensions = ["STL"];
 
@@ -37,51 +36,6 @@
         }
         return true;
     }
-
-
-    this.openFileDialog = function () {
-        $("#fileLoader").click();
-    }
-
-
-
-    this.openDropboxDrive = function () {
-
-        var filesLoadingStarted = function () {
-            showProgress(true);
-        }
-
-        var fileLoadingFinished = function (files) {
-            showProgress(false);
-            //loadFilesFromRemoteDriveAsync(files);
-            loadFiles(files);
-        }
-
-
-        dbdrive.chooseFiles(filesLoadingStarted, fileLoadingFinished);
-    }
-
-    this.openSkyDrive = function () {
-        var fileSelected = function () {
-        }
-
-        var fileDownloaded = function () {
-        }
-
-        skydrive.showUI(fileSelected, fileDownloaded);
-    }
-
-    this.openGoogleDrive = function () {
-
-        var fileSelected = function () {
-        }
-
-        var fileDownloaded = function () {
-        }
-
-        gdrive.showUI(fileSelected, fileDownloaded);
-    }
-
 
     /*adds specified file to store*/
     function addToStore(fileData, nextcall) {
@@ -147,8 +101,7 @@
 
         })();
     }
-
-
+    
     /*
     Load files in sequence
     */
@@ -264,28 +217,6 @@
         }
     }
 
-    this.onDragEnter = function (event) {
-        event.preventDefault();
-    };
-
-    this.onDragOver = function (event) {
-        $(this).css('background-color', 'gray')
-        event.stopPropagation();
-        event.preventDefault();
-        event.dataTransfer.dropEffect = 'copy';
-    };
-
-    this.onDragLeave = function (event) {
-        $(this).css('background-color', 'transparent')
-        event.preventDefault();
-    };
-
-    this.onDrop = function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-        loadFileFromDrop(event);
-    };
-
     function setupDragDropEvents() {
         if (!Modernizr.draganddrop) {
             toastr.error('Drag&Drop is not supproted on this browser', 'Error');
@@ -324,6 +255,69 @@
         return true;
     }
 
+    this.openFileDialog = function () {
+        $("#fileLoader").click();
+    }
+
+    this.openDropboxDrive = function () {
+
+        var filesLoadingStarted = function () {
+            showProgress(true);
+        }
+
+        var fileLoadingFinished = function (files) {
+            showProgress(false);
+            //loadFilesFromRemoteDriveAsync(files);
+            loadFiles(files);
+        }
+
+
+        dbdrive.chooseFiles(filesLoadingStarted, fileLoadingFinished);
+    }
+
+    this.openSkyDrive = function () {
+        var fileSelected = function () {
+        }
+
+        var fileDownloaded = function () {
+        }
+
+        skydrive.showUI(fileSelected, fileDownloaded);
+    }
+
+    this.openGoogleDrive = function () {
+
+        var fileSelected = function () {
+        }
+
+        var fileDownloaded = function () {
+        }
+
+        gdrive.showUI(fileSelected, fileDownloaded);
+    }   
+
+    this.onDragEnter = function (event) {
+        event.preventDefault();
+    };
+
+    this.onDragOver = function (event) {
+        $(this).css('background-color', 'gray')
+        event.stopPropagation();
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'copy';
+    };
+
+    this.onDragLeave = function (event) {
+        $(this).css('background-color', 'transparent')
+        event.preventDefault();
+    };
+
+    this.onDrop = function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        loadFileFromDrop(event);
+    };
+  
     this.loadSampleModelPreview = function (completeCallback) {
         var complete = completeCallback;
         $.ajax({
@@ -344,21 +338,22 @@
         });
     }
     
-    this.init = function () {
-        if (compatibilityChecks()) {
-            setupDragDropEvents();
-            setupFileLoadEvents();
-            _this.loadSampleModelPreview();
-            userAccess.UpdateUI();
-            $('#access').on('click', function () {
-                userAccess.requestUserAuth();
-            });
+    
+    //run 
+    if (compatibilityChecks()) {
+        setupDragDropEvents();
+        setupFileLoadEvents();
+        _this.loadSampleModelPreview();
+        userAccess.UpdateUI();
+        $('#access').on('click', function () {
+            userAccess.requestUserAuth();
+        });
 
-            $("#introImageSrc").lazyload();
-            $("#iconImageSrc").lazyload();
+        $("#introImageSrc").lazyload();
+        $("#iconImageSrc").lazyload();
 
-        }
     }
+    
 
 })
 

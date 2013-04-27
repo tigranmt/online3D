@@ -44,8 +44,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AjaxMin">
+      <HintPath>..\packages\AjaxMin.4.60.4609.17023\lib\net20\AjaxMin.dll</HintPath>
+    </Reference>
     <Reference Include="AppHarbor.Web.Security">
       <HintPath>Binaries\AppHarbor.Web.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Cassette">
+      <HintPath>..\packages\Cassette.2.0.0\lib\net40-client\Cassette.dll</HintPath>
+    </Reference>
+    <Reference Include="Cassette.Aspnet">
+      <HintPath>..\packages\Cassette.Aspnet.2.0.0\lib\net40\Cassette.Aspnet.dll</HintPath>
+    </Reference>
+    <Reference Include="Cassette.Views">
+      <HintPath>..\packages\Cassette.Views.2.0.0\lib\net40\Cassette.Views.dll</HintPath>
     </Reference>
     <Reference Include="le_nlog">
       <HintPath>..\packages\le_nlog.2.1.4\lib\Net40\le_nlog.dll</HintPath>
@@ -85,6 +97,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CassetteConfiguration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\IntroController.cs" />
@@ -139,7 +152,6 @@
     <Content Include="Content\Images\tool_bg.jpg" />
     <Content Include="Content\Images\tvs.png" />
     <Content Include="Content\Images\wireframes.png" />
-    <Content Include="Content\Site.min.css" />
     <Content Include="Content\tests\qunit-1.11.0.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -169,68 +181,41 @@
     <Content Include="Content\themes\base\jquery.ui.tabs.css" />
     <Content Include="Content\themes\base\jquery.ui.theme.css" />
     <Content Include="Content\toastr.css" />
-    <Content Include="Content\toastr.min.css" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\async.js" />
-    <Content Include="Scripts\async.min.js" />
     <Content Include="Scripts\binary_reader.js" />
-    <Content Include="Scripts\binary_reader.min.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\build.txt" />
     <Content Include="Scripts\Converters\stl_to_mesh.js" />
-    <Content Include="Scripts\Converters\stl_to_mesh.min.js" />
     <Content Include="Scripts\Converters\vertex_to_mesh.js" />
-    <Content Include="Scripts\Converters\vertex_to_mesh.min.js" />
     <Content Include="Scripts\Drives\dbdrive.js" />
-    <Content Include="Scripts\Drives\dbdrive.min.js" />
     <Content Include="Scripts\Drives\gdrive.js" />
-    <Content Include="Scripts\Drives\gdrive.min.js" />
     <Content Include="Scripts\Drives\skydrive.js" />
-    <Content Include="Scripts\Drives\skydrive.min.js" />
-    <Content Include="Scripts\init3d.min.js" />
-    <Content Include="Scripts\intro.min.js" />
+    <Content Include="Scripts\jquery.percentageloader-0.1.js" />
     <Content Include="Scripts\lazy-1.8.4.min.js" />
     <Content Include="Scripts\intro.js" />
-    <Content Include="Scripts\model_loader.min.js" />
-    <Content Include="Scripts\require-2.1.5.min.js" />
-    <Content Include="Scripts\screenshot.min.js" />
     <Content Include="Scripts\startup.js" />
-    <Content Include="Scripts\startup.min.js" />
     <Content Include="Scripts\startup_mesh.js" />
     <Content Include="Scripts\init3d.js" />
     <Content Include="Scripts\jquery-1.9.min.js" />
-    <Content Include="Scripts\jquery.percentageloader-0.1.min.js" />
     <Content Include="Scripts\knockout-2.1.0.min.js" />
     <Content Include="Scripts\screenshot.js" />
-    <Content Include="Scripts\startup_mesh.min.js" />
-    <Content Include="Scripts\storage.min.js" />
     <Content Include="Scripts\Tests\qunit-1.11.0.js" />
     <Content Include="Scripts\threeorbitcontrol.js" />
-    <Content Include="Scripts\threeorbitcontrol.min.js" />
-    <Content Include="Scripts\toastr.min.js" />
     <Content Include="Scripts\Tools\colorpicker.js" />
-    <Content Include="Scripts\Tools\colorpicker.min.js" />
     <Content Include="Scripts\Tools\meshpencil.js" />
-    <Content Include="Scripts\Tools\meshpencil.min.js" />
     <Content Include="Scripts\Tools\notesmanager.js" />
-    <Content Include="Scripts\Tools\notesmanager.min.js" />
-    <Content Include="Scripts\Tools\pointmeasurer.min.js" />
     <Content Include="Scripts\Tools\tools.js" />
-    <Content Include="Scripts\Tools\tools.min.js" />
     <Content Include="Scripts\Tools\pointmeasurer.js" />
     <Content Include="Scripts\threetrackballcontrols.js" />
-    <Content Include="Scripts\threetrackballcontrols.min.js" />
     <Content Include="Scripts\userlogin.js" />
     <Content Include="Scripts\model_loader.js" />
     <Content Include="Scripts\modernizr-1.7.min.js" />
     <Content Include="Scripts\storage.js" />
     <Content Include="Scripts\three.js" />
-    <Content Include="Scripts\three.min.js" />
     <Content Include="Scripts\toastr.js" />
-    <Content Include="Scripts\userlogin.min.js" />
     <Content Include="Scripts\viewmodels.js" />
-    <Content Include="Scripts\viewmodels.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -307,35 +292,7 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>type "$(ProjectDir)Scripts\storage.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\storage.min.js"
-type "$(ProjectDir)Scripts\toastr.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\toastr.min.js"
-type "$(ProjectDir)Scripts\userlogin.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\userlogin.min.js"
-type "$(ProjectDir)Scripts\startup.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\startup.min.js"
-type "$(ProjectDir)Scripts\async.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\async.min.js"
-type "$(ProjectDir)Scripts\three.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\three.min.js"
-type "$(ProjectDir)Scripts\threeorbitcontrol.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\threeorbitcontrol.min.js"
-type "$(ProjectDir)Scripts\binary_reader.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\binary_reader.min.js"
-type "$(ProjectDir)Scripts\init3d.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\init3d.min.js"
-type "$(ProjectDir)Scripts\model_loader.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\model_loader.min.js"
-type "$(ProjectDir)Scripts\viewmodels.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\viewmodels.min.js"
-type "$(ProjectDir)Scripts\screenshot.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\screenshot.min.js"
-type "$(ProjectDir)Scripts\startup_mesh.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\startup_mesh.min.js"
-type "$(ProjectDir)Scripts\Converters\stl_to_mesh.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Converters\stl_to_mesh.min.js"
-type "$(ProjectDir)Scripts\Converters\vertex_to_mesh.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Converters\vertex_to_mesh.min.js"
-type "$(ProjectDir)Scripts\Tools\tools.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Tools\tools.min.js"
-type "$(ProjectDir)Scripts\Tools\pointmeasurer.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Tools\pointmeasurer.min.js"
-type "$(ProjectDir)Scripts\Tools\meshpencil.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Tools\meshpencil.min.js"
-type "$(ProjectDir)Scripts\Tools\colorpicker.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Tools\colorpicker.min.js"
-type "$(ProjectDir)Scripts\Tools\notesmanager.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Tools\notesmanager.min.js"
-type "$(ProjectDir)Scripts\Drives\gdrive.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Drives\gdrive.min.js"
-type "$(ProjectDir)Scripts\Drives\skydrive.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Drives\skydrive.min.js"
-type "$(ProjectDir)Scripts\Drives\dbdrive.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\Drives\dbdrive.min.js"
-
-
-type "$(ProjectDir)Scripts\threetrackballcontrols.js" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Scripts\threetrackballcontrols.min.js"
-type "$(ProjectDir)Content\Site.css" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Content\Site.min.css"
-type "$(ProjectDir)Content\toastr.css" |  "$(ProjectDir)Binaries\jsmin" &gt; "$(ProjectDir)Content\toastr.min.css"
-
-</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

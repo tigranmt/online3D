@@ -1,80 +1,47 @@
-﻿<!DOCTYPE html>
+﻿@{
+    Bundles.Reference("/Scripts/jquery-1.9.min.js");
+    Bundles.Reference("/Scripts/bootstrap.min.js");
+    Bundles.Reference("/Scripts/async.js");
+    Bundles.Reference("/Scripts/three.js");
+    Bundles.Reference("/Scripts/Tools/tools.js");
+    Bundles.Reference("/Scripts/Tools/colorpicker.js");
+    Bundles.Reference("/Scripts/Tools/pointmeasurer.js");
+    Bundles.Reference("/Scripts/Tools/meshpencil.js");
+    Bundles.Reference("/Scripts/Tools/notesmanager.js");
+    Bundles.Reference("/Scripts/threetrackballcontrols.js");
+    Bundles.Reference("/Scripts/binary_reader.js");
+    Bundles.Reference("/Scripts/init3d.js");
+    Bundles.Reference("/Scripts/model_loader.js");
+    Bundles.Reference("/Scripts/jquery.percentageloader-0.1.js");
+    Bundles.Reference("/Scripts/knockout-2.1.0.min.js");
+    Bundles.Reference("/Scripts/storage.js");
+    Bundles.Reference("/Scripts/userlogin.js");
+    Bundles.Reference("/Scripts/viewmodels.js");
+    Bundles.Reference("/Scripts/toastr.js");
+    Bundles.Reference("/Scripts/screenshot.js");
+    Bundles.Reference("/Scripts/startup_mesh.js");
+    Bundles.Reference("/Scripts/Converters/stl_to_mesh.js");
+    Bundles.Reference("/Scripts/Converters/vertex_to_mesh.js");
+    Bundles.Reference("http://mrdoob.github.com/three.js/examples/fonts/helvetiker_regular.typeface.js");
+
+    Bundles.Reference("/Content/Site.css");
+    Bundles.Reference("/Content/bootstrap.min.css");
+    Bundles.Reference("/Content/toastr.css");
+    Bundles.Reference("/Content/bootstrap.min.css");
+    Bundles.Reference("/Content/colorpicker.min.css");
+}
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <title>@ViewBag.Title</title>
-     @if (ViewBag.DebugMode)
-     {
-        <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
-        <link href="@Url.Content("~/Content/toastr.css")" rel="stylesheet" type="text/css" />    
-        <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" type="text/css" />
-        <link href="@Url.Content("~/Content/colorpicker.min.css")" rel="stylesheet" type="text/css" />
-     }
-     else
-     {
-        <link href="@Url.Content("~/Content/Site.min.css")" rel="stylesheet" type="text/css" />
-        <link href="@Url.Content("~/Content/toastr.min.css")" rel="stylesheet" type="text/css" />    
-        <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" type="text/css" />
-        <link href="@Url.Content("~/Content/colorpicker.min.css")" rel="stylesheet" type="text/css" />
-     }
+   
+     @Bundles.RenderStylesheets()
 </head>
 <body id="body" class="gridbody">
     @RenderBody()
 
-     @if (ViewBag.DebugMode)
-     {
-        <script src="@Url.Content("~/Scripts/jquery-1.9.min.js")" type="text/javascript" ></script>
-        <script src="@Url.Content("~/Scripts/bootstrap.min.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/async.js")" type="text/javascript"></script>      
-        <script src="@Url.Content("~/Scripts/three.js")" type="text/javascript"></script>     
-        <script src="@Url.Content("~/Scripts/Tools/tools.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/Tools/colorpicker.js")" type="text/javascript"></script>   
-        <script src="@Url.Content("~/Scripts/Tools/pointmeasurer.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/Tools/meshpencil.js")" type="text/javascript"></script>        
-        <script src="@Url.Content("~/Scripts/Tools/notesmanager.js")" type="text/javascript"></script>        
-        <script src="@Url.Content("~/Scripts/threetrackballcontrols.js")" type="text/javascript"></script>            
-        <script src="@Url.Content("~/Scripts/binary_reader.js")" type="text/javascript"></script>        
-        <script src="@Url.Content("~/Scripts/init3d.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/model_loader.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/jquery.percentageloader-0.1.min.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/knockout-2.1.0.min.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/storage.js")" type="text/javascript"></script>    
-        <script src="@Url.Content("~/Scripts/userlogin.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/viewmodels.js")" type="text/javascript"></script>    
-        <script src="@Url.Content("~/Scripts/toastr.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/screenshot.js")" type="text/javascript"></script>   
-        <script src="@Url.Content("~/Scripts/startup_mesh.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/Converters/stl_to_mesh.js")" type="text/javascript"></script> 
-        <script src="@Url.Content("~/Scripts/Converters/vertex_to_mesh.js")" type="text/javascript"></script> 
-        <script src="http://mrdoob.github.com/three.js/examples/fonts/helvetiker_regular.typeface.js"></script>
-     
-     }
-     else
-     {
-        <script src="@Url.Content("~/Scripts/jquery-1.9.min.js")" type="text/javascript" ></script>
-        <script src="@Url.Content("~/Scripts/bootstrap.min.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/async.min.js")" type="text/javascript"></script>     
-        <script src="@Url.Content("~/Scripts/three.min.js")" type="text/javascript"></script> 
-        <script src="@Url.Content("~/Scripts/Tools/tools.min.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/Tools/colorpicker.min.js")" type="text/javascript"></script>   
-        <script src="@Url.Content("~/Scripts/Tools/pointmeasurer.min.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/Tools/meshpencil.min.js")" type="text/javascript"></script>   
-        <script src="@Url.Content("~/Scripts/Tools/notesmanager.min.js")" type="text/javascript"></script>               
-        <script src="@Url.Content("~/Scripts/threetrackballcontrols.js")" type="text/javascript"></script>    
-        <script src="@Url.Content("~/Scripts/binary_reader.min.js")" type="text/javascript"></script>        
-        <script src="@Url.Content("~/Scripts/init3d.min.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/model_loader.min.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/jquery.percentageloader-0.1.min.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/knockout-2.1.0.min.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/storage.min.js")" type="text/javascript"></script>    
-        <script src="@Url.Content("~/Scripts/userlogin.min.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/viewmodels.min.js")" type="text/javascript"></script>    
-        <script src="@Url.Content("~/Scripts/toastr.min.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/screenshot.min.js")" type="text/javascript"></script>   
-        <script src="@Url.Content("~/Scripts/startup_mesh.min.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/Converters/stl_to_mesh.min.js")" type="text/javascript"></script> 
-        <script src="@Url.Content("~/Scripts/Converters/vertex_to_mesh.min.js")" type="text/javascript"></script> 
-        <script src="http://mrdoob.github.com/three.js/examples/fonts/helvetiker_regular.typeface.js"></script>   
-     }
+     @Bundles.RenderScripts()
 </body>
 </html>
