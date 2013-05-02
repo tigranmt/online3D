@@ -1,26 +1,7 @@
 ﻿@{
-    Bundles.Reference("Scripts/jquery-1.9.min.js");
-    Bundles.Reference("Scripts/lazy-1.8.4.min.js");
-    Bundles.Reference("Scripts/modernizr-1.7.min.js");
-    Bundles.Reference("Scripts/bootstrap.min.js");
-    Bundles.Reference("Scripts/storage.js");
-    Bundles.Reference("Scripts/knockout-2.1.0.min.js");
-    Bundles.Reference("Scripts/toastr.js");
-    Bundles.Reference("Scripts/userlogin.js");
-    Bundles.Reference("Scripts/startup.js");
-
-    Bundles.Reference("//js.live.net/v5.0/wl.js");
-    Bundles.Reference("//cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.9.1/dropbox.min.js");
-    //Bundles.Reference("https://www.dropbox.com/static/api/1/dropbox.js");
-    Bundles.Reference("Scripts/Drives/skydrive.js");
-    Bundles.Reference("Scripts/Drives/dbdrive.js");
-
-
-
-
-    Bundles.Reference("/Content/bootstrap.min.css");
-    Bundles.Reference("/Content/Site.css");
-    Bundles.Reference("/Content/toastr.css");
+   
+    Bundles.Reference("Scripts/Intro");
+    Bundles.Reference("Content");
 }
 
 <!DOCTYPE html>
@@ -85,9 +66,12 @@ position: relative;">
              </div>
         </div>
       
+       
+           
+        <script type="text/javascript" async src="//js.live.net/v5.0/wl.js"></script>
+        <script type="text/javascript"  src="//cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.9.1/dropbox.min.js"></script>
+        <script type="text/javascript"  src="https://www.dropbox.com/static/api/1/dropbox.js" id="dropboxjs" data-app-key="li6cyy4xgngfash"></script>
         @Bundles.RenderScripts()
-        <script type="text/javascript" async src="https://www.dropbox.com/static/api/1/dropbox.js" id="dropboxjs" data-app-key="li6cyy4xgngfash"></script>
-    
 </body>
 
 </html>

@@ -17,11 +17,14 @@ namespace online3D
             // This default configuration treats each file as a separate 'bundle'.
             // In production the content will be minified, but the files are not combined.
             // So you probably want to tweak these defaults!
-            bundles.AddPerIndividualFile<StylesheetBundle>("Content");
-            bundles.AddPerIndividualFile<ScriptBundle>("Scripts");
+            //bundles.AddPerIndividualFile<StylesheetBundle>("Content");
+            //bundles.AddPerIndividualFile<ScriptBundle>("Scripts");
 
             // To combine files, try something like this instead:
-            //   bundles.Add<StylesheetBundle>("Content");
+               bundles.Add<StylesheetBundle>("Content");
+               bundles.Add<ScriptBundle>("Scripts/Intro");
+               bundles.Add<ScriptBundle>("Scripts/View");
+            
             // In production mode, all of ~/Content will be combined into a single bundle.
             
             // If you want a bundle per folder, try this:
