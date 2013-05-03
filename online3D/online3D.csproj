@@ -152,10 +152,8 @@
     <Content Include="Content\Images\tool_bg.jpg" />
     <Content Include="Content\Images\tvs.png" />
     <Content Include="Content\Images\wireframes.png" />
-    <Content Include="Scripts\View\bootstrap.min.js" />
+    <Content Include="Scripts\Shared\Bundle.txt" />
     <Content Include="Scripts\View\Bundle.txt" />
-    <Content Include="Scripts\View\jquery-1.9.min.js" />
-    <Content Include="Scripts\View\storage.js" />
     <Content Include="Scripts\View\toastr.js" />
     <Content Include="Scripts\View\userlogin.js" />
     <Content Include="Tests\qunit-1.11.0.css" />
@@ -164,7 +162,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\View\async.js" />
     <Content Include="Scripts\View\binary_reader.js" />
-    <Content Include="Scripts\Intro\bootstrap.min.js" />
+    <Content Include="Scripts\Shared\bootstrap.min.js" />
     <Content Include="Scripts\View\Converters\stl_to_mesh.js" />
     <Content Include="Scripts\View\Converters\vertex_to_mesh.js" />
     <Content Include="Scripts\Intro\Bundle.txt" />
@@ -173,12 +171,11 @@
     <Content Include="Scripts\Intro\Drives\skydrive.js" />
     <Content Include="Scripts\View\jquery.percentageloader-0.1.js" />
     <Content Include="Scripts\Intro\lazy-1.8.4.min.js" />
-    <Content Include="Scripts\View\intro.js" />
     <Content Include="Scripts\Intro\startup.js" />
     <Content Include="Scripts\View\startup_mesh.js" />
     <Content Include="Scripts\View\init3d.js" />
-    <Content Include="Scripts\Intro\jquery-1.9.min.js" />
-    <Content Include="Scripts\View\knockout-2.1.0.min.js" />
+    <Content Include="Scripts\Shared\jquery-1.9.min.js" />
+    <Content Include="Scripts\Shared\knockout-2.1.0.min.js" />
     <Content Include="Scripts\View\screenshot.js" />
     <Content Include="Tests\qunit-1.11.0.js" />
     <Content Include="Scripts\View\threeorbitcontrol.js" />
@@ -188,12 +185,12 @@
     <Content Include="Scripts\View\Tools\tools.js" />
     <Content Include="Scripts\View\Tools\pointmeasurer.js" />
     <Content Include="Scripts\View\threetrackballcontrols.js" />
-    <Content Include="Scripts\Intro\userlogin.js" />
+    <Content Include="Scripts\Shared\userlogin.js" />
     <Content Include="Scripts\View\model_loader.js" />
     <Content Include="Scripts\Intro\modernizr-1.7.min.js" />
-    <Content Include="Scripts\Intro\storage.js" />
+    <Content Include="Scripts\Shared\storage.js" />
     <Content Include="Scripts\View\three.js" />
-    <Content Include="Scripts\Intro\toastr.js" />
+    <Content Include="Scripts\Shared\toastr.js" />
     <Content Include="Scripts\View\viewmodels.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
