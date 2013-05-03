@@ -154,8 +154,6 @@
     <Content Include="Content\Images\wireframes.png" />
     <Content Include="Scripts\Shared\Bundle.txt" />
     <Content Include="Scripts\View\Bundle.txt" />
-    <Content Include="Scripts\View\toastr.js" />
-    <Content Include="Scripts\View\userlogin.js" />
     <Content Include="Tests\qunit-1.11.0.css" />
     <Content Include="Content\toastr.css" />
     <Content Include="Global.asax" />
