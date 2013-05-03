@@ -285,7 +285,6 @@ var notesmodel = new (function () {
         var noteText = $("#usernotes #notetextarea")[0].value;
         var nextindex = _this.notes().length + 1;
 
-
         _this.addNoteToList(noteText, nextindex, _this.notesmanager.getPoint());
 
         closeNoteEdit();

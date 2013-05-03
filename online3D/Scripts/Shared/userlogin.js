@@ -362,4 +362,7 @@ var userAccess = new (function(){
       }
    
     }
+
+
+    _this.init();
 });
