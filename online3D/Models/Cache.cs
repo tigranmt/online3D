@@ -5,12 +5,13 @@ using System.Web;
 
 namespace online3D.Models
 {
-    public static class VerticesHolder
+    public static class Cache
     {
         private static Dictionary<string, List<string>> vertexData = new Dictionary<string, List<string>>();
         private static Dictionary<string, List<string>> faceColorData = new Dictionary<string, List<string>>();
         private static Dictionary<string, string> modelImages = new Dictionary<string, string>();
         private static Dictionary<string, List<Note>> notes = new Dictionary<string, List<Note>>();
+       
         private static object _lock = new object();
         public static int AddModel(ModelInfo mi)
         {
@@ -35,10 +36,13 @@ namespace online3D.Models
                 if (mi.Notes != null)
                     notes[key] = mi.Notes;
 
+            
+
                 return vertexData[key].Count;
             }
         }
 
+      
         public static List<string> GetVertices(ModelInfo mi)
         {
             lock (_lock)
@@ -87,6 +91,8 @@ namespace online3D.Models
             }
         }
 
+      
+
         public static void RemoveVerticesData(ModelInfo mi)
         {
             lock (_lock)
@@ -125,7 +131,7 @@ namespace online3D.Models
 
         private static string KeyFromModel(ModelInfo mi)
         {
-            return mi.ID + "_" + mi.ModelName;
+            return mi.SessionName + "_" + mi.ID + "_" + mi.ModelName;
         }
     }
 }

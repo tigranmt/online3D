@@ -25,6 +25,7 @@ namespace online3D.Models
         public DateTime SavedOn { get; set; }
         public DateTime ExpiresOn { get; set; }
         public List<Note> Notes { get; set; }
+      
         
         /// <summary>
         /// Clones only properties and not coollections
@@ -32,7 +33,7 @@ namespace online3D.Models
         /// <returns></returns>
         public ModelInfo LightClone()
         {
-            return new ModelInfo { ID = this.ID, ModelName = this.ModelName, Format = this.Format, Size = this.Size, VertexCount = this.VertexCount, Color = this.Color, User = this.User, SessionName = this.SessionName };
+            return new ModelInfo { ID = this.ID, ModelName = this.ModelName, Format = this.Format, Size = this.Size, VertexCount = this.VertexCount, Color = this.Color, User = this.User, SessionName = this.SessionName};
         }
     }
 }

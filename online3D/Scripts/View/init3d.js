@@ -458,6 +458,38 @@ init.prototype.getPacketSize = function(vertexCount) {
     return 3;
 }
 
+
+init.prototype.sendEmails = function(sessionInfo) {
+    $.ajax({
+        url: "SendEmails/",
+        type: "POST",
+        contentType: "application/json",
+        processData: false,
+        cache: false,
+        data: JSON.stringify(sessionInfo),
+        dataType: 'json',
+        success: function (data) {
+            if (data === false) {
+                toastr.error('Email sent failed', 'Error !');
+            }
+            else {
+                toastr.success('Emails sent to ' + data.sessionEmails);
+                console.log("Email notificatio request was sent successfully");
+            }
+        },
+        error: function (data) {
+            toastr.error('Email sent failed', 'Error !');            
+        },
+        statusCode: {
+            401: function (data) {               
+                toastr.error('You need to login first.', 'Error !');
+                userAccess.requestUserAuth();
+
+            }
+        }
+    });
+}
+
 init.prototype.sendModelsToServer = function(sessionInfo) {
 
         var unique = undefined; //unique key associated with this scene
@@ -466,9 +498,14 @@ init.prototype.sendModelsToServer = function(sessionInfo) {
 
         (function uploadSingleModel() {
             var childrenCount = _this.glScene.__objects.length;
+
+            /**Check either upload of all models terminated*/
             if (meshIndex >= childrenCount) {
                 $("#flprogress").remove();
                 toastr.success('Upload of all models done.', 'Success !');
+               
+                //upload of all models termianted, so let's send notifications via mail, if necessary 
+                _this.sendEmails(sessionInfo);
                 return;
             }
 
@@ -532,13 +569,14 @@ init.prototype.sendModelsToServer = function(sessionInfo) {
                     VertexCount: verticesCount,
                     Color: mesh.color,
                     FaceColors: colorsSplit,
-                    SessionName:sessionInfo.sessionName,
+                    SessionName: sessionInfo.sessionName                  
                 };
 
 
                 if(index === 1 && !firstLoad) {
                     modelInfo.ModelImage =  _this.takeScreenshot();  
                     modelInfo.Notes = notesmodel.forJSON();
+                    
                     firstLoad = true;         
                 }
 
@@ -610,10 +648,11 @@ init.prototype.sendContentToServer = function () {
      var sessionInfo = {};
      var session = $("#session"); 
      session.html(" <div class='modal-header'>" +                      
-                      "<h3>Set a name to session</h3>" + 
+                      "<h3>Set session info to share</h3>" + 
                   "</div>" + 
                   "<div class='modal-body'>" + 
-                    "<input id='sessionnametext' type='text' style='width: 35em;' maxlength='50' placeholder='Type something…'>" + 
+                    "<input id='sessionnametext' type='text' style='width: 35em;' maxlength='50' placeholder='Insert session name here...'>" +
+                    "<input id='notificationemails' type='text' class='input-small' style='width: 35em;' maxlength='150' placeholder='Insert emails separated by space to send notification to '>" +
                   "</div>" + 
                   "<div class='modal-footer'>" + 
                   "<button id='startsharing' type='button' data-dismiss='modal' class='btn btn-success btn-medium'>Share</button>"+
@@ -622,6 +661,7 @@ init.prototype.sendContentToServer = function () {
      
      $("#startsharing").click(function() {
         sessionInfo.sessionName = $("#sessionnametext")[0].value;
+        sessionInfo.sessionEmails = $("#notificationemails")[0].value;
         session.modal('hide');
         session.remove();       
         _this.sendModelsToServer(sessionInfo);

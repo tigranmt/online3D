@@ -71,6 +71,9 @@
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp">
+      <HintPath>..\packages\RestSharp.104.1\lib\net4\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -119,8 +122,9 @@
     <Compile Include="Models\LinkGenerator.cs" />
     <Compile Include="Models\ModelInfo.cs" />
     <Compile Include="Models\Note.cs" />
+    <Compile Include="Models\SessionInfo.cs" />
     <Compile Include="Models\Vertex.cs" />
-    <Compile Include="Models\VerticesHolder.cs" />
+    <Compile Include="Models\Cache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -152,6 +156,7 @@
     <Content Include="Content\Images\tool_bg.jpg" />
     <Content Include="Content\Images\tvs.png" />
     <Content Include="Content\Images\wireframes.png" />
+    <Content Include="mailtemplate.html" />
     <Content Include="Scripts\Shared\Bundle.txt" />
     <Content Include="Scripts\View\Bundle.txt" />
     <Content Include="Tests\qunit-1.11.0.css" />

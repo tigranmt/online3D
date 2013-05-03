@@ -46,6 +46,7 @@ namespace online3D.Models
             mi.User = bson["User"].AsString;
             mi.ModelImage = Compressor.Decompress(bson["ModelImage"].AsString);
             mi.SessionName = bson["SessionName"].ToString();
+           
 
           
             DateTime dt = default(DateTime);
@@ -106,7 +107,7 @@ namespace online3D.Models
             bson["Color"] = mi.Color;
             bson["User"] = mi.User;
             bson["ModelImage"] = Compressor.Compress(mi.ModelImage);
-            bson["SessionName"] = mi.SessionName;
+            bson["SessionName"] = mi.SessionName;           
             bson["SavedOn"] = mi.SavedOn.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
             var array = BsonArrayFromEnumerable(mi.Vertices);
@@ -246,26 +247,11 @@ namespace online3D.Models
                 return server.GetDatabase(url.DatabaseName);  //get or create database 
 #endif
 
-
-
         }
 
 
 
-        /// <summary>
-        /// Removes specified collection from the base
-        /// </summary>
-        /// <param name="collectionID"></param>
-        /// <returns></returns>
-        public bool DeleteModelCollection(string collectionID)
-        {
-            var db = GetDataBase();
-            var collection = db.GetCollection(collectionID);
-            collection.Drop();
-            
-            return true;
-        }
-
+      
 
         private MongoCollection<BsonDocument> ReadCollection(int collectionIndex)
         {
@@ -376,5 +362,76 @@ namespace online3D.Models
 
             return group;
         }
+
+
+
+        /// <summary>
+        /// Gets the image of the given user's session name
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="sessionname"></param>
+        /// <returns></returns>
+        public string GetSessionImage(string username, string sessionname)
+        {
+            var db = GetDataBase();
+
+            //get all collection names, except system reserved ones
+            var collectionNames = db.GetCollectionNames().Where(name => !name.StartsWith("system."));
+
+            List<ModelInfo> userModels = new List<ModelInfo>();
+            foreach (var name in collectionNames)
+            {
+                //get collection 
+                var dbModels = ReadModelCollection(name, false);
+
+                //find all models among collection that have given user and session name 
+                var userSessionModel = dbModels.Where(m => m.User == username && m.SessionName == sessionname && m.ModelImage != null).FirstOrDefault();
+
+                //found one, so return
+                if (userSessionModel != null)
+                    return userSessionModel.ModelImage;
+            }
+            return string.Empty;
+        }
+
+
+        public string GetLinkToSession(string username, string sessionname)
+        {
+            var db = GetDataBase();
+
+            //get all collection names, except system reserved ones
+            var collectionNames = db.GetCollectionNames().Where(name => !name.StartsWith("system."));
+
+            List<ModelInfo> userModels = new List<ModelInfo>();
+            foreach (var name in collectionNames)
+            {
+                //get collection 
+                var dbModels = ReadModelCollection(name, false);                
+
+                //find all models among collection that have given user and session name 
+                var userSessionModel = dbModels.Where(m => m.User == username && m.SessionName == sessionname).FirstOrDefault();
+
+                //found one, so return
+                if (userSessionModel != null)
+                    return userSessionModel.ID;
+            }
+            return string.Empty;
+        }
+
+
+        /// <summary>
+        /// removes specified colelction from the base
+        /// </summary>
+        /// <param name="collectionID"></param>
+        /// <returns></returns>
+        public bool DeleteModelCollection(string collectionID)
+        {
+            var db = GetDataBase();
+            var collection = db.GetCollection(collectionID);
+            collection.Drop();
+
+            return true;
+        }
+
     }
 }

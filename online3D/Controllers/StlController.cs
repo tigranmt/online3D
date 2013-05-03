@@ -9,6 +9,8 @@ using MongoDB.Bson.Serialization;
 using online3D.Helpers;
 using System.Drawing;
 using online3D.Controllers;
+using RestSharp;
+using System.Dynamic;
 
 
 namespace ModelViewer3D.Controllers
@@ -45,7 +47,7 @@ namespace ModelViewer3D.Controllers
         {
             try
             {
-                MongoDataAccess access = new MongoDataAccess();
+                IData access = GetDataAccess();
                 var models = access.ReadModelCollection(id, false);
 
                 if (models.Count() > 0)
@@ -72,7 +74,67 @@ namespace ModelViewer3D.Controllers
         }
 
 
-     
+        /// <summary>
+        /// Reads template HTML page and genetes concrete HTML mail body based on parameters
+        /// </summary>
+        /// <param name="sessionName"></param>
+        /// <param name="sessionId"></param>
+        /// <param name="previewImageBase64"></param>
+        /// <returns></returns>
+        public string GetHtmlForMail(string sessionName, string sessionId, string previewImageBase64)
+        {            
+            string path = System.Web.HttpContext.Current.Request.MapPath("~\\mailtemplate.html");
+            return string.Format(System.IO.File.ReadAllText(path), sessionName, DateTime.Now.ToString("MM/dd/yyyy hh:ss"), sessionId, previewImageBase64);
+        }
+
+
+        /// <summary>
+        /// Saves model in the base\
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Authorize]
+        public ActionResult SendEmails(SessionInfo sinfo)
+        {
+
+            try
+            {
+
+                RestClient client = new RestClient();
+                client.BaseUrl = "https://api.mailgun.net/v2";
+                client.Authenticator = new HttpBasicAuthenticator("api", "key-8ipahp9txh4ko20plaxexe3o-id19up5");
+                RestRequest request = new RestRequest();
+                request.AddParameter("domain", "onlne3d.mailgun.org", ParameterType.UrlSegment);
+                request.Resource = "{domain}/messages";
+                request.AddParameter("from", "online3d@sharing.com");
+
+                string []emails = sinfo.sessionEmails.Split(' '); 
+
+                foreach(string e in emails) {
+                    request.AddParameter("to", e);
+                }
+               
+                var link = GetSessionLink(sinfo.sessionName);
+                var userName = GetUserName();
+                string base64SessionImage = GetDataAccess().GetSessionImage(userName, sinfo.sessionName);
+                string htmlBody = GetHtmlForMail(sinfo.sessionName, link,base64SessionImage);
+               
+                request.AddParameter("subject", "Online3D sesison was shared with you !");
+                request.AddParameter("html", htmlBody);
+                request.Method = Method.POST;
+                client.Execute(request);
+
+
+              
+                return Json(sinfo);
+            }
+            catch (Exception ex)
+            {
+                LogEntry.logger.FatalException("Error on mail send", ex);
+                return Json(false);
+            }
+        }
 
         /// <summary>
         /// Saves model in the base
@@ -92,22 +154,24 @@ namespace ModelViewer3D.Controllers
                 model.ID = LinkGenerator.GenerateTempLink(model, HttpContext.Request);
             }
 
-            var savedCount = VerticesHolder.AddModel(model);
+            var savedCount = Cache.AddModel(model);
             if (savedCount == model.VertexCount)
             {
-                IData access = new MongoDataAccess();
+                IData access = GetDataAccess();
 
-                model.Vertices = VerticesHolder.GetVertices(model);
-                model.ModelImage = VerticesHolder.GetImageData(model);
-                model.FaceColors = VerticesHolder.GetFaceColors(model);
-                model.Notes = VerticesHolder.GetNotes(model);
+                model.Vertices = Cache.GetVertices(model);
+                model.ModelImage = Cache.GetImageData(model);
+                model.FaceColors = Cache.GetFaceColors(model);
+                model.Notes = Cache.GetNotes(model);
+             
 
                 bool saveResult = access.SaveModel(model);
 
-                VerticesHolder.RemoveVerticesData(model);
-                VerticesHolder.RemoveFaceColorsData (model);
-                VerticesHolder.RemoveImageData(model);
-                VerticesHolder.RemoveNotes(model);
+                Cache.RemoveVerticesData(model);
+                Cache.RemoveFaceColorsData (model);
+                Cache.RemoveImageData(model);
+                Cache.RemoveNotes(model);
+              
 
                 if (!saveResult)
                     return Json(false);
@@ -126,7 +190,7 @@ namespace ModelViewer3D.Controllers
             {
                 var collection = model.ID.Split('/').Last();
 
-                MongoDataAccess access = new MongoDataAccess();
+                IData access = GetDataAccess();
                 access.DeleteModelCollection(collection);
 
                 return Json(true);
@@ -137,6 +201,16 @@ namespace ModelViewer3D.Controllers
                 LogEntry.logger.ErrorException("Exception on deleting " + link, ex);
                 return Json(false);
             }
+        }
+
+        private string GetSessionLink(string sessionName)
+        {
+            IData access = GetDataAccess();
+            var userName = GetUserName();
+
+
+            return access.GetLinkToSession(userName,sessionName);
+           
         }
 
 
@@ -151,7 +225,7 @@ namespace ModelViewer3D.Controllers
             try
             {               
 
-                MongoDataAccess access = new MongoDataAccess();
+                IData access = GetDataAccess();
                 if (id == "first")//first model of first collection was requested
                 {
                     var models = access.ReadModelCollection(0, false);
@@ -188,7 +262,7 @@ namespace ModelViewer3D.Controllers
             var username = User.Identity.Name;
             if (string.IsNullOrEmpty(username))
                 return Json(false);
-            MongoDataAccess access = new MongoDataAccess();
+            IData access = GetDataAccess();
 
             try
             {
@@ -221,7 +295,7 @@ namespace ModelViewer3D.Controllers
                 ModelInfo model = ModelHolder.GetInfo(key);;
                 if (model == null)
                 {
-                    MongoDataAccess access = new MongoDataAccess();
+                    IData access = GetDataAccess();
                     var models = access.ReadModelCollection(collectionID, true, modelIndex);
 
                     if (models.Count() == 0)
@@ -266,6 +340,12 @@ namespace ModelViewer3D.Controllers
                                             ex);
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
+        }
+
+
+        private IData GetDataAccess()
+        {
+            return new MongoDataAccess();
         }
 
 
