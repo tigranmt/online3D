@@ -81,10 +81,10 @@ namespace ModelViewer3D.Controllers
         /// <param name="sessionId"></param>
         /// <param name="previewImageBase64"></param>
         /// <returns></returns>
-        public string GetHtmlForMail(string sessionName, string sessionId, string previewImageBase64)
+        public string GetHtmlForMail(string sessionName, string sessionId)
         {            
             string path = System.Web.HttpContext.Current.Request.MapPath("~\\mailtemplate.html");
-            return string.Format(System.IO.File.ReadAllText(path), sessionName, DateTime.Now.ToString("MM/dd/yyyy hh:ss"), sessionId, previewImageBase64);
+            return string.Format(System.IO.File.ReadAllText(path), sessionId, sessionName, DateTime.Now.ToString("MM/dd/yyyy hh:ss"));
         }
 
 
@@ -117,11 +117,13 @@ namespace ModelViewer3D.Controllers
                
                 var link = GetSessionLink(sinfo.sessionName);
                 var userName = GetUserName();
-                string base64SessionImage = GetDataAccess().GetSessionImage(userName, sinfo.sessionName);
-                string htmlBody = GetHtmlForMail(sinfo.sessionName, link,base64SessionImage);
+                //string base64SessionImage = GetDataAccess().GetSessionImage(userName, sinfo.sessionName);
+                string htmlBody = GetHtmlForMail(sinfo.sessionName, link);
                
-                request.AddParameter("subject", "Online3D sesison was shared with you !");
+                request.AddParameter("subject", "Online3D session was shared with you !");
                 request.AddParameter("html", htmlBody);
+                //var imagePath = System.Web.HttpContext.Current.Request.MapPath("~\\Content\\3D-icon.png");
+                //request.AddFile("inline", imagePath);
                 request.Method = Method.POST;
                 client.Execute(request);
 
