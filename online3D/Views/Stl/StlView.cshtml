@@ -130,17 +130,18 @@
     <span id="noteedit" style="display:none" data-value="<button id='addnewnotebutton' class='btn btn-mini btn-success' data-bind='click:startAddNewNote.bind($data)' type='button'>Add new note</button>"></span>
     <span id="noteelementclose" data-value="
                 ___m =  function(data, event){
-                    var userNotes = $('#usernotes'); 
+                    var userNotes = $('#usernotes');
+                    var note = data; 
                     if ($('#usernotes #removenotebutton').length === 0) {
-                        $('#usernotes').append(_this.closeButtonHtml);
+                        $('#usernotes').append(note.closeButtonHtml);
                         $('#usernotes #removenotebutton').click(function () {
                             var noteId = $('#usernotes #removenotebutton').attr('parent-note-index');
-                            _this.noteRemoveRequest(parseInt(noteId) - 1); //we pass INDEX !, and not just note number, so -1
+                            note.noteRemoveRequest(parseInt(noteId) - 1); //we pass INDEX !, and not just note number, so -1
                         });
                     }
                     //position close button
                     var removenotebutton = $('#usernotes #removenotebutton');
                     removenotebutton.css({ top: event.currentTarget.offsetTop + 2 * event.currentTarget.offsetHeight + 10, left: event.currentTarget.clientWidth - 10 });
-                    removenotebutton.attr('parent-note-index', _this.noteIndex());
+                    removenotebutton.attr('parent-note-index', note.noteIndex());
                 };" />
 }
