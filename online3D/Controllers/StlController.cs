@@ -84,7 +84,8 @@ namespace ModelViewer3D.Controllers
         public string GetHtmlForMail(string sessionName, string sessionId)
         {            
             string path = System.Web.HttpContext.Current.Request.MapPath("~\\mailtemplate.html");
-            return string.Format(System.IO.File.ReadAllText(path), sessionId, sessionName, DateTime.Now.ToString("MM/dd/yyyy hh:ss"));
+            var userName = GetUserName();
+            return string.Format(System.IO.File.ReadAllText(path),userName, sessionId, sessionName, DateTime.Now.ToString("MM/dd/yyyy hh:ss"));
         }
 
 
