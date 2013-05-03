@@ -652,7 +652,7 @@ init.prototype.LoadFromServer = function (unique) {
     var packet = 0;
     var models = new Array();
 
-   
+    var tempModel = {};
 
    
     (function load() {
