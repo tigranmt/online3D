@@ -56,6 +56,7 @@
 
     //renders
     init.prototype.render = function () {
+        _this.pointlight.position.copy(_this.glCamera.position);
         _this.glRenderer.render(_this.glScene, _this.glCamera);
     }
 
@@ -64,6 +65,8 @@
         if (_this.sceneTracker && _this.sceneTracker.object) {
             _this.sceneTracker.update();
         }
+
+        
         requestAnimationFrame(_this.renderOnScreen);
         _this.render();
     }
@@ -183,10 +186,9 @@
             {
                 var pointClicked = TOOLS.getVertexFromMouseCoord(e);
                 if (pointClicked !== undefined) {
-                    //_this.sceneTracker.center = pointClicked;                              
+                                          
                     _this.sceneTracker.target = pointClicked;                              
-                    _this.spotlight.position = _this.glCamera.position;
-                    _this.spotlight.target.position = pointClicked;
+                    _this.pointlight.position = _this.glCamera.position;
                 }
             }
 
@@ -995,9 +997,9 @@ init.prototype.fitCamera = function (scene, camera, tracker, bounds) {
 
     var center = this.lookFrom(vector);
 
-    if(this.spotlight === undefined) {
-        this.spotlight = new THREE.SpotLight(0xFFFFFF, 0.9);              
-        scene.add(this.spotlight);
+    if(this.pointlight === undefined) {
+        this.pointlight = new THREE.PointLight(0xFFFFFF, 0.9);
+        scene.add(this.pointlight);
     }
 
 
@@ -1012,9 +1014,7 @@ init.prototype.fitCamera = function (scene, camera, tracker, bounds) {
         scene.add(this.ambientLight);
     }
 
-    this.spotlight.position = camera.position;
-    this.spotlight.target.position = center;
-
+  
 }
 
 
