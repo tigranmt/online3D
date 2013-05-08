@@ -110,7 +110,7 @@ function StlToMesh() {
                 return;
             }
             /**/
-
+            
 
             if (!triangleCount) {
                 toastr.error("Empty STL file", 'Error');

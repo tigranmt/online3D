@@ -70,10 +70,15 @@
             if (intersection !== undefined) {
                 //iterate over ALL faces of the model and set selected color
                 var faces = intersection.object.geometry.faces;
-                for (var n = 0; n < faces.length; n++)
-                    setColorOnFace(intersection.object.geometry, faces[n], _this.color);
+                for (var n = 0; n < faces.length; n++) {
+                    setColorOnFace(intersection.object.geometry, faces[n], _this.color, true);
+                }
+
                 intersection.object.geometry.colorsNeedUpdate = true;
+                intersection.object.color = _this.color;
             }
+
+          
         }        
 
       
@@ -118,8 +123,14 @@
     };
 
 
-    var setColorOnFace = function (geometry, face, color) {
+    var setColorOnFace = function (geometry, face, color, onlyface) {
+
         face.color.set(color);
+
+        /*do not need coloring of the vertices*/
+        if (onlyface === true)
+            return;
+
         geometry.vertices[face.a].vertexColor = color;
         geometry.vertices[face.b].vertexColor = color;
         geometry.vertices[face.c].vertexColor = color;

@@ -562,6 +562,10 @@ init.prototype.sendModelsToServer = function(sessionInfo) {
                         break;
                 }
 
+                var basicColor = geometryMesh.color; 
+                if(basicColor == undefined) 
+                    basicColor = mesh.color;
+
                 var modelInfo = {
                     ModelName: mesh.name,
                     Size: mesh.filesize,
@@ -569,7 +573,7 @@ init.prototype.sendModelsToServer = function(sessionInfo) {
                     ID: unique,
                     Vertices: verticesSplit,
                     VertexCount: verticesCount,
-                    Color: mesh.color,
+                    Color: basicColor,
                     FaceColors: colorsSplit,
                     SessionName: sessionInfo.sessionName                  
                 };
