@@ -168,19 +168,15 @@ function StlToMesh() {
                         //trianlge color information (SKIP FOR NOW)
                         var faceColor = bReader.readUInt16();
 
-                       /* var fBlue = faceColor & 0x1F;
-                        var fGreen = (faceColor >> 5) & 0x1F;
-                        var fRed = (faceColor >> 10) & 0x1F;
-
-                        var ubRed = (fRed / 32 * 256);
-                        var ubGreen = (fGreen / 32 * 256);
-                        var ubBlue = (fBlue / 32 * 256);*/
-
+                
                         var length = geometry.vertices.length;
                         var face = new THREE.Face3(length - 3, length - 2, length - 1, 1);
 
                         //face.color.setHex(modelColor);
-                        face.color.setHex(faceColor);
+                        if(faceColor !== 0)
+                            face.color.setHex(faceColor);
+                        else
+                            face.color.setHex(modelColor);
 
                         geometry.faces.push(face);
                         index--;
