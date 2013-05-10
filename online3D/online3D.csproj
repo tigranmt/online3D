@@ -147,6 +147,7 @@
     <Content Include="Content\Images\fvs.png" />
     <Content Include="Content\Images\hue.png" />
     <Content Include="Content\Images\intro.png" />
+    <Content Include="Content\Images\loading.gif" />
     <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\lvs.png" />
     <Content Include="Content\Images\meshs.png" />

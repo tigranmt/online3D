@@ -769,7 +769,12 @@ init.prototype.LoadFromServer = function (unique) {
                 else {
                     //all done
                     $("#flprogress").remove();   
-                     toastr.success('Got all models from the server. Now begin processing','Success !');
+                    toastr.success('Got all models from the server. Now begin processing', 'Success !');
+                    
+                    var loaderGif = $("#loader");
+                    if (loaderGif !== undefined)
+                        loaderGif.remove();
+
                     _this.loadMeshesFromServer(models); //load models to scene
                     models = []; //reset collection of the models
 
