@@ -1078,6 +1078,30 @@ init.prototype.LoadFiles = function (files) {
 }
 
 
+init.prototype.showSessionInfo = function (meshes)
+{
+
+
+    return;
+
+    /**Show session information if any**/
+    if (meshes.length > 0) {
+        var first = meshes[0];
+        var obj = { 
+            sessionInfo : {
+                SessionName:    first.SessionName,
+                UseName:        first.User,
+                UploadDate:     first.SavedOn
+            }
+        };
+
+        var sinfo = $("#sinfo")[0];
+        ko.applyBindings(obj, sinfo);
+    }
+    /*************************/
+}
+
+
 init.prototype.loadMeshesFromServer = function (meshes) {
 
     if (meshes === undefined)
@@ -1094,9 +1118,10 @@ init.prototype.loadMeshesFromServer = function (meshes) {
         if (index < 0) {
 
             _this.fitCamera.apply(_this, [_this.glScene, _this.glCamera, _this.sceneTracker]); //fit camera on end
-            _this.renderOnScreen(); //render
-            _this.finalizeLoading.apply(_this, meshes);
-            _this.showPanels(); //show panels       
+            _this.renderOnScreen(); //render ---
+            _this.finalizeLoading.apply(_this, meshes); //---
+            _this.showPanels(); //show panels ---   
+            _this.showSessionInfo(meshes); // session info---
             
             for(var i=0;i<notes.length;i++) {
                 var note = notes[i];

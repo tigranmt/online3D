@@ -41,8 +41,7 @@
     ko.applyBindings(viewmodels, home_Menu);
 
 
-   /* var sinfo = $("#sessioninfo")[0];
-    ko.applyBindings(viewmodels, sinfo);*/
+   
 
     var notes = $("#usernotes")[0];
     if(notes !== undefined) {

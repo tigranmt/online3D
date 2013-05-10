@@ -67,6 +67,11 @@ body
     height: 250px;
 }
 
+#sinfo {
+    display:inline;
+    background: transparent;
+}
+
 
 #fileDropDiv 
 {
