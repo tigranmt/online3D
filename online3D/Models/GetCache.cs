@@ -5,10 +5,22 @@ using System.Web;
 
 namespace online3D.Models
 {
-    public sealed class ModelHolder
+
+    /// <summary>
+    /// Caches information requested from the server
+    /// </summary>
+    public sealed class GetCache
     {
+        /// <summary>
+        /// lock object
+        /// </summary>
         private static object _lock = new object();
+
+        /// <summary>
+        /// ModelInfo per key 
+        /// </summary>
         internal static Dictionary<string, ModelInfo> internalDic = new Dictionary<string, ModelInfo>();
+
 
         public static string GetKeyFrom(string collectionID, int modelIndex)
         {

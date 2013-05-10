@@ -139,6 +139,12 @@ namespace ModelViewer3D.Controllers
             }
         }
 
+
+        private DateTime GetExpiredDate()
+        {
+            return DateTime.Now.AddSeconds(15);
+        }
+
         /// <summary>
         /// Saves model in the base
         /// </summary>
@@ -155,25 +161,27 @@ namespace ModelViewer3D.Controllers
             if (string.IsNullOrEmpty(model.ID))
             {
                 model.ID = LinkGenerator.GenerateTempLink(model, HttpContext.Request);
+                model.ExpiresOn = GetExpiredDate();
             }
 
-            var savedCount = Cache.AddModel(model);
+            
+
+            var savedCount = SendCache.AddModel(model);
             if (savedCount == model.VertexCount)
             {
                 IData access = GetDataAccess();
 
-                model.Vertices = Cache.GetVertices(model);
-                model.ModelImage = Cache.GetImageData(model);
-                model.FaceColors = Cache.GetFaceColors(model);
-                model.Notes = Cache.GetNotes(model);
+
+
+                model.Vertices = SendCache.GetVertices(model);
+                model.ModelImage = SendCache.GetImageData(model);
+                model.FaceColors = SendCache.GetFaceColors(model);
+                model.Notes = SendCache.GetNotes(model);
              
 
                 bool saveResult = access.SaveModel(model);
 
-                Cache.RemoveVerticesData(model);
-                Cache.RemoveFaceColorsData (model);
-                Cache.RemoveImageData(model);
-                Cache.RemoveNotes(model);
+                SendCache.Remove(model);
               
 
                 if (!saveResult)
@@ -293,9 +301,9 @@ namespace ModelViewer3D.Controllers
             {
                 
                 var collectionID = id.Split('/').Last();
-                string key = ModelHolder.GetKeyFrom(collectionID, modelIndex);
+                string key = GetCache.GetKeyFrom(collectionID, modelIndex);
 
-                ModelInfo model = ModelHolder.GetInfo(key);;
+                ModelInfo model = GetCache.GetInfo(key);;
                 if (model == null)
                 {
                     IData access = GetDataAccess();
@@ -305,8 +313,8 @@ namespace ModelViewer3D.Controllers
                         return Json("alldone", JsonRequestBehavior.AllowGet); //signal, there is nothing more to load. All done
 
                     model = models.FirstOrDefault();
-                    model.ExpiresOn = DateTime.Now.AddDays(1);
-                    ModelHolder.Add(key, model);
+                    model.ExpiresOn = GetExpiredDate();
+                    GetCache.Add(key, model);
                 }
                
 
@@ -319,7 +327,7 @@ namespace ModelViewer3D.Controllers
                 var end = (packetIndex * step) + step;
 
                 if (start >= verticesCount) {
-                    ModelHolder.Remove(key);
+                    GetCache.Remove(key);
                     return Json("modeldone", JsonRequestBehavior.AllowGet); //signal, we finish with model
                 }
                 tempModel.Vertices = model.Vertices.Skip(start).Take(end - start).ToList();

@@ -14,7 +14,8 @@ namespace ModelViewer3D
 
     public class MvcApplication : System.Web.HttpApplication
     {
-       
+
+        const int checkTimeout = 1000 * 60 * 30; //30 minutes 
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
@@ -49,7 +50,9 @@ namespace ModelViewer3D
 
             this.Error += new EventHandler(MvcApplication_Error);
 
-            CacheChecker.Start();
+
+
+            CacheChecker.Start(checkTimeout);
            
             
         }
