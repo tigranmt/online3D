@@ -5,25 +5,6 @@ Dependency async.js
 function StlToMesh() {
 
 
-
-    var readBytes = function (_fileData, count) {
-        var i = 0;
-        var result = [];
-
-        while (count > 0) {
-            result.push(_fileData[_nextByteIndex]);
-            _nextByteIndex++;
-            count--;
-        }
-        return result;
-    }
-
-    //reads float value from byte stream
-    var readFloat = function (_fileData) {
-        var single = parseFloat(readBytes(_fileData, 4).join(''));
-        return single;
-    }
-
     //checks either speciied file is ASCII or BINARY stl file
     var isAsciiStl = function (file) {
         var MAX_MODEL_NAME_LENGTH = 80;
@@ -73,7 +54,7 @@ function StlToMesh() {
 
     }
 
-
+    /*** ---  STL FILE READERS ---- ****/
 
     /*Reads the BINARY stl into geometry*/
     function binaryStlFileLoader() {
@@ -233,7 +214,7 @@ function StlToMesh() {
     }
 
 
-
+    /*Reads the ASCII stl into geometry*/
     function asciStlFileLoader() {
 
         var _this = this;
@@ -376,6 +357,8 @@ function StlToMesh() {
 
         }
     }
+    
+    /******************************/
 
    
 };
