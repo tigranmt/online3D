@@ -21,10 +21,42 @@
             color: 0x0000ff,
         });
         var line = new THREE.Line(geometry, material);
-        scene.add(line);finf
+        scene.add(line);
 
     }
 
+
+
+    //Saves all meshes present and _visible_ on the screen into the separate files
+    init.prototype.saveSceneAs = function () {
+
+        TOOLS.forEachMesh(function (mesh) {
+            if (mesh.visible) {
+                _this.saveMeshAs(mesh.children[0], mesh.name);
+            }
+
+        }, function (mesh) {            
+            return TOOLS.isComposedMesh(mesh);
+        }
+       );
+
+    }
+
+    init.prototype.saveMeshAs = function (mesh, filename)
+    {
+
+        //create converter 
+        var converter = new MeshToAsciiStlBlob();
+
+        //create blob from the mesh
+        var blob = converter.toAsciiBlob(mesh);
+
+        if (filename === undefined)
+            filename = mesh.name;
+
+        //save blob as a file 
+        window.saveAs(blob, filename);
+    }
    
     init.prototype.takeScreenshot = function (showInWindow) {
 
