@@ -283,6 +283,9 @@ function StlToMesh() {
                 while (index >= 0) {
                     var line = GetNextLineFromAsciStl(fileData, fileSize);
 
+                    //trim the line
+                    line = $.trim(line);
+
                     if (line == "outer loop")
                         _triangleStarted = true;
                     else if (line == "endloop") {
