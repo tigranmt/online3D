@@ -27,6 +27,25 @@
 
 
 
+    ///Saves the content of the scene (no matters the mesh visibility) 
+    ///into JSON formatted session file xxxxx.online3D
+    init.prototype.saveSceneAsSession = function () {
+
+        //request session name
+        TOOLS.forEachMesh(function (mesh) {
+            if (mesh.visible) {
+                var singleMesh = mesh.children[0];
+                single.name = mesh.name;
+              
+                //convert to json
+            }
+
+        }, function (mesh) {
+            return TOOLS.isComposedMesh(mesh);
+        }
+       );
+    }
+
     //Saves all meshes present and _visible_ on the screen into the separate files
     init.prototype.saveSceneAs = function () {
 
@@ -672,50 +691,65 @@ init.prototype.sendModelsToServer = function(sessionInfo) {
 
 }
 
+init.prototype.showSessionModal = function (onOkCallback, onCancelCallback) {
+    //show modal window 
+    jQuery('<div/>', {
+        id: 'session',
+        class: 'modal hide fade gridbody'
+    }).appendTo($("#body"));
+
+    
+    var session = $("#session");
+    session.html(" <div class='modal-header'>" +
+                     "<h3>Set session info to share</h3>" +
+                 "</div>" +
+                 "<div class='modal-body'>" +
+                   "<input id='sessionnametext' type='text' style='width: 35em;' maxlength='50' placeholder='Insert session name here...'>" +
+                   "<input id='notificationemails' type='text' class='input-small' style='width: 35em;' maxlength='150' placeholder='Insert emails separated by space to send notification to '>" +
+                 "</div>" +
+                 "<div class='modal-footer'>" +
+                 "<button id='startsharing' type='button' data-dismiss='modal' class='btn btn-success btn-medium'>Share</button>" +
+                 "<button id='cancelsharing' type='button' data-dismiss='modal' class='btn btn-danger btn-medium'>Cancel</button>" +
+                 "</div>");
+
+    $("#startsharing").click(function () {
+
+        //call OK callback if any
+        if (onOkCallback)
+            onOkCallback();
+
+        //hide and remove element
+        session.modal('hide');
+        session.remove();
+    });
+
+    $("#cancelsharing").click(function () {
+        session.modal('hide');
+        session.remove();
+        if(onCancelCallback)
+            onCancelCallback();        
+    });
+
+
+    session.modal();
+
+
+
+}
+
 /*Sends all files on the scene to the server*/
 init.prototype.sendContentToServer = function () {
 
     var _this = this;
 
-    //show modal window 
-     jQuery('<div/>', {
-                id: 'session',
-                class: 'modal hide fade gridbody' 
-     }).appendTo($("#body"));
-
-     var sessionInfo = {};
-     var session = $("#session"); 
-     session.html(" <div class='modal-header'>" +                      
-                      "<h3>Set session info to share</h3>" + 
-                  "</div>" + 
-                  "<div class='modal-body'>" + 
-                    "<input id='sessionnametext' type='text' style='width: 35em;' maxlength='50' placeholder='Insert session name here...'>" +
-                    "<input id='notificationemails' type='text' class='input-small' style='width: 35em;' maxlength='150' placeholder='Insert emails separated by space to send notification to '>" +
-                  "</div>" + 
-                  "<div class='modal-footer'>" + 
-                  "<button id='startsharing' type='button' data-dismiss='modal' class='btn btn-success btn-medium'>Share</button>"+
-                  "<button id='cancelsharing' type='button' data-dismiss='modal' class='btn btn-danger btn-medium'>Cancel</button>" + 
-                  "</div>");     
-     
-     $("#startsharing").click(function() {
+    var okCallback = function () {
+        var sessionInfo = {};
         sessionInfo.sessionName = $("#sessionnametext")[0].value;
         sessionInfo.sessionEmails = $("#notificationemails")[0].value;
-        session.modal('hide');
-        session.remove();       
+       
         _this.sendModelsToServer(sessionInfo);
-     });
-
-     $("#cancelsharing").click(function() {
-        session.modal('hide');
-        session.remove();
-        return;
-     });
-
-
-     session.modal();
-
-
-    
+    };
+    _this.showSessionModal(okCallback);
 
 }
 
