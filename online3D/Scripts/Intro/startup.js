@@ -3,6 +3,7 @@
     "use strict";
 
     window.indexedFiles.openbase();
+    window.APP_NAME = "Online3D";
 
     var _this = this;
 
@@ -11,9 +12,10 @@
         "STL": "/Stl/StlView"
     }
 
+    
 
     //list of supported extensions
-    var supportedExtensions = ["STL"];
+    var supportedExtensions = ["STL", window.APP_NAME.toUpperCase()];
 
     //for now always ok
     function extensionIsOk(files) {
@@ -101,6 +103,63 @@
 
         })();
     }
+
+
+    /// Loads session file, that was saved before 
+    /// into JSON ASCII file
+    function loadSesisonFile(sessionFile) {
+
+        //create a FileReader object
+        var reader = new FileReader();
+     
+        reader.onload = function (event) {
+            var data = event.target.result;
+            if (reader.readyState == 2) {
+              
+               
+                //parse JSON to object
+                var sessionObj = JSON.parse(data);
+
+                //iterate over all meshes in the object anb save to DB
+                for(var i=0;i<sessionObj.Meshes.length;i++)  {
+                    var obj = sessionObj.Meshes[i];
+
+                    //create map object
+                 
+                    var fileData = {
+                        name: obj.name,
+                        size: 1,
+                        data: obj.vertices,
+                        blob: true
+                    };
+
+                    //save to INdexedDB
+                    if (addToStore(fileData) === false) {
+                        toastr.error('Failed to load file ' + sessionFile.name, 'Error');
+                        showProgress(false);
+                    }
+                }
+
+              
+
+            }
+            else {
+                toastr.error('Failed to read the data', 'Error');
+                showProgress(false);
+            }
+
+
+        };
+
+        reader.onerror = function (event) {
+            console.error("File could not be read! Error code: " + event.target.error.code);
+            toastr.error('Failed to load file ' + file.name + ' Error: ' + event.target.error.toString(), 'Error');
+            showProgress(false);
+        };
+
+        //this is a FILE object
+        reader.readAsBinaryString(sessionFile);       
+    }
     
     /*
     Load files in sequence
@@ -111,8 +170,22 @@
         if (!compatibilityChecks())
             return;
 
-        if (files.length == 0)
+        if (files.length === 0)
             return;
+
+        //check if this is a saved session file
+        if (files.length === 1) {
+
+            //get the extension of the file 
+            var extension = files[0].name.split('.').pop().toUpperCase();
+            if (extension === window.APP_NAME.toUpperCase()) {
+
+                //yes, this is a session file, so we need to manage it in another way
+                loadSesisonFile(files[0]);
+
+                return;
+            }
+        }
 
         //read file like a data 
         if (files) {
@@ -138,7 +211,10 @@
                 } //loop finished management
 
                 var file = files[index]; //get file
+
+
                 var reader = new FileReader();
+
                 reader.onload = function (event) {
                     var data = event.target.result;
                     if (reader.readyState == 2) {
@@ -169,7 +245,7 @@
                     showProgress(false);
                 };
 
-                //load all files in sequence    
+                
 
                 //this is a BLOB obect  
                 if (file.blob !== undefined) {

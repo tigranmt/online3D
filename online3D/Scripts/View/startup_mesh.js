@@ -40,7 +40,7 @@
     var home_Menu = $("#home")[0];
     ko.applyBindings(viewmodels, home_Menu);
 
-
+    window.APP_NAME = "Online3D";
    
 
     var notes = $("#usernotes")[0];

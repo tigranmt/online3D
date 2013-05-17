@@ -160,7 +160,7 @@
     <Content Include="mailtemplate.html" />
     <Content Include="Scripts\Shared\Bundle.txt" />
     <Content Include="Scripts\View\Bundle.txt" />
-    <Content Include="Scripts\View\Converters\meshtoasciistlblob.js" />
+    <Content Include="Scripts\View\Converters\toasciiblob.js" />
     <Content Include="Scripts\View\saveas.js" />
     <Content Include="Tests\qunit-1.11.0.css" />
     <Content Include="Content\toastr.css" />

@@ -1,8 +1,8 @@
 ﻿/**
 * Converts specified mesh into ASCII stl formatted blob
 */
-function MeshToAsciiStlBlob() {
-    this.toAsciiBlob = function (mesh) {
+function ToAsciiBlob() {
+    this.meshToAsciiBlob = function (mesh) {
         var newline = " \r\n";
         var stringData = "solid WRAP" + newline;
         var faceindex = 0;
@@ -30,6 +30,10 @@ function MeshToAsciiStlBlob() {
         stringData += "end solid";
 
 
-        return new Blob([stringData], { type: "text/plain" })
+        return new Blob([stringData], { type: "text/plain" });
+    }
+
+    this.stringToAscciBlob = function(stringData) {
+        return new Blob([stringData], { type: "text/plain" });
     }
 }

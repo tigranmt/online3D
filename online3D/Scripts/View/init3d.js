@@ -10,8 +10,7 @@
     
 
     var _this = this;
-
-
+    
 
     this.drawLine = function(scene, start, end) {
         var geometry = new THREE.Geometry();
@@ -31,33 +30,67 @@
     ///into JSON formatted session file xxxxx.online3D
     init.prototype.saveSceneAsSession = function () {
 
-        //request session name
-        TOOLS.forEachMesh(function (mesh) {
-            if (mesh.visible) {
-                var singleMesh = mesh.children[0];
-                single.name = mesh.name;
-              
-                //convert to json
-            }
 
-        }, function (mesh) {
-            return TOOLS.isComposedMesh(mesh);
-        }
-       );
+        var _this = this;
+
+        var onOkCallback = function (sessionName, emails) {
+
+            var session = {
+                SessionName: sessionName,
+                Emails: "", //ignore emails, we don't actually need them in this case
+                Date: new Date().getDate(),
+                Meshes: []
+            };
+
+
+            //request session name
+            TOOLS.forEachMesh(function (mesh) {               
+                    var singleMesh = {
+                        name: mesh.name,
+                        vertices : mesh.children[0].geometry.vertices
+                    };
+                    session.Meshes.push(singleMesh);
+            },
+
+            function (mesh) {
+                return TOOLS.isComposedMesh(mesh);
+            });
+
+
+
+            //convert to json
+            var json = JSON.stringify(session);
+
+            //create converter 
+            var converter = new ToAsciiBlob();
+
+            //create blob from the mesh
+            var blob = converter.stringToAscciBlob(json);
+
+
+            //save blob as a file 
+            window.saveAs(blob, session.SessionName + "." + window.APP_NAME);
+            
+        } //onOKCallback
+
+
+        _this.showSessionModal(onOkCallback);      
     }
 
     //Saves all meshes present and _visible_ on the screen into the separate files
     init.prototype.saveSceneAs = function () {
 
         TOOLS.forEachMesh(function (mesh) {
-            if (mesh.visible) {
-                _this.saveMeshAs(mesh.children[0], mesh.name);
+                if (mesh.visible) {
+                    _this.saveMeshAs(mesh.children[0], mesh.name);
+                }
+            },
+            function (mesh) {            
+                return TOOLS.isComposedMesh(mesh);
             }
+        );
+ 
 
-        }, function (mesh) {            
-            return TOOLS.isComposedMesh(mesh);
-        }
-       );
 
     }
 
@@ -65,10 +98,10 @@
     {
 
         //create converter 
-        var converter = new MeshToAsciiStlBlob();
+        var converter = new ToAsciiBlob();
 
         //create blob from the mesh
-        var blob = converter.toAsciiBlob(mesh);
+        var blob = converter.meshToAsciiBlob(mesh);
 
         if (filename === undefined)
             filename = mesh.name;
@@ -715,8 +748,11 @@ init.prototype.showSessionModal = function (onOkCallback, onCancelCallback) {
     $("#startsharing").click(function () {
 
         //call OK callback if any
-        if (onOkCallback)
-            onOkCallback();
+        if (onOkCallback) {
+            var sessionName = $("#sessionnametext")[0].value;
+            var emails =  $("#notificationemails")[0].value;
+            onOkCallback(sessionName, emails);
+        }
 
         //hide and remove element
         session.modal('hide');
@@ -724,10 +760,12 @@ init.prototype.showSessionModal = function (onOkCallback, onCancelCallback) {
     });
 
     $("#cancelsharing").click(function () {
+       
+        if(onCancelCallback)
+            onCancelCallback();
+
         session.modal('hide');
         session.remove();
-        if(onCancelCallback)
-            onCancelCallback();        
     });
 
 
@@ -742,10 +780,10 @@ init.prototype.sendContentToServer = function () {
 
     var _this = this;
 
-    var okCallback = function () {
+    var okCallback = function (sessionName, emails) {
         var sessionInfo = {};
-        sessionInfo.sessionName = $("#sessionnametext")[0].value;
-        sessionInfo.sessionEmails = $("#notificationemails")[0].value;
+        sessionInfo.sessionName =sessionName;
+        sessionInfo.sessionEmails = emails;
        
         _this.sendModelsToServer(sessionInfo);
     };
