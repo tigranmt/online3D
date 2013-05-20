@@ -13,9 +13,9 @@ final users, which are very often in these cases are not engineers, can easily r
 
 Yes, there are several platforms available now in the market like: 
 
-[3dfile.io/](http://3dfile.io/)
-[SketchFab](https://sketchfab.com/)
-[GrabCAD](http://grabcad.com/)
+-[3dfile.io/](http://3dfile.io/)
+-[SketchFab](https://sketchfab.com/)
+-[GrabCAD](http://grabcad.com/)
 
 
 The [3dfile.io/](http://3dfile.io/) and [SketchFab](https://sketchfab.com/) when one want to upload a file, first 
