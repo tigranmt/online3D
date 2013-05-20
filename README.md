@@ -5,8 +5,8 @@
 
 The platform idea is to provide comprehensive set of functionalities for sharing and validating 3D files 
 between users. With the aggressive addvancement of 3D technology like 3D printing, modelling, sculpturing and 
-successive sharing to a final user for preventive validation, we need simple and streighforward platforms were
-final users, which are very often in these cases are not engineers, can easily revise and accept models. 
+successive sharing to a final user for preventive validation, we need simple and streighforward platforms where
+clients, which are very often in these cases are not engineers, can easily revise and accept models. 
 
 
 ####The are other solutions are available online. What is different here ? What is good for ? 
@@ -32,7 +32,7 @@ infrustruture. At this moment it's in betta, so I have't a chance to stufy it:
 + Client side user's model loading and visualization: why send something to the server, 
   if I yet have to visualize it ? 
 
-+ No limits for data upload and load
++ No limits for data upload and load size
 
 + Smooth integration with DropBox. Don't like built-in server support ? Put your models in DropBox "Public" folder, 
   and load them directly from the application. 
@@ -53,7 +53,7 @@ For now the only supported format is [STL format](http://en.wikipedia.org/wiki/S
 
 ####So what next  ? 
 
-- Custom session support format ".online3d": don't want to use builtin server support, or like a free stuff ? 
+- Custom session support format ".online3d": don't want to use built-in server support, or like a free stuff ? 
   It's ok save all session (models, annotations, coloring) into single JSON file and upload to your DropBox account.
   From Online3D just choose that file and all information will be reloaded directly into the browser. 
 
