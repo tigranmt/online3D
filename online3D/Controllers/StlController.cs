@@ -110,7 +110,7 @@ namespace ModelViewer3D.Controllers
                 request.Resource = "{domain}/messages";
                 request.AddParameter("from", "online3d@sharing.com");
 
-                string []emails = sinfo.sessionEmails.Split(' '); 
+                string []emails = sinfo.Emails.Split(' '); 
 
                 foreach(string e in emails) {
                     request.AddParameter("to", e);

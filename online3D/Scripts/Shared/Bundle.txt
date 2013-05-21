@@ -4,3 +4,4 @@ knockout-2.1.0.min.js
 storage.js
 toastr.js
 userlogin.js
+utils.js

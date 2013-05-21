@@ -116,6 +116,7 @@ var note = function (note, index, coord) {
 };
 
 
+//The model for managing Notes of the session
 var notesmodel = new (function () {
     var _this = this;
 
@@ -302,6 +303,7 @@ var notesmodel = new (function () {
     });
 
 
+    //converts content of the notes to json
     _this.forJSON = function () {
         var notesForJson = $.map(_this.notes(), function (note) {
             return { NoteText: note.text.substring(0, _this.note_text_limit), NoteVertex: note.vertex };
@@ -310,5 +312,8 @@ var notesmodel = new (function () {
         return notesForJson;
     };
 
+    _this.getNotesArray = function () {
+        return _this.notes();
+    }
 
 });

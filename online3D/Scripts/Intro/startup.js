@@ -2,7 +2,7 @@
 
     "use strict";
 
-    window.indexedFiles.openbase();
+   
     window.APP_NAME = "Online3D";
 
     var _this = this;
@@ -455,8 +455,8 @@
         $("#iconImageSrc").lazyload();
 
     }
-    
 
+    window.indexedFiles.openbase();
 })
 
 

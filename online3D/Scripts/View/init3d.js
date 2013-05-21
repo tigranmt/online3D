@@ -12,20 +12,6 @@
     var _this = this;
     
 
-    this.drawLine = function(scene, start, end) {
-        var geometry = new THREE.Geometry();
-        geometry.vertices.push(start);
-        geometry.vertices.push(end);  
-        var material = new THREE.LineBasicMaterial({
-            color: 0x0000ff,
-        });
-        var line = new THREE.Line(geometry, material);
-        scene.add(line);
-
-    }
-
-
-
     ///Saves the content of the scene (no matters the mesh visibility) 
     ///into JSON formatted session file xxxxx.online3D
     init.prototype.saveSceneAsSession = function () {
@@ -35,21 +21,14 @@
 
         var onOkCallback = function (sessionName, emails) {
 
-            var session = {
-                SessionName: sessionName,
-                Emails: "", //ignore emails, we don't actually need them in this case
-                Date: new Date().getDate(),
-                Meshes: []
-            };
-
-
+            //no emails support for now
+            var sessionManifest = utils.getSessionManifest(sessionName,"");
+            sessionManifest.Notes = notesmodel.getNotesArray(); //assign notes array
+            
             //request session name
             TOOLS.forEachMesh(function (mesh) {               
-                    var singleMesh = {
-                        name: mesh.name,
-                        vertices : mesh.children[0].geometry.vertices
-                    };
-                    session.Meshes.push(singleMesh);
+                    var meshModel = utils.meshModelFromMesh(mesh);
+                    sessionManifest.Meshes.push(meshModel);
             },
 
             function (mesh) {
@@ -59,7 +38,7 @@
 
 
             //convert to json
-            var json = JSON.stringify(session);
+            var json = JSON.stringify(sessionManifest);
 
             //create converter 
             var converter = new ToAsciiBlob();
@@ -69,7 +48,7 @@
 
 
             //save blob as a file 
-            window.saveAs(blob, session.SessionName + "." + window.APP_NAME);
+            window.saveAs(blob, sessionManifest.SessionName + "." + window.APP_NAME);
             
         } //onOKCallback
 
@@ -659,7 +638,7 @@ init.prototype.sendModelsToServer = function(sessionInfo) {
                     VertexCount: verticesCount,
                     Color: basicColor,
                     FaceColors: colorsSplit,
-                    SessionName: sessionInfo.sessionName                  
+                    SessionName: sessionInfo.SessionName                  
                 };
 
 
@@ -781,11 +760,8 @@ init.prototype.sendContentToServer = function () {
     var _this = this;
 
     var okCallback = function (sessionName, emails) {
-        var sessionInfo = {};
-        sessionInfo.sessionName =sessionName;
-        sessionInfo.sessionEmails = emails;
-       
-        _this.sendModelsToServer(sessionInfo);
+        var sessionManifest = utils.getSessionManifest(sessionName, emails);
+        _this.sendModelsToServer(sessionManifest);
     };
     _this.showSessionModal(okCallback);
 
@@ -1184,8 +1160,9 @@ init.prototype.LoadFiles = function (files) {
 
             //this is SESSION file load
             // -----
-
-            _this.modelLoader.loadSession(_this.glScene, store.fileData, store.fileName, store.fileSize, loadAsync);  //load models in async way  
+            
+            //load models in async way  
+            _this.modelLoader.loadSession(_this.glScene, store.fileData, store.fileName, store.fileSize, loadAsync);  
            
             index = -1; // there could be only one session file accepted, so break the execution : -1
         }

@@ -8,6 +8,6 @@ namespace online3D.Models
     public class SessionInfo
     {       
         public string sessionName { get; set; }
-        public string sessionEmails { get; set; }
+        public string Emails { get; set; }
     }
 }

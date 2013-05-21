@@ -34,7 +34,7 @@ function SessionToMeshes() {
             while (currentVertexIndex < vertexCount) {
 
                 for (var i = currentVertexIndex; i < currentVertexIndex + 3; i++) {
-                    var ob = curMesh.vertices[currentVertexIndex]; 
+                    var ob = curMesh.vertices[i]; 
                     var vertex = new THREE.Vector3(ob.x, ob.y, ob.z);
                     curGeometry.vertices.push(vertex);
                 }
