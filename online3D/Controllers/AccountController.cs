@@ -41,7 +41,7 @@ namespace online3D.Controllers
 
         private bool IsValid(UserModel user)
         {
-            if (user.Password != "sweden" || user.UserName != "sweden")
+            if (user.Password != "guest" || user.UserName != "guestpro")
                 return false;
 
             return true;
