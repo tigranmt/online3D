@@ -71,8 +71,8 @@ var viewmodels = new (function () {
                           new MenuItem("logOutButton", "Log out", logOutCallback), ];
 
     _this.save_menu = [{ id: "saveScreenShotButton", text: "Screenshot", callback: function () { stlscene.graphics.takeScreenshot(true); } },
-                        { id: "saveAsButton", text: "Save as STL", callback: function () { stlscene.graphics.saveSceneAs(); } }
-                        //{ id: "saveAsSession", text: "Save as Online3D session", callback: function () { stlscene.graphics.saveSceneAsSession(); } }
+                        { id: "saveAsButton", text: "Save as STL", callback: function () { stlscene.graphics.saveSceneAs(); }},
+                         { id: "saveAsSession", text: "Save as Online3D session", callback: function () { stlscene.graphics.saveSceneAsSession(); } }
 
                         ];
 

@@ -47,8 +47,14 @@ function ModelLoader(scene, camera, renderer, tracker) {
             throw 'Not recognized file format';
     }
 
+    //Loads the session JSON file informazion on screen (not only meshes, but notes, colors...)
+    this.loadSession = function (scene, data, fileName, fileSize, nextCallback) {
+        new SessionToMeshes().loadSessionAsync(scene, data, progress, nextCallback);
+    }
 
 
+
+    //Loads meshy model, whis is sequence of vertices from the server
     this.loadMeshModel = function (object, nextCallback) {
         if (object === undefined || object.Size === undefined) {
             toastr.error('Can not load mesh', 'Error');
@@ -63,7 +69,7 @@ function ModelLoader(scene, camera, renderer, tracker) {
     }
 
 
-    
+   
 
 
     

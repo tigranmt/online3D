@@ -17,5 +17,7 @@
     Converters/stl_to_mesh.js
     Converters/vertex_to_mesh.js
 	Converters/toasciiblob.js
+	Converters/session_to_meshes.js
+	
 	
     

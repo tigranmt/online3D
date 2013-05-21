@@ -1173,10 +1173,29 @@ init.prototype.LoadFiles = function (files) {
             toastr.success('Done !');
             return;
         }
+
+
         var store = files[index];
-        _this.modelLoader.loadModel(_this.glScene, store.fileData, store.fileName, store.fileSize, loadAsync);  //load models in async way  
-        index--;
+
+        //get an extension of the file to understand how to treat it
+        var extension = store.fileName.split('.').pop();
+
+        if (extension && extension === window.APP_NAME) {
+
+            //this is SESSION file load
+            // -----
+
+            _this.modelLoader.loadSession(_this.glScene, store.fileData, store.fileName, store.fileSize, loadAsync);  //load models in async way  
+           
+            index = -1; // there could be only one session file accepted, so break the execution : -1
+        }
+        else {
+            //this is a file load
+            _this.modelLoader.loadModel(_this.glScene, store.fileData, store.fileName, store.fileSize, loadAsync);  //load models in async way  
+            index--; //decrement index
+        }
     };
+
 
     loadAsync();
 }

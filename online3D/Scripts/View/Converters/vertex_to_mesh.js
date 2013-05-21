@@ -18,7 +18,7 @@ function VertexToMesh() {
     }
 
 
-    /** Loads mesh (object) and accepts nect call (callback) procedure **/
+    /** Loads mesh (object) and accepts next call (callback) procedure **/
     this.loadAsync = function (scene, object, progressCallback, finishCallback) {
 
         var _scene = scene;

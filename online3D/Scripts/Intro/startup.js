@@ -9,7 +9,8 @@
 
     //rooting map
     var rootMap = {
-        "STL": "/Stl/StlView"
+        "STL": "/Stl/StlView",
+        "ONLINE3D": "/Stl/StlView"
     }
 
     
@@ -116,21 +117,39 @@
             var data = event.target.result;
             if (reader.readyState == 2) {
               
+                var fileData = {
+
+                    "fileName": sessionFile.name,
+                    "fileSize": 1,
+                    "fileData": data
+                };
                
+                if (addToStore(fileData) === false) {
+                    toastr.error('Failed to load file ' + sessionFile.name, 'Error');
+                    showProgress(false);
+                }
+                else {
+                    var extension = sessionFile.name.split('.').pop();
+                    var path = rootMap[extension.toUpperCase()];
+                    if (path) {
+                        window.location.replace(path);
+                    }
+                }
+
                 //parse JSON to object
-                var sessionObj = JSON.parse(data);
+                //var sessionObj = JSON.parse(data);
 
                 //iterate over all meshes in the object anb save to DB
-                for(var i=0;i<sessionObj.Meshes.length;i++)  {
+               /* for(var i=0;i<sessionObj.Meshes.length;i++)  {
                     var obj = sessionObj.Meshes[i];
 
                     //create map object
                  
                     var fileData = {
-                        name: obj.name,
-                        size: 1,
-                        data: obj.vertices,
-                        blob: true
+                        
+                        "fileName": obj.name,
+                        "fileSize": 1,
+                        "fileData": obj.vertices                      
                     };
 
                     //save to INdexedDB
@@ -138,7 +157,14 @@
                         toastr.error('Failed to load file ' + sessionFile.name, 'Error');
                         showProgress(false);
                     }
-                }
+                    else {
+                        var extension = sessionFile.name.split('.').pop();
+                        var path = rootMap[extension.toUpperCase()];
+                        if (path) {
+                            window.location.replace(path);
+                        }
+                    }
+                }*/
 
               
 
