@@ -2,7 +2,7 @@
 
     "use strict";
 
-   
+
     window.APP_NAME = "Online3D";
 
     var _this = this;
@@ -13,7 +13,7 @@
         "ONLINE3D": "/Stl/StlView"
     }
 
-    
+
 
     //list of supported extensions
     var supportedExtensions = ["STL", window.APP_NAME.toUpperCase()];
@@ -112,61 +112,31 @@
 
         //create a FileReader object
         var reader = new FileReader();
-     
+
+        var jumpToView = function () {
+            var extension = sessionFile.name.split('.').pop();
+            var path = rootMap[extension.toUpperCase()];
+            if (path) {
+                window.location.replace(path);
+            }
+        }
+
         reader.onload = function (event) {
             var data = event.target.result;
             if (reader.readyState == 2) {
-              
+
                 var fileData = {
 
                     "fileName": sessionFile.name,
                     "fileSize": 1,
                     "fileData": data
                 };
-               
-                if (addToStore(fileData) === false) {
+
+
+                if (addToStore(fileData, jumpToView) === false) {
                     toastr.error('Failed to load file ' + sessionFile.name, 'Error');
                     showProgress(false);
                 }
-                else {
-                    var extension = sessionFile.name.split('.').pop();
-                    var path = rootMap[extension.toUpperCase()];
-                    if (path) {
-                        window.location.replace(path);
-                    }
-                }
-
-                //parse JSON to object
-                //var sessionObj = JSON.parse(data);
-
-                //iterate over all meshes in the object anb save to DB
-               /* for(var i=0;i<sessionObj.Meshes.length;i++)  {
-                    var obj = sessionObj.Meshes[i];
-
-                    //create map object
-                 
-                    var fileData = {
-                        
-                        "fileName": obj.name,
-                        "fileSize": 1,
-                        "fileData": obj.vertices                      
-                    };
-
-                    //save to INdexedDB
-                    if (addToStore(fileData) === false) {
-                        toastr.error('Failed to load file ' + sessionFile.name, 'Error');
-                        showProgress(false);
-                    }
-                    else {
-                        var extension = sessionFile.name.split('.').pop();
-                        var path = rootMap[extension.toUpperCase()];
-                        if (path) {
-                            window.location.replace(path);
-                        }
-                    }
-                }*/
-
-              
 
             }
             else {
@@ -184,9 +154,9 @@
         };
 
         //this is a FILE object
-        reader.readAsBinaryString(sessionFile);       
+        reader.readAsBinaryString(sessionFile);
     }
-    
+
     /*
     Load files in sequence
     */
@@ -271,7 +241,7 @@
                     showProgress(false);
                 };
 
-                
+
 
                 //this is a BLOB obect  
                 if (file.blob !== undefined) {
@@ -396,7 +366,7 @@
         }
 
         gdrive.showUI(fileSelected, fileDownloaded);
-    }   
+    }
 
     this.onDragEnter = function (event) {
         event.preventDefault();
@@ -419,7 +389,7 @@
         event.stopPropagation();
         loadFileFromDrop(event);
     };
-  
+
     this.loadSampleModelPreview = function (completeCallback) {
         var complete = completeCallback;
         $.ajax({
@@ -439,8 +409,8 @@
             }
         });
     }
-    
-    
+
+
     //run 
     if (compatibilityChecks()) {
         setupDragDropEvents();

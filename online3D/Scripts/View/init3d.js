@@ -555,151 +555,151 @@ init.prototype.sendEmails = function(sessionInfo) {
     });
 }
 
-init.prototype.sendModelsToServer = function(sessionInfo) {
+init.prototype.sendModelsToServer = function (sessionInfo) {
 
-        var unique = undefined; //unique key associated with this scene
-        var meshIndex = 0;
-        var _this = this;
+    var unique = undefined; //unique key associated with this scene
+    var meshIndex = 0;
+    var _this = this;
 
-        (function uploadSingleModel() {
-            var childrenCount = _this.glScene.__objects.length;
+    (function uploadSingleModel() {
+        var childrenCount = _this.glScene.__objects.length;
 
-            /**Check either upload of all models terminated*/
-            if (meshIndex >= childrenCount) {
-                $("#flprogress").remove();
-                toastr.success('Upload of all models done.', 'Success !');
-               
-                //upload of all models termianted, so let's send notifications via mail, if necessary 
-                _this.sendEmails(sessionInfo);
-                return;
+        /**Check either upload of all models terminated*/
+        if (meshIndex >= childrenCount) {
+            $("#flprogress").remove();
+            toastr.success('Upload of all models done.', 'Success !');
+
+            //upload of all models termianted, so let's send notifications via mail, if necessary 
+            _this.sendEmails(sessionInfo);
+            return;
+        }
+
+        var mesh = _this.glScene.__objects[meshIndex];
+        if (!TOOLS.isComposedMesh(mesh)) {
+            meshIndex++;
+            uploadSingleModel();
+            return;
+        }
+
+        //these variables are in closure
+        var geometryMesh = mesh.children[0];
+        var verticesCount = geometryMesh.geometry.vertices.length;
+
+        var step = parseInt(_this.getPacketSize(verticesCount));
+        var index = 0;
+
+
+        if (index === 0) {
+            _this.showUploadProgress(mesh.name, 0);
+
+        }
+
+        var firstLoad = false;
+
+
+        function currentModelSequence() {
+
+            var verticesSplit = new Array();
+            var colorsSplit = new Array();
+
+            while (index < verticesCount) {
+                var gv = geometryMesh.geometry.vertices[index];
+                var shorten = utils.vertexToShorten(gv);
+
+                var vertex = "x:" + shorten.x + " " + "y:" + shorten.y + " " + "z:" + shorten.z;
+
+                if (gv.vertexColor !== undefined)
+                    colorsSplit.push(index + ":" + gv.vertexColor);
+
+                verticesSplit.push(vertex);
+                //verticesSplit.push(parseFloat(Math.round(gv.x * 100) / 100).toFixed(2);
+                index++;
+
+                /*In case of first vertex in the model just push it raise ajax. So we will check for authentication requeirement,
+                and no any relation with the models size, as we push ALWAYS only 1 vertex on first step for ANY model*/
+                if (index == 1)
+                    break;
+
+
+                if (verticesSplit.length % step === 0)
+                    break;
             }
 
-            var mesh = _this.glScene.__objects[meshIndex];
-            if (!TOOLS.isComposedMesh(mesh)) {
-                meshIndex++;
-                uploadSingleModel();
-                return;
+            var basicColor = geometryMesh.color;
+            if (basicColor == undefined)
+                basicColor = mesh.color;
+
+            var modelInfo = {
+                ModelName: mesh.name,
+                Size: mesh.filesize,
+                Format: "Stl",
+                ID: unique,
+                Vertices: verticesSplit,
+                VertexCount: verticesCount,
+                Color: basicColor,
+                FaceColors: colorsSplit,
+                SessionName: sessionInfo.SessionName
+            };
+
+
+            if (index === 1 && !firstLoad) {
+                modelInfo.ModelImage = _this.takeScreenshot();
+                modelInfo.Notes = notesmodel.forJSON();
+
+                firstLoad = true;
             }
 
-            //these variables are in closure
-            var geometryMesh = mesh.children[0];
-            var verticesCount = geometryMesh.geometry.vertices.length;
+            $.ajax({
+                url: "SaveModel/",
+                type: "POST",
+                contentType: "application/json",
+                processData: false,
+                cache: false,
+                data: JSON.stringify(modelInfo),
+                dataType: 'json',
+                success: function (data) {
 
-            var step = parseInt(_this.getPacketSize(verticesCount));
-            var index = 0;
-
-
-            if (index === 0) {
-                _this.showUploadProgress(mesh.name, 0);
-
-            }
-
-            var firstLoad = false;
-        
-
-            function currentModelSequence() {
-
-                var verticesSplit = new Array();
-                var colorsSplit = new Array();
-
-                while (index < verticesCount) {
-                    var gv = geometryMesh.geometry.vertices[index];    
-                    var vertex = "x:" + parseFloat(Math.round(gv.x * 100) / 100).toFixed(2) + " " + 
-                                            "y:" + parseFloat(Math.round(gv.y * 100) / 100).toFixed(2) + " " + 
-                                                "z:"  + parseFloat(Math.round(gv.z * 100) / 100).toFixed(2);
-              
-                    if(gv.vertexColor !== undefined) 
-                       colorsSplit.push(index + ":" + gv.vertexColor);
-
-                    verticesSplit.push(vertex);
-                    //verticesSplit.push(parseFloat(Math.round(gv.x * 100) / 100).toFixed(2);
-                    index++;
-
-                    /*In case of first vertex in the model just push it raise ajax. So we will check for authentication requeirement,
-                    and no any relation with the models size, as we push ALWAYS only 1 vertex on first step for ANY model*/
-                    if (index == 1)
-                        break;
-
-
-                    if (verticesSplit.length % step === 0)
-                        break;
-                }
-
-                var basicColor = geometryMesh.color; 
-                if(basicColor == undefined) 
-                    basicColor = mesh.color;
-
-                var modelInfo = {
-                    ModelName: mesh.name,
-                    Size: mesh.filesize,
-                    Format: "Stl",
-                    ID: unique,
-                    Vertices: verticesSplit,
-                    VertexCount: verticesCount,
-                    Color: basicColor,
-                    FaceColors: colorsSplit,
-                    SessionName: sessionInfo.SessionName                  
-                };
-
-
-                if(index === 1 && !firstLoad) {
-                    modelInfo.ModelImage =  _this.takeScreenshot();  
-                    modelInfo.Notes = notesmodel.forJSON();
-                    
-                    firstLoad = true;         
-                }
-
-                $.ajax({
-                    url: "SaveModel/",
-                    type: "POST",
-                    contentType: "application/json",
-                    processData: false,
-                    cache : false,
-                    data: JSON.stringify(modelInfo),
-                    dataType: 'json',
-                    success: function (data) {
-                    
-                        //error happened on server
-                        if(data === false) {
-                            toastr.error('Error on save.', 'Error !');
-                            $("#flprogress").remove();
-                            return;
-                        }
-                    
-                        //get the unique key associated to this model+scene, generated by the server
-                        unique = data;
-
-                        //if I'm not at the end of the collection, call my self to go ahead
-                        if (index < verticesCount) {
-                            currentModelSequence();
-                            _this.showUploadProgress(mesh.name, 100 / (verticesCount / index));
-                        }
-                        else {
-                            //load another model
-                            meshIndex++;
-                            _this.showUploadProgress(mesh.name, 100);
-                            uploadSingleModel(); //call to upload another model in collection, if any
-                        }
-                    },
-                    error: function (data) {
+                    //error happened on server
+                    if (data === false) {
                         toastr.error('Error on save.', 'Error !');
                         $("#flprogress").remove();
-                    },
-                    statusCode: {
-                        401: function (data) {
-                            meshIndex = -1; //not valid value
-                            $("#flprogress").remove();
-                            toastr.error('You need to login first.', 'Error !');
-                            userAccess.requestUserAuth();
-
-                        }
+                        return;
                     }
-                });
 
-            }; //call myself
+                    //get the unique key associated to this model+scene, generated by the server
+                    unique = data;
 
-            currentModelSequence();
-        })();
+                    //if I'm not at the end of the collection, call my self to go ahead
+                    if (index < verticesCount) {
+                        currentModelSequence();
+                        _this.showUploadProgress(mesh.name, 100 / (verticesCount / index));
+                    }
+                    else {
+                        //load another model
+                        meshIndex++;
+                        _this.showUploadProgress(mesh.name, 100);
+                        uploadSingleModel(); //call to upload another model in collection, if any
+                    }
+                },
+                error: function (data) {
+                    toastr.error('Error on save.', 'Error !');
+                    $("#flprogress").remove();
+                },
+                statusCode: {
+                    401: function (data) {
+                        meshIndex = -1; //not valid value
+                        $("#flprogress").remove();
+                        toastr.error('You need to login first.', 'Error !');
+                        userAccess.requestUserAuth();
+
+                    }
+                }
+            });
+
+        }; //call myself
+
+        currentModelSequence();
+    })();
 
 }
 

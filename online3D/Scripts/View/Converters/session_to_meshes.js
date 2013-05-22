@@ -39,12 +39,8 @@ function SessionToMeshes() {
                     curGeometry.vertices.push(vertex);
                 }
 
-                currentVertexIndex += 3;
+                currentVertexIndex = i;
 
-                //single step break conditon 
-                if (currentVertexIndex % stepSize === 0) {
-                    break;
-                }
 
                 //add face of 3 vertices
                 //var length = geometry.vertices.length;
@@ -52,6 +48,13 @@ function SessionToMeshes() {
                 var face = new THREE.Face3(length - 3, length - 2, length - 1, 1);
                 face.color.setHex(modelColor);
                 curGeometry.faces.push(face);
+
+
+
+                //single step break conditon 
+                if (currentVertexIndex % stepSize === 0) {
+                    break;
+                }
 
             } // while
 
@@ -98,7 +101,7 @@ function SessionToMeshes() {
             for (var g = 0; g<geometries.length; g++) {
                 //consruct mesh
                 var geometry = geometries[g];
-                var meshMaterial = new THREE.MeshPhongMaterial({ ambient: 0x222222, vertexColors: THREE.FaceColors, specular: 0x49D8FB, shininess: 140, perPixel: false, overdraw: false, side: THREE.DoubleSide });
+                var meshMaterial = new THREE.MeshPhongMaterial({ ambient: 0x222222, vertexColors: THREE.FaceColors, specular: 0x49D8FB, shininess: 140, perPixel: false, overdraw: true, side: THREE.DoubleSide });
                 var meshWireframe = new THREE.MeshBasicMaterial({ color: 0x111111, vertexColors: THREE.FaceColor, wireframe: true });
                 var multiMaterial = [meshMaterial, meshWireframe];
 
