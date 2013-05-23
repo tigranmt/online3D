@@ -538,8 +538,10 @@ init.prototype.sendEmails = function(sessionInfo) {
                 toastr.error('Email sent failed', 'Error !');
             }
             else {
-                toastr.success('Emails sent to ' + data.sessionEmails);
-                console.log("Email notificatio request was sent successfully");
+                if (data.Emails && data.Emails.length > 0) {
+                    toastr.success('Emails sent to ' + data.sessionEmails);
+                    console.log("Email notification request was sent successfully");
+                }
             }
         },
         error: function (data) {

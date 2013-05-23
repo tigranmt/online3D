@@ -101,6 +101,10 @@ namespace ModelViewer3D.Controllers
 
             try
             {
+                //no any email specified, it's not a problem, emails are not  mandatory
+                // just return
+                if(string.IsNullOrEmpty(sinfo.Emails))
+                    return Json(sinfo);
 
                 RestClient client = new RestClient();
                 client.BaseUrl = "https://api.mailgun.net/v2";
