@@ -72,16 +72,31 @@ function SessionToMeshes() {
                 //reset current geometry
                 curGeometry = new THREE.Geometry();
 
-                //generate new color
-                modelColor = curMesh.color || Math.random() * 0xffffff;
+               
 
                 //chekc if there is any other model in array to load
-                if (currentModelIndex < totalModelsCount)
+                if (currentModelIndex < totalModelsCount) {
                     curMesh = sessionObj.Meshes[currentModelIndex];
+
+                    //set new vertex count
+                    vertexCount = curMesh.vertices.length;
+
+                    //set name 
+                    curGeometry.name = curMesh.name;
+
+                    //set color                   
+                    modelColor = curMesh.color || Math.random() * 0xffffff;
+
+
+                    //reset current vertex index
+                    currentVertexIndex = 0;
+
+                }
             }
 
             //check if we finished all models
-            if (currentModelIndex >= totalModelsCount) {
+            if (currentModelIndex === totalModelsCount) {
+                progressCallback(currentVertexIndex, vertexCount);
                 isDone = true;
             }
           
