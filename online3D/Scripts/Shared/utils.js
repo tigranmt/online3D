@@ -55,5 +55,17 @@
                 Notes : [], 
             };
     }
+
+    _this.meshFromGeometry = function(geometry) {
+        var meshMaterial = new THREE.MeshPhongMaterial({ ambient: 0x222222, vertexColors: THREE.FaceColors, specular: 0x49D8FB, shininess: 140, perPixel: false, overdraw: true, side: THREE.DoubleSide });
+        var meshWireframe = new THREE.MeshBasicMaterial({ color: 0x111111, vertexColors: THREE.FaceColors, specular: 0x49D8FB, shininess: 140, wireframe: true });
+        var multiMaterial = [meshMaterial, meshWireframe];
+
+        geometry.computeFaceNormals();
+        geometry.computeVertexNormals();
+                  
+        var mesh = THREE.SceneUtils.createMultiMaterialObject(geometry, multiMaterial);
+        return mesh;
+    }
 }
 );

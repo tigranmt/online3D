@@ -6,7 +6,7 @@ function SessionToMeshes() {
     this.loadSessionAsync = function (scene, data, progress, nextCallback) {
 
 
-        var isDone = false; 
+        var isDone = false;
         var sessionObj = JSON.parse(data); //parse to object from JSON 
 
         var currentModelIndex = 0;
@@ -16,25 +16,24 @@ function SessionToMeshes() {
         var curMesh = sessionObj.Meshes[currentModelIndex];
         var vertexCount = curMesh.vertices.length;
         var progressCallback = progress;
-       
+
         var geometries = [];
 
         var curGeometry = new THREE.Geometry();
         curGeometry.name = curMesh.name;
 
 
-        
+
         var modelColor = curMesh.color || Math.random() * 0xffffff;
         curGeometry.color = modelColor;
 
-        var readStep = function (iterator)
-        {
+        var readStep = function (iterator) {
 
-           
+
             while (currentVertexIndex < vertexCount) {
 
                 for (var i = currentVertexIndex; i < currentVertexIndex + 3; i++) {
-                    var ob = curMesh.vertices[i]; 
+                    var ob = curMesh.vertices[i];
                     var vertex = new THREE.Vector3(ob.x, ob.y, ob.z);
                     curGeometry.vertices.push(vertex);
                 }
@@ -72,7 +71,7 @@ function SessionToMeshes() {
                 //reset current geometry
                 curGeometry = new THREE.Geometry();
 
-               
+
 
                 //chekc if there is any other model in array to load
                 if (currentModelIndex < totalModelsCount) {
@@ -99,7 +98,7 @@ function SessionToMeshes() {
                 progressCallback(currentVertexIndex, vertexCount);
                 isDone = true;
             }
-          
+
 
             iterator();
         }
@@ -110,22 +109,13 @@ function SessionToMeshes() {
             return isDone;
         }
 
-        var complete = function ()
-        {
+        var complete = function () {
 
-            for (var g = 0; g<geometries.length; g++) {
-                //consruct mesh
+            for (var g = 0; g < geometries.length; g++) {
+
                 var geometry = geometries[g];
-                var meshMaterial = new THREE.MeshPhongMaterial({ ambient: 0x222222, vertexColors: THREE.FaceColors, specular: 0x49D8FB, shininess: 140, perPixel: false, overdraw: true, side: THREE.DoubleSide });
-                var meshWireframe = new THREE.MeshBasicMaterial({ color: 0x111111, vertexColors: THREE.FaceColor, wireframe: true });
-                var multiMaterial = [meshMaterial, meshWireframe];
-
-                //normals calculation for correct lighting
-                geometry.computeFaceNormals();
-                geometry.computeVertexNormals();
-
-                //   geometry.__dirtyColors = true;
-                var mesh = THREE.SceneUtils.createMultiMaterialObject(geometry, multiMaterial);
+                //construct mesh
+                var mesh = utils.meshFromGeometry(geometry);
 
                 //set additional mesh data
                 mesh.name = geometry.name;

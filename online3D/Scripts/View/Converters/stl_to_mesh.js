@@ -91,7 +91,7 @@ function StlToMesh() {
                 return;
             }
             /**/
-            
+
 
             if (!triangleCount) {
                 toastr.error("Empty STL file", 'Error');
@@ -149,12 +149,12 @@ function StlToMesh() {
                         //trianlge color information (SKIP FOR NOW)
                         var faceColor = bReader.readUInt16();
 
-                
+
                         var length = geometry.vertices.length;
                         var face = new THREE.Face3(length - 3, length - 2, length - 1, 1);
 
                         //face.color.setHex(modelColor);
-                        if(faceColor !== 0)
+                        if (faceColor !== 0)
                             face.color.setHex(faceColor);
                         else
                             face.color.setHex(modelColor);
@@ -183,16 +183,7 @@ function StlToMesh() {
 
                 if (geometry.vertices.length > 0) {
 
-                    var meshMaterial = new THREE.MeshPhongMaterial({ ambient: 0x222222, vertexColors: THREE.FaceColors, specular: 0x49D8FB, shininess: 140, perPixel: false, overdraw: true, side: THREE.DoubleSide });
-                    var meshWireframe = new THREE.MeshBasicMaterial({ color: 0x111111, vertexColors: THREE.FaceColors, specular: 0x49D8FB, shininess: 140, wireframe: true });
-                    var multiMaterial = [meshMaterial, meshWireframe];
-
-                    geometry.computeFaceNormals();
-                    geometry.computeVertexNormals();
-                  
-
-                    //geometry.__dirtyColors = true;
-                    var mesh = THREE.SceneUtils.createMultiMaterialObject(geometry, multiMaterial);
+                    var mesh = utils.meshFromGeometry(geometry);
 
                     //set additional mesh data
                     mesh.name = fileName;
@@ -329,19 +320,7 @@ function StlToMesh() {
                 //vertices are loaded 
                 if (geometry.vertices.length > 0) {
 
-                    //finalizing loading of the geometry
-
-                    //consruct mesh
-                    var meshMaterial = new THREE.MeshPhongMaterial({ ambient: 0x222222, vertexColors: THREE.FaceColors, specular: 0x49D8FB, shininess: 140, perPixel: false, overdraw: false, side: THREE.DoubleSide });
-                    var meshWireframe = new THREE.MeshBasicMaterial({ color: 0x111111,  vertexColors: THREE.FaceColor, wireframe: true});
-                    var multiMaterial = [meshMaterial, meshWireframe];
-
-                    //normals calculation for correct lighting
-                    geometry.computeFaceNormals();
-                    geometry.computeVertexNormals();
-
-                 //   geometry.__dirtyColors = true;
-                    var mesh = THREE.SceneUtils.createMultiMaterialObject(geometry, multiMaterial);
+                    var mesh = utils.meshFromGeometry(geometry);
 
                     //set additional mesh data
                     mesh.name = fileName;
