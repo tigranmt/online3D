@@ -159,6 +159,7 @@
     <Content Include="Content\Images\wireframes.png" />
     <Content Include="mailtemplate.html" />
     <Content Include="Scripts\Shared\Bundle.txt" />
+    <Content Include="Scripts\Shared\sessioninfo.js" />
     <Content Include="Scripts\Shared\utils.js" />
     <Content Include="Scripts\View\Bundle.txt" />
     <Content Include="Scripts\View\Converters\session_to_meshes.js" />

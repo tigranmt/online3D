@@ -212,11 +212,16 @@ var userAccess = new (function(){
         });
     };
 
+    
 
-
+    _this.getSignedUserName = function ()
+    {
+        var signedUser = getCookie("signed");
+        return signedUser;
+    }
 
     _this.CheckSigned = function() {
-         var signedUser = getCookie("signed");
+        var signedUser = _this.getSignedUserName();
          _this.logedIn( (signedUser != "" && signedUser != undefined));;
 
          return _this.logedIn();

@@ -1,6 +1,6 @@
 ﻿function init() {
 
-    //Web gl members
+   
     this.glScene = undefined;
     this.glRenderer = undefined;
     this.glCamera = undefined;
@@ -10,10 +10,11 @@
     
 
     var _this = this;
-    
 
-    ///Saves the content of the scene (no matters the mesh visibility) 
-    ///into JSON formatted session file xxxxx.online3D
+
+    /* Saves the content of the scene (no matters the mesh visibility) 
+     *  into JSON formatted session file xxxxx.online3D
+    */
     init.prototype.saveSceneAsSession = function () {
 
 
@@ -22,8 +23,9 @@
         var onOkCallback = function (sessionName, emails) {
 
             //no emails support for now
-            var sessionManifest = utils.getSessionManifest(sessionName,"");
+            var sessionManifest = sessionInformation.getSessionManifest(sessionName, userAccess.getSignedUserName(), "", utils.getCurrentDateTime());
             sessionManifest.Notes = notesmodel.getNotesArray(); //assign notes array
+            
             
             //request session name
             TOOLS.forEachMesh(function (mesh) {               
@@ -56,7 +58,9 @@
         _this.showSessionModal(onOkCallback);      
     }
 
-    //Saves all meshes present and _visible_ on the screen into the separate files
+    
+    /* Saves all meshes present and _visible_ on the screen into the separate files
+    * */
     init.prototype.saveSceneAs = function () {
 
         TOOLS.forEachMesh(function (mesh) {
@@ -73,6 +77,12 @@
 
     }
 
+    /*
+     * Save specified mesh to a file
+     @param {THREE.Mesh} mesh Mesh object 
+     @param {string} filename Name of the file to save to 
+
+    */
     init.prototype.saveMeshAs = function (mesh, filename)
     {
 
@@ -89,6 +99,9 @@
         window.saveAs(blob, filename);
     }
    
+    /*Takes the screen shot of entire scene intot a single image 
+    * @param {bool} showInWindow If True, image will be shown in seprated popup, otherwise only return base64 string
+    */
     init.prototype.takeScreenshot = function (showInWindow) {
 
 
@@ -420,17 +433,7 @@ init.prototype.loadMeshesInformation = function () {
     var infolist = $("#infoList")[0];
     ko.applyBindings(infos, infolist); //bind to element   
 
-    /** Set tooltips on control*/
-//    var modelHeadings = $("#infoList .accordion-heading .badge");
-//    for(var ih = 0;ih<modelHeadings.length;ih++) 
-//    {
-//        modelHeadings[ih].tooltip({
-//            placement: 'right',
-//            trigger: 'hover',
-//            title : infoViewModels[ih].fileName
-//        });
-//    }
-//    /*********************/
+   
 }
 
 
@@ -762,7 +765,7 @@ init.prototype.sendContentToServer = function () {
     var _this = this;
 
     var okCallback = function (sessionName, emails) {
-        var sessionManifest = utils.getSessionManifest(sessionName, emails);
+        var sessionManifest = sessionInformation.getSessionManifest(sessionName, "", emails, utils.getCurrentDateTime());
         _this.sendModelsToServer(sessionManifest);
     };
     _this.showSessionModal(okCallback);
@@ -1137,6 +1140,7 @@ init.prototype.LoadFiles = function (files) {
 
 
     var index = files.length - 1;
+    var sinfo = undefined;
 
     //load in async way
     var loadAsync = function () {
@@ -1147,6 +1151,14 @@ init.prototype.LoadFiles = function (files) {
             _this.finalizeLoading.apply(_this);
             _this.showPanels(); //show panels
           
+            // this is Online£D session JSON file load
+            // so it contains some additonal information
+            if (sinfo) {
+                var sessionManifest = sessionInformation.getSessionInforFromOnline3DSession(sinfo);
+                //_this.showSessionInfo(sessionManifest); // session info---
+
+                _this.showNotes(sessionManifest.Notes);
+            }
 
             toastr.success('Done !');
             return;
@@ -1162,9 +1174,8 @@ init.prototype.LoadFiles = function (files) {
 
             //this is SESSION file load
             // -----
-            
-            //load models in async way  
-            _this.modelLoader.loadSession(_this.glScene, store.fileData, store.fileName, store.fileSize, loadAsync);  
+            sinfo = JSON.parse(store.fileData);
+            _this.modelLoader.loadSession(_this.glScene, sinfo, store.fileName, store.fileSize, loadAsync);
            
             index = -1; // there could be only one session file accepted, so break the execution : -1
         }
@@ -1180,27 +1191,31 @@ init.prototype.LoadFiles = function (files) {
 }
 
 
-init.prototype.showSessionInfo = function (meshes)
+init.prototype.showSessionInfo = function (sessionInfo)
 {
-
 
     return;
 
     /**Show session information if any**/
-    if (meshes.length > 0) {
-        var first = meshes[0];
-        var obj = { 
-            sessionInfo : {
-                SessionName:    first.SessionName,
-                UseName:        first.User,
-                UploadDate:     first.SavedOn
-            }
-        };
-
-        var sinfo = $("#sinfo")[0];
-        ko.applyBindings(obj, sinfo);
-    }
+    var sinfo = $("#sinfo")[0];
+    ko.applyBindings(sessionInfo, sinfo);
+    
     /*************************/
+}
+
+init.prototype.showNotes = function (notes) {
+    for (var i = 0; i < notes.length; i++) {
+        var note = notes[i];
+
+        var text = note.NoteText || note.text;
+        var vertex = note.NoteVertex || note.vertex;
+
+        notesmodel.addNoteToList(text, i + 1, vertex);
+    }
+
+    if (notes.length > 0)
+        notesmodel.expand();
+
 }
 
 
@@ -1223,15 +1238,11 @@ init.prototype.loadMeshesFromServer = function (meshes) {
             _this.renderOnScreen(); //render ---
             _this.finalizeLoading.apply(_this, meshes); //---
             _this.showPanels(); //show panels ---   
-            _this.showSessionInfo(meshes); // session info---
-            
-            for(var i=0;i<notes.length;i++) {
-                var note = notes[i];
-                notesmodel.addNoteToList(note.NoteText, i+1, note.NoteVertex);
-            }
 
-            if(notes.length > 0)
-                notesmodel.expand();
+            var sinfo = sessionInformation.getSessionInfoFromMeshes(meshes);
+            _this.showSessionInfo(sinfo); // session info---
+            
+            _this.showNotes(notes);
                  
             toastr.success('Done !');
             return;

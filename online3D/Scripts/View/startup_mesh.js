@@ -49,7 +49,7 @@
        //apply first binding 
        ko.applyBindings(notesmodel, notes);
 
-       //subscribe to html changed event so REapply bindings
+       //subscribe to html changed event so Reapply bindings
        notesmodel.htmlChanged = function() {
             ko.applyBindings(notesmodel, notes);
        }

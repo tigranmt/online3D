@@ -5,3 +5,4 @@ storage.js
 toastr.js
 userlogin.js
 utils.js
+sessioninfo.js

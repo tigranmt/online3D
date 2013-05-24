@@ -2,12 +2,15 @@
 function SessionToMeshes() {
 
 
-    //loads geometry informationfrom the session
+    /*loads geometry informationfrom the session
+    * Loads session complete information in async calls
+    * 
+    */
     this.loadSessionAsync = function (scene, data, progress, nextCallback) {
 
 
         var isDone = false;
-        var sessionObj = JSON.parse(data); //parse to object from JSON 
+        var sessionObj = data; 
 
         var currentModelIndex = 0;
         var currentVertexIndex = 0;
