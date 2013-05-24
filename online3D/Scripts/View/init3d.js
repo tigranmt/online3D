@@ -102,32 +102,59 @@
     /*Takes the screen shot of entire scene intot a single image 
     * @param {bool} showInWindow If True, image will be shown in seprated popup, otherwise only return base64 string
     */
-    init.prototype.takeScreenshot = function (showInWindow) {
+    init.prototype.takeScreenshot = function (showInWindow, width, height, ready) {
 
 
-        var image = THREEx.Screenshot.toDataURL(_this.glRenderer);
-
-        if(showInWindow === true) {
+        var originalimage = THREEx.Screenshot.toDataURL(_this.glRenderer);
+       
+        var screenshot;
+        if (showInWindow === true) {
             //create preview window
-              jQuery('<div/>', {
+            jQuery('<div/>', {
                 id: 'screenshot',
-                class: 'modal hide fade gridbody' 
-            }).appendTo($("#body"));
-           
-           var screenshot = $("#screenshot"); 
-           screenshot.html("<img src='" + image + "'></img>");
-            //show modal window
-           screenshot.modal();
+                class: 'modal hide fade gridbody'
+            }).appendTo($("#body"));        
 
+       
+            screenshot = $("#screenshot");
+        }
+
+        //custom width and height request
+        if (width && height) {
+            var callback = function (newimage) {
+                if (showInWindow === true) {
+                      
+                    //assign RESIZED image
+                    screenshot.html("<img src='" + newimage + "'></img>");                        
+                       
+                }
+
+                if (ready)
+                    ready(newimage);
+            }
+
+            //This is ASYNC call!
+            THREEx.Screenshot.resize(originalimage, width, height, callback);
+        }
+        else {
+
+            if (showInWindow === true) {
+                //NO custom width and height request, so capture ENTIRE screen               
+                screenshot.html("<img src='" + originalimage + "'></img>");
+            }
+        }
+
+        if (showInWindow === true) {
             //subscribe to its close, so after remove accrodion
             screenshot.on('hidden', function () {
                 screenshot.remove();
-            })
+            });
 
+            screenshot.modal();
         }
 
+        return originalimage;       
 
-        return image;
     }
 
     //renders
@@ -566,23 +593,43 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
     var meshIndex = 0;
     var _this = this;
 
-    (function uploadSingleModel() {
-        var childrenCount = _this.glScene.__objects.length;
+    var childrenCount = _this.glScene.__objects.length;
+    
+    var curVertexIndex = 0;
+    var sessionImage;
+
+    var uploadComplete = function () {
 
         /**Check either upload of all models terminated*/
-        if (meshIndex >= childrenCount) {
-            $("#flprogress").remove();
-            toastr.success('Upload of all models done.', 'Success !');
+        $("#flprogress").remove();
+        toastr.success('Upload of all models done.', 'Success !');
 
-            //upload of all models termianted, so let's send notifications via mail, if necessary 
-            _this.sendEmails(sessionInfo);
-            return;
-        }
+        //upload of all models termianted, so let's send notifications via mail, if necessary 
+        _this.sendEmails(sessionInfo);
+       
+    }
+
+    var isUploadDone = function () {
+        return (meshIndex >= childrenCount) ;
+    }
+
+
+    var imageReady= function(resizedImage) {
+
+        //get resized image
+        sessionImage = resizedImage;
+
+        //start async upload
+        async.until(isUploadDone, uploadSingleModel, uploadComplete); //async call 
+    }
+
+    var uploadSingleModel = function (iterator) {
 
         var mesh = _this.glScene.__objects[meshIndex];
         if (!TOOLS.isComposedMesh(mesh)) {
             meshIndex++;
-            uploadSingleModel();
+            //   uploadSingleModel();
+            iterator();
             return;
         }
 
@@ -591,12 +638,11 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
         var verticesCount = geometryMesh.geometry.vertices.length;
 
         var step = parseInt(_this.getPacketSize(verticesCount));
-        var index = 0;
+       
 
 
-        if (index === 0) {
+        if (curVertexIndex === 0) {
             _this.showUploadProgress(mesh.name, 0);
-
         }
 
         var firstLoad = false;
@@ -607,8 +653,8 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
             var verticesSplit = new Array();
             var colorsSplit = new Array();
 
-            while (index < verticesCount) {
-                var gv = geometryMesh.geometry.vertices[index];
+            while (curVertexIndex < verticesCount) {
+                var gv = geometryMesh.geometry.vertices[curVertexIndex];
                 var shorten = utils.vertexToShorten(gv);
 
                 var vertex = "x:" + shorten.x + " " + "y:" + shorten.y + " " + "z:" + shorten.z;
@@ -617,12 +663,12 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
                     colorsSplit.push(index + ":" + gv.vertexColor);
 
                 verticesSplit.push(vertex);
-                //verticesSplit.push(parseFloat(Math.round(gv.x * 100) / 100).toFixed(2);
-                index++;
+               
+                curVertexIndex++;
 
                 /*In case of first vertex in the model just push it raise ajax. So we will check for authentication requeirement,
                 and no any relation with the models size, as we push ALWAYS only 1 vertex on first step for ANY model*/
-                if (index == 1)
+                if (curVertexIndex == 1)
                     break;
 
 
@@ -647,8 +693,8 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
             };
 
 
-            if (index === 1 && !firstLoad) {
-                modelInfo.ModelImage = _this.takeScreenshot();
+            if (curVertexIndex === 1 && !firstLoad) {
+                modelInfo.ModelImage = sessionImage;
                 modelInfo.Notes = notesmodel.forJSON();
 
                 firstLoad = true;
@@ -675,15 +721,18 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
                     unique = data;
 
                     //if I'm not at the end of the collection, call my self to go ahead
-                    if (index < verticesCount) {
+                    if (curVertexIndex < verticesCount) {
                         currentModelSequence();
-                        _this.showUploadProgress(mesh.name, 100 / (verticesCount / index));
+                        _this.showUploadProgress(mesh.name, 100 / (verticesCount / curVertexIndex));
                     }
                     else {
                         //load another model
                         meshIndex++;
+                        curVertexIndex = 0;
                         _this.showUploadProgress(mesh.name, 100);
-                        uploadSingleModel(); //call to upload another model in collection, if any
+
+                        iterator();
+                       // uploadSingleModel(); //call to upload another model in collection, if any
                     }
                 },
                 error: function (data) {
@@ -704,8 +753,13 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
         }; //call myself
 
         currentModelSequence();
-    })();
+    };
 
+
+
+
+    //get resized screen shot of the screen
+    _this.takeScreenshot(false, 560, 400, imageReady);
 }
 
 init.prototype.showSessionModal = function (onOkCallback, onCancelCallback) {

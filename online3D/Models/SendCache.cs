@@ -81,6 +81,9 @@ namespace online3D.Models
                 if (!vertexData.TryGetValue(key, out temp))
                     vertexData[key] = new List<string>();
 
+                if (mi.Vertices == null)
+                    return 0;
+
                 vertexData[key].AddRange(mi.Vertices);
 
                 if (!faceColorData.TryGetValue(key, out temp))

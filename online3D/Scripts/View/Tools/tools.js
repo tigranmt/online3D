@@ -149,9 +149,9 @@
     },
 
     isComposedMesh: function (mesh) {
-        return (mesh.children != undefined &&
+        return (mesh && mesh.children &&
                   mesh.children.length == 2 &&
-                    mesh.children[0].geometry != undefined);
+                    mesh.children[0].geometry);
     },
 
     //add to scene a new method

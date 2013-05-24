@@ -32,7 +32,7 @@ var THREEx = THREEx || {};
     * @param {Number} dstHeight the destination height of the image
     * @param {Number} callback the callback to notify once completed with callback(newImageUrl)
     */
-    var _aspectResize = function (srcUrl, dstW, dstH, callback) {
+    var aspectResize = function (srcUrl, dstW, dstH, callback) {
         // to compute the width/height while keeping aspect
         var cpuScaleAspect = function (maxW, maxH, curW, curH) {
             var ratio = curH / curW;
@@ -53,7 +53,7 @@ var THREEx = THREEx || {};
             var ctx = canvas.getContext('2d');
 
             // TODO is this needed
-            ctx.fillStyle = "black";
+            ctx.fillStyle = "transparent";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             // scale the image while preserving the aspect
@@ -78,6 +78,7 @@ var THREEx = THREEx || {};
     }
 
 
+  
     // Super cooked function: THREEx.Screenshot.bindKey(renderer)
     // and you are done to get screenshot on your demo
 
@@ -124,6 +125,7 @@ var THREEx = THREEx || {};
     // export it	
     THREEx.Screenshot = {
         toDataURL: toDataURL,
-        bindKey: bindKey
+        resize   : aspectResize,
+        bindKey  : bindKey
     };
 })();
