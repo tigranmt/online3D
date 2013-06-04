@@ -10,13 +10,14 @@
     //rooting map
     var rootMap = {
         "STL": "/Stl/StlView",
-        "ONLINE3D": "/Stl/StlView"
+        "ONLINE3D": "/Stl/StlView",
+        "OBJ": "/Stl/StlView",
     }
 
 
 
     //list of supported extensions
-    var supportedExtensions = ["STL", window.APP_NAME.toUpperCase()];
+    var supportedExtensions = ["STL", window.APP_NAME.toUpperCase(), "OBJ"];
 
     //for now always ok
     function extensionIsOk(files) {
