@@ -172,7 +172,7 @@
     <Content Include="Scripts\View\async.js" />
     <Content Include="Scripts\View\binary_reader.js" />
     <Content Include="Scripts\Shared\bootstrap.min.js" />
-    <Content Include="Scripts\View\Converters\stl_to_mesh.js" />
+    <Content Include="Scripts\View\Converters\model_to_mesh.js" />
     <Content Include="Scripts\View\Converters\vertex_to_mesh.js" />
     <Content Include="Scripts\Intro\Bundle.txt" />
     <Content Include="Scripts\Intro\Drives\dbdrive.js" />
