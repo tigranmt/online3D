@@ -39,12 +39,9 @@ function ModelLoader(scene, camera, renderer, tracker) {
         }
 
 
-        var extension = fileName.split('.').pop();
-        if (extension.toUpperCase() === "STL") {
-            new StlToMesh().loadModelAsync(scene, data, fileName, fileSize, progress, nextCallback);
-        }
-        else
-            throw 'Not recognized file format';
+        var extension = fileName.split('.').pop().toUpperCase();        
+        new ModelToMesh(extension).loadModelAsync(scene, data, fileName, fileSize, progress, nextCallback);
+        
     }
 
     //Loads the session JSON file informazion on screen (not only meshes, but notes, colors...)
