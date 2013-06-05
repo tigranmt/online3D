@@ -391,6 +391,9 @@
         loadFileFromDrop(event);
     };
 
+
+  
+
     this.loadSampleModelPreview = function (completeCallback) {
         var complete = completeCallback;
         $.ajax({
@@ -411,18 +414,32 @@
         });
     }
 
+    var setupPopovers = function () {
+        $("#presentation-view").popover();
+        $("#presentation-share").popover();
+        $("#presentation-collaborate").popover();
+        $("#presentation-cloud").popover();
+
+      
+        
+        
+    }
 
     //run 
     if (compatibilityChecks()) {
         setupDragDropEvents();
         setupFileLoadEvents();
-        _this.loadSampleModelPreview();
+        setupPopovers();
+        // _this.loadSampleModelPreview();
+        $("#presentation").slideToggle(function () {
+            setupPopovers();          
+        });
         userAccess.UpdateUI();
         $('#access').on('click', function () {
             userAccess.requestUserAuth();
         });
 
-        $("#introImageSrc").lazyload();
+       // $("#introImageSrc").lazyload();
         $("#iconImageSrc").lazyload();
 
     }

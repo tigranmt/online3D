@@ -135,6 +135,7 @@
     <Content Include="Binaries\MongoDB.Driver.dll" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\colorpicker.min.css" />
+    <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\Images\3D-icon.png" />
     <Content Include="Content\Images\alpha.png" />
     <Content Include="Content\Images\alphabutton.png" />
@@ -157,6 +158,7 @@
     <Content Include="Content\Images\tool_bg.jpg" />
     <Content Include="Content\Images\tvs.png" />
     <Content Include="Content\Images\wireframes.png" />
+    <Content Include="font\fontawesome-webfont.svg" />
     <Content Include="mailtemplate.html" />
     <Content Include="Scripts\Shared\Bundle.txt" />
     <Content Include="Scripts\Shared\sessioninfo.js" />
@@ -240,6 +242,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Tests\ConnectionTestsView.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="font\fontawesome-webfont.eot" />
+    <Content Include="font\fontawesome-webfont.ttf" />
+    <Content Include="font\fontawesome-webfont.woff" />
+    <Content Include="font\FontAwesome.otf" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

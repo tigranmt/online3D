@@ -53,6 +53,46 @@ body
     z-index: 1;
 }
 
+
+#presentation {
+    width: 600px;
+    background: rgba(24, 120, 209, 0.56);
+    height: 150px;
+    position: absolute;
+    display:none;
+    box-shadow: 15px 15px 15px 0px #bbb;
+    margin: 50px 0px;
+}
+
+#presentation-description {
+    font-size: 1.4em;
+    color: white;
+    font-style: oblique;
+    font-weight: bold;
+    margin: 0.2em;   
+    display: inline;
+}
+
+#presentation #preview {
+    cursor: pointer;     
+    position:absolute;   
+}
+
+
+#presentation i {
+    font-size: 4em;
+    margin: 1em;
+    display:inline-block;
+    
+}
+
+#presentation div:hover  i 
+{
+    color: whitesmoke;  
+}
+
+
+
 .gridbody
 {
     background-color: none;
@@ -73,11 +113,18 @@ body
 }
 
 
+
 #fileDropDiv 
 {
     width : 60%;
+    box-shadow: 15px 15px 100px 0px #bbb;
+
+
 }
 
+
+
+ 
 
 .center {
     float: none;

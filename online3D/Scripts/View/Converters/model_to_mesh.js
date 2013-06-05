@@ -324,6 +324,7 @@ function AsciStlFileLoader ()
                 geometry.vertices.push(v1);
                 geometry.vertices.push(v2);
                
+                //create a face 
                 var length = geometry.vertices.length;
                 var face = new THREE.Face3(length - 3, length - 2, length - 1, 1);
                 face.color.setHex(modelColor);
