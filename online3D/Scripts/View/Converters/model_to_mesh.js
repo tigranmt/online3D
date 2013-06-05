@@ -208,6 +208,7 @@ function BinaryStlFileLoader() {
                 mesh.verticescount = geometry.vertices.length;
                 mesh.filesize = Math.round((fileSize / 1024) * 100) / 100;
                 mesh.color = modelColor;
+                mesh.Format = "stl";
                 _scene.add(mesh);
             }
 
@@ -357,6 +358,7 @@ function AsciStlFileLoader ()
                 mesh.verticescount = geometry.vertices.length;
                 mesh.filesize = Math.round((fileSize / 1024) * 100) / 100;
                 mesh.color = modelColor;
+                mesh.Format = "stl";
                 _scene.add(mesh); //add to scene
             }
 
@@ -379,10 +381,25 @@ function ObjFileLoader() {
 
     var _this = this;
     var done = false;
-    var obj, _scene, _finishCallback, _data;
+    var obj, _scene, _finishCallback, _data, _fileName, _fileSize;
 
-    var complete = function () {      
-        _scene.add(obj);
+    var complete = function () {
+
+        obj.Format = "obj";
+        var newObj = utils.objectFromMultimaterial(obj);
+        for (var ch = 0; ch < newObj.children.length; ch++) {
+            var mesh = newObj.children[ch];
+            var geometry = mesh.geometry || mesh.children[0].geometry;
+
+            mesh.name = _fileName;
+            mesh.facecount = geometry.faces.length;
+            mesh.verticescount = geometry.vertices.length;
+            mesh.filesize = Math.round((_fileSize / 1024) * 100) / 100;
+            mesh.Format = "obj";
+        }
+
+        newObj.Format = "obj";
+        _scene.add(newObj);
         _finishCallback();
     }
 
@@ -403,6 +420,8 @@ function ObjFileLoader() {
         _scene = scene;
         _data = fileData;
         _finishCallback = finishCallback;
+        _fileName = fileName;
+        _fileSize = fileSize;
 
         async.until(isLoadingDone, readStep, complete);
     }

@@ -91,7 +91,7 @@
         this.scene.remove(mesh);
     },
 
-  
+
     getViewDirection: function (event) {
 
         var x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -200,12 +200,22 @@
             var childrenCount = this.scene.__objects.length;
             for (var i = 0; i < childrenCount; i++) {
 
-                var mesh = this.scene.__objects[i];
+                var meshes = [];
+                var mo = this.scene.__objects[i];
+                if (mo.Format === "obj") {
+                    meshes = mo.children.slice(0);
+                }
+                else {
+                    meshes.push(mo);
+                }
                 if (next === undefined)
                     next = this.isComposedMesh;
 
-                if (mesh !== undefined && next.call(this, mesh) !== false) {
-                    callback.call(this, mesh);
+                for (var m = 0; m < meshes.length; m++) {
+                    var obj = meshes[m];
+                    if (obj !== undefined && next.call(this, obj) !== false) {
+                        callback.call(this, obj);
+                    }
                 }
             }
         };

@@ -28,11 +28,11 @@
             var extension = files[i].name.split('.').pop().toUpperCase();
             if (firstExtension === undefined)
                 firstExtension = extension;
-            else {
-                //if files are of different extension, can not accept it
-                if (firstExtension !== extension)
-                    return false;
-            }
+//            else {
+//                //if files are of different extension, can not accept it
+//                if (firstExtension !== extension)
+//                    return false;
+//            }
 
             //check if recovered extension is in the array of supprotable ones
             if ($.inArray(extension, supportedExtensions) < 0)
