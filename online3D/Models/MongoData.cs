@@ -123,6 +123,30 @@ namespace online3D.Models
 
         }
 
+        private void UpdateBsonInfo(BsonDocument bson, ModelInfo mi)
+        {
+            bson["ModelName"] = mi.ModelName;
+            bson["Size"] = mi.Size;
+            bson["ID"] = mi.ID;
+            bson["Format"] = mi.Format;
+            bson["VertexCount"] = mi.VertexCount;
+            bson["Color"] = mi.Color;
+            bson["User"] = mi.User;
+            bson["ModelImage"] = Compressor.Compress(mi.ModelImage);
+            bson["SessionName"] = mi.SessionName;
+            bson["SavedOn"] = mi.SavedOn.ToString(System.Globalization.CultureInfo.InvariantCulture);
+
+            var array = BsonArrayFromEnumerable(mi.Vertices);
+            bson.Add("Vertices", array);
+
+            var faceColors = BsonArrayFromEnumerable(mi.FaceColors);
+            bson.Add("FaceColors", faceColors);
+
+            var notes = BsonArrayFromEnumerableNotes(mi.Notes);
+            bson.Add("Notes", notes);
+
+        }
+
 
         private BsonString BsonArrayFromEnumerableNotes(IEnumerable<Note> notes)
         {
@@ -178,15 +202,18 @@ namespace online3D.Models
 
                 if (savedDocument != null)
                 {
-                    var bsonArraySaved = savedDocument["Vertices"].AsString;
+                    UpdateBsonInfo(savedDocument, mi); 
+
+                    /*var bsonArraySaved = savedDocument["Vertices"].AsString;
                     var bsonArrayNew = BsonArrayFromEnumerable(mi.Vertices);
-                    bsonArraySaved +=bsonArrayNew;
+                    bsonArraySaved +=bsonArrayNew;*/
                     collection.Save(savedDocument); //update document
                 }
                 else
                 {
                     // a NEW document                  
-                    savedDocument = BsonFromModelInfo(mi);       //generate BSON document
+                         //generate BSON document
+                    savedDocument = BsonFromModelInfo(mi); 
                     collection.Insert(savedDocument);   //insert
                 }
 

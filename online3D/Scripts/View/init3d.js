@@ -684,7 +684,7 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
                 ModelName: mesh.name,
                 Size: mesh.filesize,
                 Format: "Stl",
-                ID: unique,
+                ID: sessionInformation.link || unique,
                 Vertices: verticesSplit,
                 VertexCount: verticesCount,
                 Color: basicColor,
@@ -700,8 +700,12 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
                 firstLoad = true;
             }
 
+            var requestUrl = "SaveModel/";
+            if(sessionInformation.link)
+                requestUrl = "../SaveModel/";
+
             $.ajax({
-                url: "SaveModel/",
+                url: requestUrl,
                 type: "POST",
                 contentType: "application/json",
                 processData: false,
