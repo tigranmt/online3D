@@ -164,6 +164,8 @@
     <Content Include="Scripts\Shared\sessioninfo.js" />
     <Content Include="Scripts\Shared\utils.js" />
     <Content Include="Scripts\View\Bundle.txt" />
+    <Content Include="Scripts\View\Converters\MTLLoader.js" />
+    <Content Include="Scripts\View\Converters\OBJMTLLoader.js" />
     <Content Include="Scripts\View\Converters\session_to_meshes.js" />
     <Content Include="Scripts\View\Converters\toasciiblob.js" />
     <Content Include="Scripts\View\saveas.js" />

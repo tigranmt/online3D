@@ -14,6 +14,8 @@
     screenshot.js
     startup_mesh.js
 	saveas.js
+	Converters/MTLLoader.js
+	Converters/OBJMTLLoader.js
     Converters/model_to_mesh.js
     Converters/vertex_to_mesh.js
 	Converters/toasciiblob.js

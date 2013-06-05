@@ -54,14 +54,14 @@ function ModelToMesh(type) {
                 break;
 
             case "objBinary":
+            case "objAscii":
                 modelLoader = new ObjFileLoader(); 
                 break;
-        }
-     
+        }     
 
-        var loadSuceed;
+       
         if (modelLoader != undefined) {
-            loadSuceed = modelLoader.loadAsync(scene, _fileData, fileName, fileSize, progressCallback, finishCallback);
+               modelLoader.loadAsync(scene, _fileData, fileName, fileSize, progressCallback, finishCallback);
         }
 
     }
@@ -378,110 +378,37 @@ function ObjFileLoader() {
 
 
     var _this = this;
-    this.loadAsync = function (scene, fileData, fileName, fileSize, progressCallback, finishCallback) {
+    var done = false;
+    var obj, _scene, _finishCallback, _data;
 
-        var _finishCallback = finishCallback || function () { };
-        var _progressCallback = progressCallback || function () { };
-        var _scene = scene;
-
-
-        //Check if loading done 
-        var isLoadingDone = function () {
-            _progressCallback(i, triangleCount); //run progress if defined
-            return done;
-        }
-        // ----
-
-
-
-
-        //single step runner
-        var readStep = function (iterator) {
-
-            //just define a step of 1/1000 of the quantity of triangles in the mesh
-            var index = fileSize / 1000;
-
-            if (readSizeTotal === 0) {
-                done = true;
-            }
-            else {
-
-                while (readSizeTotal > 0 && index >= 0) {
-
-                    //Don't need first 12 bytes, the normal of the triangle            
-                    bReader.readFloat();
-                    bReader.readFloat();
-                    bReader.readFloat();
-
-                    var vertex0 = { x: 0, y: 0, z: 0 }, vertex1 = { x: 0, y: 0, z: 0 }, vertex2 = { x: 0, y: 0, z: 0 };
-
-                    vertex0.x = bReader.readFloat();
-                    vertex0.y = bReader.readFloat();
-                    vertex0.z = bReader.readFloat();
-
-                    vertex1.x = bReader.readFloat();
-                    vertex1.y = bReader.readFloat();
-                    vertex1.z = bReader.readFloat();
-
-                    vertex2.x = bReader.readFloat();
-                    vertex2.y = bReader.readFloat();
-                    vertex2.z = bReader.readFloat();
-
-                    //push vertices to mesh  
-                    geometry.vertices.push(new THREE.Vector3(vertex0.x, vertex0.y, vertex0.z));
-                    geometry.vertices.push(new THREE.Vector3(vertex1.x, vertex1.y, vertex1.z));
-                    geometry.vertices.push(new THREE.Vector3(vertex2.x, vertex2.y, vertex2.z));
-
-                    //trianlge color information (SKIP FOR NOW)
-                    var faceColor = bReader.readUInt16();
-
-
-                    var length = geometry.vertices.length;
-                    var face = new THREE.Face3(length - 3, length - 2, length - 1, 1);
-
-                    //face.color.setHex(modelColor);
-                    if (faceColor !== 0)
-                        face.color.setHex(faceColor);
-                    else
-                        face.color.setHex(modelColor);
-
-                    geometry.faces.push(face);
-                    index--;
-                    i++;
-                    readSizeTotal--;
-                }
-            }
-
-            iterator();
-        }
-        //---
-
-
-
-        //Run on complete
-        var complete = function () {
-
-            if (geometry.vertices.length > 0) {
-
-                var mesh = utils.meshFromGeometry(geometry);
-
-                //set additional mesh data
-                mesh.name = fileName;
-                mesh.facecount = geometry.faces.length;
-                mesh.verticescount = geometry.vertices.length;
-                mesh.filesize = Math.round((fileSize / 1024) * 100) / 100;
-                mesh.color = modelColor;
-                _scene.add(mesh);
-            }
-
-            _finishCallback();
-
-        }
-        // ---- 
-
+    var complete = function () {      
+        _scene.add(obj);
+        _finishCallback();
     }
 
+    var isLoadingDone = function () {
+        return done;
+    }
 
+    var readStep = function (iterator) {
+        var objLoader = new THREE.OBJMTLLoader();
+        obj = objLoader.parse(_data);
+
+        done = true;
+
+        iterator();
+    }
+
+    this.loadAsync = function (scene, fileData, fileName, fileSize, progressCallback, finishCallback) {
+        _scene = scene;
+        _data = fileData;
+        _finishCallback = finishCallback;
+
+        async.until(isLoadingDone, readStep, complete);
+    }
+
+    
+    
 }
 
 

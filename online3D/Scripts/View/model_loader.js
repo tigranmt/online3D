@@ -38,9 +38,10 @@ function ModelLoader(scene, camera, renderer, tracker) {
             return;
         }
 
-
-        var extension = fileName.split('.').pop().toUpperCase();        
-        new ModelToMesh(extension).loadModelAsync(scene, data, fileName, fileSize, progress, nextCallback);
+       
+        var extension = fileName.split('.').pop().toUpperCase();
+        var modelToMesh = new ModelToMesh(extension);
+        modelToMesh.loadModelAsync(scene, data, fileName, fileSize, progress, nextCallback);
         
     }
 
