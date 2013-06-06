@@ -324,7 +324,7 @@ init.prototype.setupSceneTracking = function () {
 //loads file information on UI
 init.prototype.loadMeshesInformation = function () {
 
-    var _count = this.glScene.__objects.length;
+    var _count = this.glScene.children.length;
     var infoViewModels = new Array();
     var imIndex = 0;
     var _this = this;
@@ -377,9 +377,9 @@ init.prototype.loadMeshesInformation = function () {
             };
 
             self.getModelByName = function (modelName) {
-                var count = _this.glScene.__objects.length;
+                var count = _this.glScene.children.length;
                 for (var i = 0; i < count; i++) {
-                    var mesh = _this.glScene.__objects[i];
+                    var mesh = _this.glScene.children[i];
                     if (mesh !== undefined && mesh.name === modelName)
                         return mesh;
                 }
@@ -593,14 +593,14 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
     var meshIndex = 0, childIndex = 0;
     var _this = this;
 
-    var childrenCount = _this.glScene.__objects.length;
+    var childrenCount = _this.glScene.children.length;
     
     var curVertexIndex = 0;
     var sessionImage;
 
     //collection all meshes suitable for send
     var meshesToSend = [];
-    for (var m = 0; m < _this.glScene.children.length; m++) {
+    for (var m = 0; m < childrenCount; m++) {
 
         var me = _this.glScene.children[m];
        

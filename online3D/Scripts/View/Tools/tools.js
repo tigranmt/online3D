@@ -197,11 +197,11 @@
 
         //assign iterator function to scene
         this.forEachMesh = function (callback, next) {
-            var childrenCount = this.scene.__objects.length;
+            var childrenCount = this.scene.children.length;
             for (var i = 0; i < childrenCount; i++) {
 
                 var meshes = [];
-                var mo = this.scene.__objects[i];
+                var mo = this.scene.children[i];
                 if (mo.Format === "obj") {
                     meshes = mo.children.slice(0);
                 }
@@ -222,10 +222,10 @@
 
 
         this.findFirst = function (callback) {
-            var childrenCount = this.scene.__objects.length;
+            var childrenCount = this.scene.children.length;
             for (var i = 0; i < childrenCount; i++) {
 
-                var mesh = this.scene.__objects[i];
+                var mesh = this.scene.children[i];
                 if (mesh !== undefined && callback.call(this, mesh) !== false) {
                     return mesh;
                 }
