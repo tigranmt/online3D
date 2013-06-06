@@ -590,13 +590,25 @@ init.prototype.sendEmails = function(sessionInfo) {
 init.prototype.sendModelsToServer = function (sessionInfo) {
 
     var unique = undefined; //unique key associated with this scene
-    var meshIndex = 0;
+    var meshIndex = 0, childIndex = 0;
     var _this = this;
 
     var childrenCount = _this.glScene.__objects.length;
     
     var curVertexIndex = 0;
     var sessionImage;
+
+    //collection all meshes suitable for send
+    var meshesToSend = [];
+    for (var m = 0; m < _this.glScene.children.length; m++) {
+
+        var me = _this.glScene.children[m];
+       
+        if (me.Format === "obj" && !(me instanceof THREE.Mesh) && me.children.length > 0)
+            meshesToSend = meshesToSend.concat(me.children);
+        else if(me.Format === "stl")
+            meshesToSend.push(me);
+    }
 
     var uploadComplete = function () {
 
@@ -625,13 +637,16 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
 
     var uploadSingleModel = function (iterator) {
 
-        var mesh = _this.glScene.__objects[meshIndex];
+        var mesh = meshesToSend[meshIndex];
+       
+        
         if (!TOOLS.isComposedMesh(mesh)) {
             meshIndex++;
             //   uploadSingleModel();
             iterator();
             return;
         }
+        
 
         //these variables are in closure
         var geometryMesh = mesh.children[0];
@@ -731,7 +746,11 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
                     }
                     else {
                         //load another model
-                        meshIndex++;
+
+                     
+                         meshIndex++;
+
+
                         curVertexIndex = 0;
                         _this.showUploadProgress(mesh.name, 100);
 

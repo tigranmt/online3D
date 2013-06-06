@@ -325,7 +325,7 @@ namespace ModelViewer3D.Controllers
                 /** vertices load **/
                 var verticesCount = model.VertexCount;
                 var tempModel = model.LightClone();
-                var step = (int)(verticesCount / 27);
+                var step = (verticesCount >=27) ? (int)(verticesCount / 27) : 3;
 
                 var start = packetIndex * step;
                 var end = (packetIndex * step) + step;

@@ -391,7 +391,7 @@ function ObjFileLoader() {
             var mesh = newObj.children[ch];
             var geometry = mesh.geometry || mesh.children[0].geometry;
 
-            mesh.name = _fileName;
+            mesh.name = _fileName + "_" + ch;
             mesh.facecount = geometry.faces.length;
             mesh.verticescount = geometry.vertices.length;
             mesh.filesize = Math.round((_fileSize / 1024) * 100) / 100;
