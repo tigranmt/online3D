@@ -383,6 +383,8 @@ function ObjFileLoader() {
     var done = false;
     var obj, _scene, _finishCallback, _data, _fileName, _fileSize;
 
+
+
     var complete = function () {
 
         obj.Format = "obj";

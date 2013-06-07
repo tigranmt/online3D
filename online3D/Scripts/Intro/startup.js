@@ -430,7 +430,9 @@
         setupDragDropEvents();
         setupFileLoadEvents();
         setupPopovers();
+
         // _this.loadSampleModelPreview();
+
         $("#presentation").slideToggle(function () {
             setupPopovers();          
         });

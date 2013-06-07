@@ -197,11 +197,11 @@
 
         //assign iterator function to scene
         this.forEachMesh = function (callback, next) {
-            var childrenCount = this.scene.children.length;
+            var childrenCount = this.scene.__objects.length;
             for (var i = 0; i < childrenCount; i++) {
 
                 var meshes = [];
-                var mo = this.scene.children[i];
+                var mo = this.scene.__objects[i];
                 if (mo.Format === "obj") {
                     meshes = mo.children.slice(0);
                 }
