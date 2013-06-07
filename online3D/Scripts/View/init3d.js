@@ -324,7 +324,7 @@ init.prototype.setupSceneTracking = function () {
 //loads file information on UI
 init.prototype.loadMeshesInformation = function () {
 
-    var _count = this.glScene.children.length;
+    var _count = this.glScene.__objects.length;
     var infoViewModels = new Array();
     var imIndex = 0;
     var _this = this;
@@ -377,9 +377,9 @@ init.prototype.loadMeshesInformation = function () {
             };
 
             self.getModelByName = function (modelName) {
-                var count = _this.glScene.children.length;
+                var count = _this.glScene.__objects.length;
                 for (var i = 0; i < count; i++) {
-                    var mesh = _this.glScene.children[i];
+                    var mesh = _this.glScene.__objects[i];
                     if (mesh !== undefined && mesh.name === modelName)
                         return mesh;
                 }
@@ -593,7 +593,7 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
     var meshIndex = 0, childIndex = 0;
     var _this = this;
 
-    var childrenCount = _this.glScene.children.length;
+    var childrenCount = _this.glScene.__objects.length;
     
     var curVertexIndex = 0;
     var sessionImage;
@@ -602,7 +602,7 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
     var meshesToSend = [];
     for (var m = 0; m < childrenCount; m++) {
 
-        var me = _this.glScene.children[m];
+        var me = _this.glScene.__objects[m];
        
         if (me.Format === "obj" && !(me instanceof THREE.Mesh) && me.children.length > 0)
             meshesToSend = meshesToSend.concat(me.children);
@@ -640,20 +640,38 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
         var mesh = meshesToSend[meshIndex];
        
         
-        if (!TOOLS.isComposedMesh(mesh)) {
-            meshIndex++;
-            //   uploadSingleModel();
+        //if (!TOOLS.isComposedMesh(mesh)) {
+        //    meshIndex++;
+        //    //   uploadSingleModel();
+        //    iterator();
+        //    return;
+        //}
+        
+        if (!mesh || !mesh.children) {
+            meshIndex++;                
             iterator();
             return;
         }
         
+        var geometryMesh = mesh.children[0] || mesh;
 
-        //these variables are in closure
-        var geometryMesh = mesh.children[0];
+        if (!geometryMesh) {
+            meshIndex++;
+            iterator();
+            return;
+        }
+
+        if (!geometryMesh.name) {
+            geometryMesh.name = mesh.name;
+            if (!geometryMesh.name) {
+                geometryMesh.name = "child";
+            }
+
+        }
+
         var verticesCount = geometryMesh.geometry.vertices.length;
 
-        var step = parseInt(_this.getPacketSize(verticesCount));
-       
+        var step = parseInt(_this.getPacketSize(verticesCount));       
 
 
         if (curVertexIndex === 0) {

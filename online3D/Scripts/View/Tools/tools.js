@@ -222,10 +222,10 @@
 
 
         this.findFirst = function (callback) {
-            var childrenCount = this.scene.children.length;
+            var childrenCount = this.scene.__objects.length;
             for (var i = 0; i < childrenCount; i++) {
 
-                var mesh = this.scene.children[i];
+                var mesh = this.scene.__objects[i];
                 if (mesh !== undefined && callback.call(this, mesh) !== false) {
                     return mesh;
                 }
