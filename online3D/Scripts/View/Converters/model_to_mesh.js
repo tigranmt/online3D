@@ -384,23 +384,40 @@ function ObjFileLoader() {
     var obj, _scene, _finishCallback, _data, _fileName, _fileSize;
 
 
+    var renameMeshesToUnique = function (obj) {
 
-    var complete = function () {
+        var fn = obj.name;
 
-        obj.Format = "obj";
-        var newObj = utils.objectFromMultimaterial(obj);
-        for (var ch = 0; ch < newObj.children.length; ch++) {
-            var mesh = newObj.children[ch];
+
+        if (!obj || !obj.children || obj.children.length === 0)
+            return;
+
+        for (var ch = 0; ch < obj.children.length; ch++) {
+            var mesh = obj.children[ch];
+
             var geometry = mesh.geometry || mesh.children[0].geometry;
-
-            mesh.name = _fileName + "_" + ch;
+            mesh.name = fn + "_" + ch; 
             mesh.facecount = geometry.faces.length;
             mesh.verticescount = geometry.vertices.length;
             mesh.filesize = Math.round((_fileSize / 1024) * 100) / 100;
             mesh.Format = "obj";
+
+            renameMeshesToUnique(mesh);
         }
 
+
+    }
+
+    var complete = function () {
+
+        obj.Format = "obj";
+
+        var newObj = utils.objectFromMultimaterial(obj);
+        
         newObj.Format = "obj";
+        newObj.name = _fileName;
+        renameMeshesToUnique(newObj);
+
         _scene.add(newObj);
         _finishCallback();
     }

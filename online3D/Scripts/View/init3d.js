@@ -638,14 +638,8 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
     var uploadSingleModel = function (iterator) {
 
         var mesh = meshesToSend[meshIndex];
-       
+
         
-        //if (!TOOLS.isComposedMesh(mesh)) {
-        //    meshIndex++;
-        //    //   uploadSingleModel();
-        //    iterator();
-        //    return;
-        //}
         
         if (!mesh || !mesh.children) {
             meshIndex++;                
@@ -653,7 +647,7 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
             return;
         }
         
-        var geometryMesh = mesh.children[0] || mesh;
+        var geometryMesh = mesh.children[0];
 
         if (!geometryMesh) {
             meshIndex++;
@@ -669,7 +663,19 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
 
         }
 
-        var verticesCount = geometryMesh.geometry.vertices.length;
+        var vertices = [];
+        
+        //collect all vertices 
+        var faces = geometryMesh.geometry.faces;
+        for(var f=0; f<faces.length; f++) {
+            var face = faces[f];
+            vertices.push(geometryMesh.geometry.vertices[face.a]);
+            vertices.push(geometryMesh.geometry.vertices[face.b]);
+            vertices.push(geometryMesh.geometry.vertices[face.c]);
+        }
+
+       
+        var verticesCount = vertices.length;
 
         var step = parseInt(_this.getPacketSize(verticesCount));       
 
@@ -687,7 +693,7 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
             var colorsSplit = new Array();
 
             while (curVertexIndex < verticesCount) {
-                var gv = geometryMesh.geometry.vertices[curVertexIndex];
+                var gv = vertices[curVertexIndex];
                 var shorten = utils.vertexToShorten(gv);
 
                 var vertex = "x:" + shorten.x + " " + "y:" + shorten.y + " " + "z:" + shorten.z;
@@ -716,7 +722,7 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
             var modelInfo = {
                 ModelName: mesh.name,
                 Size: mesh.filesize,
-                Format: "Stl",
+                Format: "stl",
                 ID: sessionInformation.link || unique,
                 Vertices: verticesSplit,
                 VertexCount: verticesCount,

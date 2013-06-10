@@ -137,13 +137,13 @@ namespace online3D.Models
             bson["SavedOn"] = mi.SavedOn.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
             var array = BsonArrayFromEnumerable(mi.Vertices);
-            bson.Add("Vertices", array);
+            bson["Vertices"] =  array;
 
             var faceColors = BsonArrayFromEnumerable(mi.FaceColors);
-            bson.Add("FaceColors", faceColors);
+            bson["FaceColors"] =  faceColors;
 
             var notes = BsonArrayFromEnumerableNotes(mi.Notes);
-            bson.Add("Notes", notes);
+            bson["Notes"] =  notes;
 
         }
 

@@ -157,8 +157,8 @@ namespace ModelViewer3D.Controllers
         [HttpPost]     
         [Authorize]
         public ActionResult SaveModel(ModelInfo model)
-        {           
-           
+        {
+
             model.User = User.Identity.Name;
 
             //generate unique link for the model 
