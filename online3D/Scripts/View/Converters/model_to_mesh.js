@@ -200,7 +200,11 @@ function BinaryStlFileLoader() {
 
             if (geometry.vertices.length > 0) {
 
+
+                geometry.mergeVertices();
+
                 var mesh = utils.meshFromGeometry(geometry);
+
 
                 //set additional mesh data
                 mesh.name = fileName;
@@ -350,6 +354,7 @@ function AsciStlFileLoader ()
             //vertices are loaded 
             if (geometry.vertices.length > 0) {
 
+                geometry.mergeVertices();
                 var mesh = utils.meshFromGeometry(geometry);
 
                 //set additional mesh data
