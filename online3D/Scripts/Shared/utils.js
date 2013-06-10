@@ -1,6 +1,8 @@
 ﻿var utils = new (function () {
     var _this = this;
 
+    
+
 
     /*  Gets the current date time in dd/mm/yyyy @ hh:mm:ss
      * 

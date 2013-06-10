@@ -91,33 +91,20 @@
         leftButtonPressed = false;       
     };
 
-    var keyfromVertex = function (v) {
-        if (v === undefined)
-            return;
-        var precisionPoints = 4; // number of decimal points, eg. 4 for epsilon of 0.0001
-        var precision = Math.pow(10, precisionPoints);
-        return [Math.round(v.x * precision), Math.round(v.y * precision), Math.round(v.z * precision)].join('_');
-    };
+   
 
     var getNeighbours = function (geometry, face) {
+      
+        var neighbours = [];
+   
+        var na = stlscene.graphics.geoData.getNeigbourFaces(geometry.vertices[face.a]);
+        var nb = stlscene.graphics.geoData.getNeigbourFaces(geometry.vertices[face.b]);
+        var nc = stlscene.graphics.geoData.getNeigbourFaces(geometry.vertices[face.c]);
 
-        var vertexMap = {};
-        var neighbours = new Array();
-
-        vertexMap[keyfromVertex(geometry.vertices[face.a])] = 0;
-        vertexMap[keyfromVertex(geometry.vertices[face.b])] = 1;
-        vertexMap[keyfromVertex(geometry.vertices[face.c])] = 2;
-
-        for (var i = 0; i < geometry.faces.length; i++) {
-
-            var neigbourFace = geometry.faces[i];
-            if (vertexMap[keyfromVertex(geometry.vertices[neigbourFace.a])] !== undefined ||
-                    vertexMap[keyfromVertex(geometry.vertices[neigbourFace.b])] !== undefined ||
-                        vertexMap[keyfromVertex(geometry.vertices[neigbourFace.c])] !== undefined) {
-                neighbours.push(neigbourFace);
-            }
-        }
-
+   
+        neighbours = neighbours.concat(na);
+        neighbours = neighbours.concat(nb);
+        neighbours = neighbours.concat(nc);
 
         return neighbours;
     };
