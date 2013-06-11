@@ -150,7 +150,5 @@ TOOLS.PointToPointMeasurer = function () {
 
 
 //Point to point measurer
-TOOLS.PointToPointMeasurer.prototype = {
-
-    constructor: TOOLS.Tool(TOOLS.POINT_TO_POINT_MEASURER)
-};
+TOOLS.PointToPointMeasurer.prototype = TOOLS; 
+TOOLS.PointToPointMeasurer.prototype.constructor = TOOLS.Tool(TOOLS.POINT_TO_POINT_MEASURER);

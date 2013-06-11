@@ -200,11 +200,9 @@ function BinaryStlFileLoader() {
 
             if (geometry.vertices.length > 0) {
 
-
-                geometry.mergeVertices();
-
                 var mesh = utils.meshFromGeometry(geometry);
 
+                geometry.mergeVertices();
 
                 //set additional mesh data
                 mesh.name = fileName;

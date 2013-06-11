@@ -5,6 +5,7 @@
     Tools/pointmeasurer.js
     Tools/meshpencil.js
     Tools/notesmanager.js
+	Tools/sculpturing.js	
     threetrackballcontrols.js
     binary_reader.js
 	geometrydata.js

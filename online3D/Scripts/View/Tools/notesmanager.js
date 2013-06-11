@@ -111,6 +111,5 @@
 
 
 //Notes manager
-TOOLS.NotesManager.prototype = {
-    constructor: TOOLS.Tool(TOOLS.NOTES_MANAGER)
-};
+TOOLS.NotesManager.prototype = TOOLS; 
+TOOLS.NotesManager.prototype.constructor =  TOOLS.Tool(TOOLS.NOTES_MANAGER);

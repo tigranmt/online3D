@@ -84,7 +84,8 @@ var viewmodels = new (function () {
 
 
     _this.tools_menu = [{ id: "ppMeasure", text: "Mesure point to point", callback: function () { TOOLS.startTool(TOOLS.POINT_TO_POINT_MEASURER); } },
-                          { id: "ppMeshPencil", text: "Mesh pencil", callback: function () { TOOLS.startTool(TOOLS.MESH_PENCIL); } }];
+                          { id: "ppMeshPencil", text: "Mesh pencil", callback: function () { TOOLS.startTool(TOOLS.MESH_PENCIL); } },
+                          { id: "ppScupturing", text: "Sculpturing", callback: function () { TOOLS.startTool(TOOLS.SCULPTURING); } }];
     
    
 }

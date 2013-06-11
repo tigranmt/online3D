@@ -1,8 +1,9 @@
 ﻿var TOOLS = TOOLS || {
 
-    POINT_TO_POINT_MEASURER: "Point to point Measurer",
-    MESH_PENCIL: "Mesh pencil",
-    NOTES_MANAGER: "Notes manager",
+    POINT_TO_POINT_MEASURER : "Point to point Measurer",
+    MESH_PENCIL             : "Mesh pencil",
+    NOTES_MANAGER           : "Notes manager",
+    SCULPTURING             : "Sculpturing",
 
     toolsarray: {},
 
@@ -79,6 +80,8 @@
             return new this.MeshPencil();
         else if (toolName === this.NOTES_MANAGER)
             return new this.NotesManager();
+        else if (toolName === this.SCULPTURING)
+            return new this.Sculpturing();
     },
 
 

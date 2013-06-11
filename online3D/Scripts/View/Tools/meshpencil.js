@@ -97,9 +97,9 @@
       
         var neighbours = [];
    
-        var na = stlscene.graphics.geoData.getNeigbourFaces(geometry.vertices[face.a]);
-        var nb = stlscene.graphics.geoData.getNeigbourFaces(geometry.vertices[face.b]);
-        var nc = stlscene.graphics.geoData.getNeigbourFaces(geometry.vertices[face.c]);
+        var na = stlscene.graphics.geoData.getNeigbourFaces(geometry.vertices[face.a], 5);
+        var nb = stlscene.graphics.geoData.getNeigbourFaces(geometry.vertices[face.b], 5);
+        var nc = stlscene.graphics.geoData.getNeigbourFaces(geometry.vertices[face.c], 5);
 
    
         neighbours = neighbours.concat(na);
@@ -147,6 +147,6 @@
 }
 
 //Point to point measurer
-TOOLS.MeshPencil.prototype = {
-    constructor: TOOLS.Tool(TOOLS.MESH_PENCIL)
-};
+TOOLS.MeshPencil.prototype = TOOLS; 
+TOOLS.MeshPencil.prototype.constructor = TOOLS.Tool(TOOLS.MESH_PENCIL);
+  
