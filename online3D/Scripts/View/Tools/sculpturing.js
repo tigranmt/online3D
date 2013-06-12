@@ -4,7 +4,9 @@
     var geodata = stlscene.graphics.geoData;
     var geometry;
     var leftButtonPressed = false;
+    var sculptureAdd = true, sculptureFlat = false, sculptureMorph = false;
 
+    var leftDownPointY, leftCurrentPointY;
 
     var strength = 0.2;
     var selsize = 5;
@@ -12,16 +14,11 @@
 
     this.title = "Sculpture";
     this.text = "Choose a function to sculpt a model";
-    //this.htmlUI = //"<div class='well'>" + 
-	//		        "<div class='input-append color' data-color='" + this.color + "'  id='cpcolor'>" +
-	//			        "<input type='text' class='span2' value='' readonly=''>" +
-	//			        "<span class='add-on' style='cursor:pointer;'><i style='background-color:" + this.color + ";'></i></span>" +
-    //                "</div>" +
-    //                "<div>" +
-    //                  "<button id='colorAllModelButton' type='button' class='btn btn-primary btn-small btn-success' data-toggle='buttons-radio'>Color all model</button>" +
-    //                "</div>"
-
-    //"</div>";
+    this.htmlUI = "<div class='btn-group' data-toggle='buttons-radio'>" +                  
+                    "<button id='scultureAdd' class='btn'>Add</button>" + 
+                    "<button id='sculptureFlat' class='btn'>Flat</button>" +
+                     "<button id='sculptureMorph' class='btn'>Morph</button>" +
+                  "</div>";
 
     this.uiWidth = 300;
 
@@ -49,6 +46,27 @@
         document.addEventListener('mousedown', onMouseDown, true);
         document.addEventListener('mouseup', onMouseUp, false);
         TOOLS.current = _this;
+
+        $("#scultureAdd").on('click', function (event) {
+            sculptureAdd = true;
+            sculptureFlat = false;
+            sculptureMorph = false;
+        });
+
+
+        $("#sculptureFlat").on('click', function (event) {
+           
+            sculptureAdd = false;
+            sculptureFlat = true;
+            sculptureMorph = false;
+        });
+
+        $("#sculptureMorph").on('click', function (event) {
+          
+            sculptureAdd = false;
+            sculptureFlat = false;
+            sculptureMorph = true;
+        });
     };
 
     this.startAgent = function () {
@@ -71,16 +89,29 @@
     }
 
 
-    var sculptPlus = function () {
+    var sculpt = function () {
        
 
-        reset();
-        collectData(event);
+        //for mrphing data calculation is done only once
+        if (!sculptureMorph) {
+            reset();
+            collectData(event);
+        }
 
         if (geometry) {
-            morph();
+            
+            var value = strength
+            if (sculptureMorph)
+                value = leftDownPointY - leftCurrentPointY;
 
-       
+
+            if (value < -50) {
+                value = 0;
+            }
+            else if (value > 50)
+                value = 50;
+
+            morph(value);
             geometry.computeCentroids();
             geometry.computeFaceNormals();
             geometry.computeVertexNormals();
@@ -90,7 +121,7 @@
         }
     }
 
-    var morph = function () {
+    var morph = function (distance) {
         for (var vm = 0; vm < morphData.verticesToMorph.length; vm++) {
             var vertexData = morphData.verticesToMorph[vm];
             var v = vertexData.vertex;
@@ -103,16 +134,22 @@
           
 
             var movement = applyMorphingFunction(relativeDistance);
-            movement *= strength;
+            movement *= distance;
 
             var x = selectionAverageNormal.x * movement
             var y = selectionAverageNormal.y * movement;
             var z = selectionAverageNormal.z * movement;
 
-
-            v.x += x;
-            v.y += y;
-            v.z += z;
+            if (sculptureAdd || sculptureMorph) {
+                v.x += x;
+                v.y += y;
+                v.z += z;
+            }
+            else if(sculptureFlat){
+                v.x -= x;
+                v.y -= y;
+                v.z -= z;
+            }
         }
     }
 
@@ -226,8 +263,16 @@
 
         leftButtonPressed = event.button === 0;
 
+        leftDownPointY = event.clientY;
+
         if (leftButtonPressed) {
-            sculptPlus();
+
+            if (sculptureMorph) {
+                reset();
+                collectData(event);
+            }
+
+            sculpt();
         }
 
 
@@ -244,7 +289,9 @@
         if (leftButtonPressed) {//left button
 
             if (geometry) {
-                sculptPlus();
+
+                leftCurrentPointY = event.clientY;              
+                sculpt();
             }
         }
         else {
@@ -258,6 +305,7 @@
             reset();
 
         leftButtonPressed = false;
+        leftDownPointY = 0;
     };
 
 
