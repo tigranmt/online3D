@@ -100,7 +100,7 @@
 
         if (geometry) {
             
-            var value = strength
+            var value = strength;
             if (sculptureMorph)
                 value = leftDownPointY - leftCurrentPointY;
 
@@ -140,16 +140,25 @@
             var y = selectionAverageNormal.y * movement;
             var z = selectionAverageNormal.z * movement;
 
-            if (sculptureAdd || sculptureMorph) {
+            if (sculptureAdd) {
+
+
                 v.x += x;
                 v.y += y;
                 v.z += z;
-            }
+            }             
             else if(sculptureFlat){
                 v.x -= x;
                 v.y -= y;
                 v.z -= z;
             }
+            else if (sculptureMorph) {
+
+                v.x = v.originalx + x;
+                v.y = v.originaly + y;
+                v.z = v.originalz + z;
+            }
+
         }
     }
 
@@ -202,6 +211,10 @@
                     var distance = v.distanceTo(firstVertex);
                     if (distance > maxDistanceToHeadOfSelection)
                         maxDistanceToHeadOfSelection = distance;
+
+                    v.originalx = v.x;
+                    v.originaly = v.y;
+                    v.originalz = v.z;
 
                     morphData.verticesToMorph.push({
                         vertex: v,
