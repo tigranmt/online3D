@@ -8,14 +8,14 @@
 
     var leftDownPointY, leftCurrentPointY;
 
-    var strength = 0.2;
+    var strength = 40;
     var selsize = 5;
     var facesSelectedUnderMouse = {};
 
     this.title = "Sculpture";
     this.text = "Choose a function to sculpt a model";
-    this.htmlUI = "<div class='btn-group' data-toggle='buttons-radio'>" +                  
-                    "<button id='scultureAdd' class='btn'>Add</button>" + 
+    this.htmlUI = "<div class='btn-group' data-toggle='buttons-radio'>" +
+                    "<button id='scultureAdd' class='btn'>Add</button>" +
                     "<button id='sculptureFlat' class='btn'>Flat</button>" +
                      "<button id='sculptureMorph' class='btn'>Morph</button>" +
                   "</div>";
@@ -24,7 +24,7 @@
 
 
     var morphData = {
-        verticesToMorph : []
+        verticesToMorph: []
     };
 
     //An average normal of all selected triangles 
@@ -32,7 +32,7 @@
 
     // Maximum distance found among all selected vertices in collection 
     // to the first slected vertex (vertex)
-    var maxDistanceToHeadOfSelection = 0; 
+    var maxDistanceToHeadOfSelection = 0;
 
     this.isCanvasClicked = function (event) {
         var elementName = (event.srcElement) ? event.srcElement.localName.toLowerCase() : event.originalTarget.localName.toLowerCase();
@@ -55,14 +55,14 @@
 
 
         $("#sculptureFlat").on('click', function (event) {
-           
+
             sculptureAdd = false;
             sculptureFlat = true;
             sculptureMorph = false;
         });
 
         $("#sculptureMorph").on('click', function (event) {
-          
+
             sculptureAdd = false;
             sculptureFlat = false;
             sculptureMorph = true;
@@ -83,14 +83,13 @@
     };
 
 
-    var applyMorphingFunction = function(val)
-    {
-          return (Math.cos(val * Math.PI) + 1) / 2;
+    var applyMorphingFunction = function (val) {
+        return (Math.cos(val * Math.PI) + 1) / 2;
     }
 
 
     var sculpt = function () {
-       
+
 
         //for mrphing data calculation is done only once
         if (!sculptureMorph) {
@@ -99,7 +98,7 @@
         }
 
         if (geometry) {
-            
+
             var value = strength;
             if (sculptureMorph)
                 value = leftDownPointY - leftCurrentPointY;
@@ -110,6 +109,8 @@
             }
             else if (value > 50)
                 value = 50;
+
+            
 
             morph(value);
             geometry.computeCentroids();
@@ -131,7 +132,7 @@
             if (relativeDistance > 1.0)
                 relativeDistance = 1.0;
 
-          
+
 
             var movement = applyMorphingFunction(relativeDistance);
             movement *= distance;
@@ -146,8 +147,8 @@
                 v.x += x;
                 v.y += y;
                 v.z += z;
-            }             
-            else if(sculptureFlat){
+            }
+            else if (sculptureFlat) {
                 v.x -= x;
                 v.y -= y;
                 v.z -= z;
@@ -175,6 +176,40 @@
         geodata.rebuild();
     }
 
+
+    var meshAverageVector = function (mesh, vertex) {
+        var geometry = mesh.geometry;
+        var faces = geometry.faces;       
+        var facesLength = faces.length;
+        var avgNormal = new THREE.Vector3(0, 0, 0);
+        var twoLines = [new THREE.Vector3(), new THREE.Vector3()];
+
+        for (var i = 0; i < facesLength; i++) {
+            var face = faces[i];
+            var vertices = geodata.getVerticesOfFace(face);
+            for (var v = 0; v < vertices.length; v++) {
+                var ve = vertices[v];
+                if (ve == vertex)
+                    continue;
+
+                twoLines[1] = twoLines[0];
+                var v0 = new THREE.Vector3(ve.x, ve.y, ve.z);
+                var v1 = new THREE.Vector3(ve.x, ve.y, ve.z);
+                v1.addVectors(v1, v0);
+                twoLines[0] = v1;
+            }
+
+            var normal = geodata.computeFaceNormal(face);
+            var angle = twoLines[0].angleTo(twoLines[1]);
+            var multiplied = normal.multiplyScalar(angle);
+            avgNormal.addVectors(avgNormal, multiplied);
+        }
+
+
+        avgNormal.multiplyScalar(1.0 / facesLength);
+        return avgNormal;
+    }
+
     var collectData = function (event) {
         //find intersections
         var intersection = TOOLS.getIntersectionFromMouseCoord(event);
@@ -198,12 +233,19 @@
 
             //get just first vertex of availabel ones 
             var firstVertex = vertices[0];
-            selectionAverageNormal = geodata.getVertexAvgNormal(firstVertex);
+            selectionAverageNormal = meshAverageVector(intersection.object, firstVertex);
 
             var neigbourFaces = geodata.getNeigbourFaces(firstVertex, selsize);
 
             for (var f = 0; f < neigbourFaces.length; f++) {
+
                 var ff = neigbourFaces[f];
+
+                var normal = geodata.computeFaceNormal(ff);
+                var angle = normal.angleTo(selectionAverageNormal);
+                if (angle < 3)
+                    continue;
+
                 var facevertices = geodata.getVerticesOfFace(ff);
                 for (var vv = 0; vv < facevertices.length; vv++) {
                     var v = facevertices[vv];
@@ -251,18 +293,18 @@
         if (intersection !== undefined) {
 
             for (var n = 0; n < facesSelectedUnderMouse.length; n++) {
-                var face = facesSelectedUnderMouse[n]; 
-                if(face.originalColor)
-                    setColorOnFace(intersection.object.geometry,  face, face.originalColor);
+                var face = facesSelectedUnderMouse[n];
+                if (face.originalColor)
+                    setColorOnFace(intersection.object.geometry, face, face.originalColor);
             }
 
             var face = intersection.face;
-            var vertices = geodata.getVerticesOfFace(face); 
+            var vertices = geodata.getVerticesOfFace(face);
             facesSelectedUnderMouse = geodata.getNeigbourFaces(vertices[0], selsize);
 
             for (var n = 0; n < facesSelectedUnderMouse.length; n++) {
                 var face = facesSelectedUnderMouse[n];
-               
+
                 setColorOnFace(intersection.object.geometry, facesSelectedUnderMouse[n], "#ffffff");
             }
             intersection.object.geometry.colorsNeedUpdate = true;
@@ -303,18 +345,18 @@
 
             if (geometry) {
 
-                leftCurrentPointY = event.clientY;              
+                leftCurrentPointY = event.clientY;
                 sculpt();
             }
         }
         else {
-           // selectTrianglesUnderMouse(event);
+            // selectTrianglesUnderMouse(event);
         }
     };
 
     var onMouseUp = function (event) {
 
-        if(leftButtonPressed)
+        if (leftButtonPressed)
             reset();
 
         leftButtonPressed = false;

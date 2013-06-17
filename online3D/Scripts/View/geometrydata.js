@@ -5,10 +5,10 @@
     var precision = Math.pow(10, 4);
 
     _this.data = {
-         meshes : []
+        meshes: []
     };
 
-  
+
 
     var keyfromVertex = function (v) {
         if (v === undefined)
@@ -16,7 +16,7 @@
         return [Math.round(v.x * precision), Math.round(v.y * precision), Math.round(v.z * precision)].join('_');
     }
 
-    var keyfromFace = function(f) {
+    var keyfromFace = function (f) {
         if (f === undefined)
             return;
         return [f.a, f.b, f.c].join('_');
@@ -35,16 +35,16 @@
             var faces = m.vertex_to_face_map[key];
 
             var filtered = faces.filter(function (f) {
-                var k = keyfromFace(f); 
+                var k = keyfromFace(f);
                 return (ex[k] === undefined);
-            }); 
+            });
 
             neighbourFaces = neighbourFaces.concat(filtered);
         }
 
 
         return neighbourFaces;
-            
+
     }
 
     var constructGeoDataFromScene = function () {
@@ -114,21 +114,47 @@
     }
 
 
-    var computeFaceNormal = function (face) {
-      
-        var vertices = _this.getVerticesOfFace(face);
-        var cb = new THREE.Vector3(), ab = new THREE.Vector3();
-        var vA = vertices[0];
-        var vB = vertices[1];
-        var vC = vertices[2];
+    _this.computeFaceNormal = function (face) {
 
-        cb.subVectors(vC, vB);
-        ab.subVectors(vA, vB);
-        cb.cross(ab);
+        var normal = face.normal;
+        if (!normal || (normal.x === 0 && normal.y === 0)) {
 
-        cb.normalize();
+            var vertices = _this.getVerticesOfFace(face);
+            var cb = new THREE.Vector3(), ab = new THREE.Vector3();
+            var vA = vertices[0];
+            var vB = vertices[1];
+            var vC = vertices[2];
 
-        return cb;
+            cb.subVectors(vC, vB);
+            ab.subVectors(vA, vB);
+            cb.cross(ab);
+
+            cb.normalize();
+
+            face.normal = cb;
+        }
+
+        return face.normal;
+    }
+
+    _this.updateVertexInfo = function (meshIndex, originalVertex, newVertex) {
+        var meshI = meshIndex || 0;
+        var mesh = _this.data.meshes[meshI];
+
+        //vertex to face map update
+        var keyOriginal = keyfromVertex(originalVertex);
+        if (!mesh.vertex_to_face_map[keyOriginal]) {
+            console.log("Not valid vertex " + keyOriginal + " ! Can not find it in internal data");
+        }
+        else {
+            var referedFaces = mesh.vertex_to_face_map[keya];
+            delete mesh.vertex_to_face_map[keya]; //remove property 
+            var keyNew = keyfromVertex(newVertex);
+            mesh.vertex_to_face_map[keyNew] = referedFaces; // add new property and assign previos collection
+        }
+        //----
+
+
     }
 
 
@@ -149,10 +175,10 @@
         var excludeFaces = {};
         var excludeVertices = {};
 
-        var startkeyvertex = keyfromVertex(vertex);       
+        var startkeyvertex = keyfromVertex(vertex);
         vertexCollection.push(vertex);
         excludeVertices[startkeyvertex] = "";
-       
+
 
         for (var i = 0; i < deep; i++) {
             var neighbours = neigboursOfVertices(vertexCollection, excludeFaces);
@@ -169,7 +195,7 @@
 
                     //concat UNIQUE vertices
                     for (var v = 0; v < vertices.length; v++) {
-                        var keyvertex= keyfromVertex(vertices[v]); 
+                        var keyvertex = keyfromVertex(vertices[v]);
                         if (excludeVertices[keyvertex] === undefined) {
                             vertexCollection.push(vertices[v]);
                             excludeVertices[keyvertex] = "";
@@ -205,10 +231,10 @@
         var neighbours = _this.getNeigbourFaces(vertex);
         if (!neighbours || neighbours.length === 0)
             return;
-        
-        
+
+
         var avgNormal = new THREE.Vector3(0, 0, 0);
-        
+
         var twoLines = [new THREE.Vector3(), new THREE.Vector3()];
         for (var i = 0; i < neighbours.length; i++) {
             var face = neighbours[i];
@@ -227,9 +253,12 @@
             }
 
 
-            var normal =  computeFaceNormal(face);
+            var normal = _this.computeFaceNormal(face);
+            if (normal.x === 0 && normal.y === 0)
+                normal = geodata.computeFaceNormal(face);
+
             var angle = twoLines[0].angleTo(twoLines[1]);
-            var multiplied = normal.multiplyScalar(angle);                
+            var multiplied = normal.multiplyScalar(angle);
             avgNormal.addVectors(avgNormal, multiplied);
         }
 
@@ -237,27 +266,27 @@
         avgNormal.multiplyScalar(1.0 / neighbours.length);
         return avgNormal;
 
-    //    CoreTriangleCollection triangles = this.GetConnectedTrianglesReference(cmc);
-    //    Vector3 averageNormal = new Vector3(0, 0, 0);
-    //    int thisNr;
-    //    Vector3[] twoLines = new Vector3[2];
-    //    bool success;
+        //    CoreTriangleCollection triangles = this.GetConnectedTrianglesReference(cmc);
+        //    Vector3 averageNormal = new Vector3(0, 0, 0);
+        //    int thisNr;
+        //    Vector3[] twoLines = new Vector3[2];
+        //    bool success;
 
-    //    foreach (CoreTriangle triangle in triangles)
-    //{
-    //            thisNr = triangle.GetVertexNr(this);
-    //    for (int i = 0; i < 3; ++i)
-    //    {
-    //        if (i != thisNr)
-    //        {
-    //            twoLines[1] = twoLines[0];
-    //            twoLines[0] = new Vector3(triangle._vertices[i].Coord, triangle._vertices[thisNr].Coord);
-    //        }
-    //    }
-    //    averageNormal += twoLines[0].AngleWith(twoLines[1]) * triangle.GetCoord().GetNormal(out success);
-    //}
-    //averageNormal.Scale(1.0f / (double)triangles.Count);
-    //return averageNormal;
+        //    foreach (CoreTriangle triangle in triangles)
+        //{
+        //            thisNr = triangle.GetVertexNr(this);
+        //    for (int i = 0; i < 3; ++i)
+        //    {
+        //        if (i != thisNr)
+        //        {
+        //            twoLines[1] = twoLines[0];
+        //            twoLines[0] = new Vector3(triangle._vertices[i].Coord, triangle._vertices[thisNr].Coord);
+        //        }
+        //    }
+        //    averageNormal += twoLines[0].AngleWith(twoLines[1]) * triangle.GetCoord().GetNormal(out success);
+        //}
+        //averageNormal.Scale(1.0f / (double)triangles.Count);
+        //return averageNormal;
 
 
 
@@ -272,7 +301,7 @@
 
         //    var ne = neighbours[n];
         //    var normal = computeFaceNormal(ne);
-          
+
         //    avgNormal.addVectors(avgNormal, normal);
 
         //}
@@ -282,10 +311,10 @@
         //return avgNormal;
     }
 
-   
-
-  
 
 
-    constructGeoDataFromScene(); 
+
+
+
+    constructGeoDataFromScene();
 };
