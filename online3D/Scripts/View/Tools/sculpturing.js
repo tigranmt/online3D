@@ -8,7 +8,7 @@
 
     var leftDownPointY, leftCurrentPointY;
 
-    var strength = 40;
+    var strength =0.1;
     var selsize = 5;
     var facesSelectedUnderMouse = {};
 
@@ -30,9 +30,8 @@
     //An average normal of all selected triangles 
     var selectionAverageNormal = new THREE.Vector3();
 
-    // Maximum distance found among all selected vertices in collection 
-    // to the first slected vertex (vertex)
-    var maxDistanceToHeadOfSelection = 0;
+    // The shortest distance from the EDGE vertex of the current selection 
+    var selectionNearestEdgeDistance = 10000;
 
     this.isCanvasClicked = function (event) {
         var elementName = (event.srcElement) ? event.srcElement.localName.toLowerCase() : event.originalTarget.localName.toLowerCase();
@@ -84,7 +83,7 @@
 
 
     var applyMorphingFunction = function (val) {
-        return (Math.cos(val * Math.PI) + 1) / 2;
+        return (Math.cos(val * Math.PI) + 1) / 2.0;
     }
 
 
@@ -110,8 +109,6 @@
             else if (value > 50)
                 value = 50;
 
-            
-
             morph(value);
             geometry.computeCentroids();
             geometry.computeFaceNormals();
@@ -126,9 +123,9 @@
         for (var vm = 0; vm < morphData.verticesToMorph.length; vm++) {
             var vertexData = morphData.verticesToMorph[vm];
             var v = vertexData.vertex;
-            var distance = vertexData.distanceToHead;
+            var distanceToHead = vertexData.distanceToHead;
 
-            var relativeDistance = distance / maxDistanceToHeadOfSelection;
+            var relativeDistance = distanceToHead / selectionNearestEdgeDistance;
             if (relativeDistance > 1.0)
                 relativeDistance = 1.0;
 
@@ -147,6 +144,10 @@
                 v.x += x;
                 v.y += y;
                 v.z += z;
+
+                v.originalx = v.x;
+                v.originaly = v.y;
+                v.originalz = v.z;
             }
             else if (sculptureFlat) {
                 v.x -= x;
@@ -168,7 +169,7 @@
         // reset variables 
         morphData.verticesToMorph = [];
         selectionAverageNormal = new THREE.Vector3();
-        maxDistanceToHeadOfSelection = 0;
+        selectionNearestEdgeDistance = 10000;
         geometry = undefined;
         // ------
 
@@ -177,39 +178,7 @@
     }
 
 
-    var meshAverageVector = function (mesh, vertex) {
-        var geometry = mesh.geometry;
-        var faces = geometry.faces;       
-        var facesLength = faces.length;
-        var avgNormal = new THREE.Vector3(0, 0, 0);
-        var twoLines = [new THREE.Vector3(), new THREE.Vector3()];
-
-        for (var i = 0; i < facesLength; i++) {
-            var face = faces[i];
-            var vertices = geodata.getVerticesOfFace(face);
-            for (var v = 0; v < vertices.length; v++) {
-                var ve = vertices[v];
-                if (ve == vertex)
-                    continue;
-
-                twoLines[1] = twoLines[0];
-                var v0 = new THREE.Vector3(ve.x, ve.y, ve.z);
-                var v1 = new THREE.Vector3(ve.x, ve.y, ve.z);
-                v1.addVectors(v1, v0);
-                twoLines[0] = v1;
-            }
-
-            var normal = geodata.computeFaceNormal(face);
-            var angle = twoLines[0].angleTo(twoLines[1]);
-            var multiplied = normal.multiplyScalar(angle);
-            avgNormal.addVectors(avgNormal, multiplied);
-        }
-
-
-        avgNormal.multiplyScalar(1.0 / facesLength);
-        return avgNormal;
-    }
-
+   
     var collectData = function (event) {
         //find intersections
         var intersection = TOOLS.getIntersectionFromMouseCoord(event);
@@ -233,38 +202,45 @@
 
             //get just first vertex of availabel ones 
             var firstVertex = vertices[0];
-            selectionAverageNormal = meshAverageVector(intersection.object, firstVertex);
+            selectionAverageNormal = geodata.getVertexAvgNormal(firstVertex);
 
             var neigbourFaces = geodata.getNeigbourFaces(firstVertex, selsize);
 
-            for (var f = 0; f < neigbourFaces.length; f++) {
+            var uniqueVertices = geodata.getVerticesOfFaces(neigbourFaces);
+            var edgeVertices = geodata.getEdgeVertices(neigbourFaces);
+            
 
-                var ff = neigbourFaces[f];
+            var length = uniqueVertices.length;
+              
+            for (var vv = 0; vv < length; vv++) {
+                var v = uniqueVertices[vv];
 
-                var normal = geodata.computeFaceNormal(ff);
-                var angle = normal.angleTo(selectionAverageNormal);
-                if (angle < 3)
-                    continue;
+                var distance = v.distanceTo(firstVertex);
+                var key = geodata.getVertexKey(v);
 
-                var facevertices = geodata.getVerticesOfFace(ff);
-                for (var vv = 0; vv < facevertices.length; vv++) {
-                    var v = facevertices[vv];
-
-                    var distance = v.distanceTo(firstVertex);
-                    if (distance > maxDistanceToHeadOfSelection)
-                        maxDistanceToHeadOfSelection = distance;
-
-                    v.originalx = v.x;
-                    v.originaly = v.y;
-                    v.originalz = v.z;
-
-                    morphData.verticesToMorph.push({
-                        vertex: v,
-                        distanceToHead: distance
-                    });
-
+                if (edgeVertices.hasOwnProperty(key)) {
+                    //this is edge vertex 
+                    if (distance < selectionNearestEdgeDistance)
+                        selectionNearestEdgeDistance = distance;
                 }
+                else {
+                    
+                    var x = 0;
+                    x++;
+                }
+
+
+                v.originalx = v.x;
+                v.originaly = v.y;
+                v.originalz = v.z;
+
+                morphData.verticesToMorph.push({
+                    vertex: v,
+                    distanceToHead: distance
+                });
+
             }
+            
         }
 
 

@@ -9,6 +9,8 @@
     };
 
 
+    
+
 
     var keyfromVertex = function (v) {
         if (v === undefined)
@@ -114,6 +116,10 @@
     }
 
 
+    _this.getVertexKey = function (vertex) {
+        return keyfromVertex(vertex);
+    }
+
     _this.computeFaceNormal = function (face) {
 
         var normal = face.normal;
@@ -163,6 +169,7 @@
         constructGeoDataFromScene();
     }
 
+  
 
     _this.getNeigbourFaces = function (vertex, deepness) {
 
@@ -200,11 +207,7 @@
                             vertexCollection.push(vertices[v]);
                             excludeVertices[keyvertex] = "";
                         }
-                        else {
-
-                            var x = 0;
-                            x++;
-                        }
+                       
                     }
 
                 }
@@ -223,6 +226,117 @@
         return m.face_to_vertex_map[key];
     }
 
+    _this.getEdgeVertices = function (facesArray) {
+        if (!facesArray || facesArray.length === 0) {
+            console.log("Not valid array to get vertices from");
+        }
+        else {
+            var vertices = {};
+            var stat = {};
+
+            var length = facesArray.length;
+            for (var f = 0; f < length; f++) {
+                var face = facesArray[f];
+                var faceVertices = _this.getVerticesOfFace(face);
+
+                var v0 = faceVertices[0];
+                var v1 = faceVertices[1];
+                var v2 = faceVertices[2];
+
+                // line 0
+                var line0_key = keyfromVertex(v0) + keyfromVertex(v1);
+                if (!stat.hasOwnProperty(line0_key)) {
+                    stat[line0_key] = {
+                        faces: [],
+                        lineVertices : []
+                    }
+                }
+                stat[line0_key].faces.push(face);
+                stat[line0_key].lineVertices.push(v0);
+                stat[line0_key].lineVertices.push(v1);
+
+
+
+                // line 1
+                var line1_key = keyfromVertex(v1) + keyfromVertex(v2);
+                if (!stat.hasOwnProperty(line1_key)) {
+                    stat[line1_key] = {
+                        faces: [],
+                        lineVertices: []
+                    }
+                }
+                stat[line1_key].faces.push(face);
+                stat[line1_key].lineVertices.push(v1);
+                stat[line1_key].lineVertices.push(v2);
+
+
+                //line 2
+                var line2_key = keyfromVertex(v2) + keyfromVertex(v0);
+                if (!stat.hasOwnProperty(line2_key)) {
+                    stat[line2_key] = {
+                        faces: [],
+                        lineVertices: []
+                    }
+                }
+                stat[line2_key].faces.push(face);
+                stat[line2_key].lineVertices.push(v2);
+                stat[line2_key].lineVertices.push(v0);
+
+
+            }
+        }
+
+        for (var prop in stat) {          
+            if (stat.hasOwnProperty(prop)) {
+                var trianglesCount = stat[prop].faces.length;
+                if (trianglesCount < 2) //this is edge 
+                {
+                    var vertex0 = stat[prop].lineVertices[0];
+                    var vertex1 = stat[prop].lineVertices[1];
+
+                    var key0 = keyfromVertex(vertex0);
+                    var key1 = keyfromVertex(vertex1);
+
+                    vertices[key0] = vertex0;
+                    vertices[key1] = vertex1;
+                }
+            }
+        }
+
+        return vertices;
+    }
+
+
+    _this.getVerticesOfFaces = function (facesArray) {
+        if (!facesArray || facesArray.length === 0) {
+            console.log("Not valid array to get vertices from");
+        }
+        else {
+            var vertices = [];
+            var unique = {};
+            var length = facesArray.length;
+            for (var f = 0; f < length; f++) {
+                var face = facesArray[f];
+                var faceVertices = _this.getVerticesOfFace(face);
+                for (var v = 0; v < faceVertices.length; v++) {
+                    var vertex = faceVertices[v];
+                    var key = keyfromVertex(vertex);
+
+                    //skip this
+                    if (unique[key] === "") {
+                        continue;
+                    }
+                    else {
+                        unique[key] = "";
+                        vertices.push(vertex);
+                    }
+
+                }
+            }
+        }
+
+        return vertices;
+    }
 
 
 
@@ -245,9 +359,9 @@
                     continue;
 
                 twoLines[1] = twoLines[0];
-                var v0 = new THREE.Vector3(ve.x, ve.y, ve.z);
+                var v0 = vertex;
                 var v1 = new THREE.Vector3(ve.x, ve.y, ve.z);
-                v1.addVectors(v1, v0);
+                v1.subVectors(v1, v0);
                 twoLines[0] = v1;
 
             }
@@ -300,7 +414,7 @@
         //for (var n = 0; n < neighbours.length; n++) {
 
         //    var ne = neighbours[n];
-        //    var normal = computeFaceNormal(ne);
+        //    var normal = _this.computeFaceNormal(ne);
 
         //    avgNormal.addVectors(avgNormal, normal);
 
