@@ -87,7 +87,7 @@
     }
 
 
-    var sculpt = function () {
+    var sculpt = function (event) {
 
 
         //for mrphing data calculation is done only once
@@ -306,7 +306,7 @@
                 collectData(event);
             }
 
-            sculpt();
+            sculpt(event);
         }
 
 
@@ -325,7 +325,7 @@
             if (geometry) {
 
                 leftCurrentPointY = event.clientY;
-                sculpt();
+                sculpt(event);
             }
         }
         else {
