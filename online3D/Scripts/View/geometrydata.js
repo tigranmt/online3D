@@ -2,7 +2,7 @@
 
 
     var _this = this;
-    var precision = Math.pow(10, 4);
+    var precision = Math.pow(10, 2);
 
     _this.data = {
         meshes: []
@@ -28,6 +28,7 @@
 
         var neighbourFaces = [];
         var ex = excludefaces || {};
+        var unique = {};
 
         for (var v = 0; v < vertices.length; v++) {
             var m = _this.data.meshes[0];
@@ -38,6 +39,12 @@
 
             var filtered = faces.filter(function (f) {
                 var k = keyfromFace(f);
+                if (unique[k] === undefined) {
+                    unique[k] = "";
+                }
+                else {
+                    return false;
+                }
                 return (ex[k] === undefined);
             });
 
@@ -227,6 +234,9 @@
     }
 
     _this.getEdgeVertices = function (facesArray) {
+
+
+       
         if (!facesArray || facesArray.length === 0) {
             console.log("Not valid array to get vertices from");
         }
@@ -244,43 +254,65 @@
                 var v2 = faceVertices[2];
 
                 // line 0
-                var line0_key = keyfromVertex(v0) + keyfromVertex(v1);
+                //var line0_key = keyfromVertex(v0) + keyfromVertex(v1);
+                var line0_key = face.a + "_" + face.b;
                 if (!stat.hasOwnProperty(line0_key)) {
-                    stat[line0_key] = {
-                        faces: [],
-                        lineVertices : []
+                    line0_key = face.b + "_" + face.a; //inverse and check
+                    if (!stat.hasOwnProperty(line0_key)) {
+                        stat[line0_key] = {
+                            faces: [],
+                            lineVertices: []
+                        }
                     }
+
                 }
+                else {
+                    var x = 0;
+                }
+              
+
                 stat[line0_key].faces.push(face);
-                stat[line0_key].lineVertices.push(v0);
-                stat[line0_key].lineVertices.push(v1);
+                stat[line0_key].lineVertices[0] = v0;
+                stat[line0_key].lineVertices[1] = v1;
 
 
 
                 // line 1
-                var line1_key = keyfromVertex(v1) + keyfromVertex(v2);
+                //var line1_key = keyfromVertex(v1) + keyfromVertex(v2);
+                var line1_key = face.b + "_" + face.c;
                 if (!stat.hasOwnProperty(line1_key)) {
-                    stat[line1_key] = {
-                        faces: [],
-                        lineVertices: []
+                    line1_key = face.c + "_" + face.b;  //inverse and check
+                    if (!stat.hasOwnProperty(line1_key)) {
+                        stat[line1_key] = {
+                            faces: [],
+                            lineVertices: []
+                        }
                     }
-                }
-                stat[line1_key].faces.push(face);
-                stat[line1_key].lineVertices.push(v1);
-                stat[line1_key].lineVertices.push(v2);
 
+                }
+
+                stat[line1_key].faces.push(face);
+                stat[line1_key].lineVertices[0] = v1;
+                stat[line1_key].lineVertices[1] = v2;
+              
 
                 //line 2
-                var line2_key = keyfromVertex(v2) + keyfromVertex(v0);
+                //var line2_key = keyfromVertex(v2) + keyfromVertex(v0);
+                var line2_key = face.c + "_" + face.a;
                 if (!stat.hasOwnProperty(line2_key)) {
-                    stat[line2_key] = {
-                        faces: [],
-                        lineVertices: []
+                    line2_key = face.a + "_" + face.c;  //inverse and check
+                    if (!stat.hasOwnProperty(line2_key)) {
+                        stat[line2_key] = {
+                            faces: [],
+                            lineVertices: []
+                        }
                     }
                 }
+
                 stat[line2_key].faces.push(face);
-                stat[line2_key].lineVertices.push(v2);
-                stat[line2_key].lineVertices.push(v0);
+                stat[line2_key].lineVertices[0] = v2;
+                stat[line2_key].lineVertices[1] = v0;
+               
 
 
             }

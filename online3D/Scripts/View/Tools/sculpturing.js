@@ -9,7 +9,7 @@
     var leftDownPointY, leftCurrentPointY;
 
     var strength =0.1;
-    var selsize = 5;
+    var selsize = 15;
     var facesSelectedUnderMouse = {};
 
     this.title = "Sculpture";
@@ -99,8 +99,10 @@
         if (geometry) {
 
             var value = strength;
-            if (sculptureMorph)
+            if (sculptureMorph) {
                 value = leftDownPointY - leftCurrentPointY;
+                value *= 0.08;
+            }
 
 
             if (value < -50) {
@@ -218,7 +220,7 @@
                 var distance = v.distanceTo(firstVertex);
                 var key = geodata.getVertexKey(v);
 
-                if (edgeVertices.hasOwnProperty(key)) {
+               if (edgeVertices.hasOwnProperty(key)) {
                     //this is edge vertex 
                     if (distance < selectionNearestEdgeDistance)
                         selectionNearestEdgeDistance = distance;
@@ -295,6 +297,7 @@
         leftButtonPressed = event.button === 0;
 
         leftDownPointY = event.clientY;
+        leftCurrentPointY = event.clientY;
 
         if (leftButtonPressed) {
 
@@ -337,6 +340,7 @@
 
         leftButtonPressed = false;
         leftDownPointY = 0;
+        leftCurrentPointY = 0;
     };
 
 
