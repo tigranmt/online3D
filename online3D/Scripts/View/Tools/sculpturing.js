@@ -143,6 +143,8 @@
             if (sculptureAdd) {
 
 
+                var original = new THREE.Vector3(v.originalx, v.originaly, v.originalz); 
+
                 v.x += x;
                 v.y += y;
                 v.z += z;
@@ -150,11 +152,23 @@
                 v.originalx = v.x;
                 v.originaly = v.y;
                 v.originalz = v.z;
+
+                geodata.updateVertexInfo(0, original, v);
             }
             else if (sculptureFlat) {
+
+
+                var original = new THREE.Vector3(v.originalx, v.originaly, v.originalz);
+
                 v.x -= x;
                 v.y -= y;
                 v.z -= z;
+
+                v.originalx = v.x;
+                v.originaly = v.y;
+                v.originalz = v.z;
+
+                geodata.updateVertexInfo(0, original, v);
             }
             else if (sculptureMorph) {
 
@@ -164,10 +178,12 @@
             }
 
         }
+
+
     }
 
 
-    var reset = function () {
+    var reset = function (resetGeoData) {
         // reset variables 
         morphData.verticesToMorph = [];
         selectionAverageNormal = new THREE.Vector3();
@@ -175,8 +191,10 @@
         geometry = undefined;
         // ------
 
-        //rebuild geo data
-        geodata.rebuild();
+        if (resetGeoData) {
+            //rebuild geo data
+            geodata.rebuild();
+        }
     }
 
 
@@ -302,7 +320,7 @@
         if (leftButtonPressed) {
 
             if (sculptureMorph) {
-                reset();
+                reset(true);
                 collectData(event);
             }
 
@@ -335,8 +353,11 @@
 
     var onMouseUp = function (event) {
 
-        if (leftButtonPressed)
-            reset();
+        if (leftButtonPressed) {
+         
+            var resetGeoData = sculptureMorph;
+            reset(resetGeoData);
+        }
 
         leftButtonPressed = false;
         leftDownPointY = 0;

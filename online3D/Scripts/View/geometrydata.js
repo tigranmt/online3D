@@ -2,7 +2,7 @@
 
 
     var _this = this;
-    var precision = Math.pow(10, 2);
+    var precision = Math.pow(10, 4);
 
     _this.data = {
         meshes: []
@@ -160,8 +160,8 @@
             console.log("Not valid vertex " + keyOriginal + " ! Can not find it in internal data");
         }
         else {
-            var referedFaces = mesh.vertex_to_face_map[keya];
-            delete mesh.vertex_to_face_map[keya]; //remove property 
+            var referedFaces = mesh.vertex_to_face_map[keyOriginal];
+            delete mesh.vertex_to_face_map[keyOriginal]; //remove property 
             var keyNew = keyfromVertex(newVertex);
             mesh.vertex_to_face_map[keyNew] = referedFaces; // add new property and assign previos collection
         }
