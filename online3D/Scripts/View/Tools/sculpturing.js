@@ -9,7 +9,7 @@
     var leftDownPointY, leftCurrentPointY;
 
     var strength =0.1;
-    var selsize = 15;
+    var selsize = 20;
     var facesSelectedUnderMouse = {};
 
     this.title = "Sculpture";

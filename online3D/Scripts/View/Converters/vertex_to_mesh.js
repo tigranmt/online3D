@@ -112,8 +112,12 @@ function VertexToMesh() {
                 var multiMaterial = [meshMaterial, meshWireframe];
 
                 //normals calculation for correct lighting
-                geometry.computeFaceNormals();
+                geometry.mergeVertices();
+                geometry.computeCentroids();
                 geometry.computeVertexNormals();
+                geometry.computeFaceNormals();
+                geometry.computeBoundingSphere();               
+               
 
                 // geometry.__dirtyColors = true;
                 var mesh = THREE.SceneUtils.createMultiMaterialObject(geometry, multiMaterial);

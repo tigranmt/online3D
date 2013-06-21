@@ -40,7 +40,9 @@
      */
     _this.meshModelFromMesh = function (mesh) {
         var verticesShort = [];
+        var facesArray = [];
         var vertexCollection = mesh.children[0].geometry.vertices;
+
         for(var i=0;i<vertexCollection.length;i++) {
 
             var v = vertexCollection[i];
@@ -50,9 +52,20 @@
             verticesShort.push(vertex);
 
         }
+
+
+        var faces = mesh.children[0].geometry.faces;
+        for (var i = 0; i < faces.length; i++) {
+
+            var f = faces[i];
+            facesArray.push(f);
+
+        }
+
         return  {
                     name     : mesh.name,
                     vertices : verticesShort,
+                    faces    : facesArray,
                     color    : mesh.color,
                 };
         

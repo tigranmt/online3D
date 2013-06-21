@@ -37,6 +37,7 @@ function SessionToMeshes() {
 
                 for (var i = currentVertexIndex; i < currentVertexIndex + 3; i++) {
                     var ob = curMesh.vertices[i];
+
                     var vertex = new THREE.Vector3(ob.x, ob.y, ob.z);
                     curGeometry.vertices.push(vertex);
                 }
@@ -117,6 +118,13 @@ function SessionToMeshes() {
             for (var g = 0; g < geometries.length; g++) {
 
                 var geometry = geometries[g];
+
+                geometry.mergeVertices();
+                geometry.computeCentroids();
+                geometry.computeVertexNormals();
+                geometry.computeFaceNormals();
+                geometry.computeBoundingSphere();
+
                 //construct mesh
                 var mesh = utils.meshFromGeometry(geometry);
 

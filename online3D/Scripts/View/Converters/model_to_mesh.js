@@ -353,6 +353,10 @@ function AsciStlFileLoader ()
             if (geometry.vertices.length > 0) {
 
                 geometry.mergeVertices();
+                geometry.computeCentroids();
+                geometry.computeFaceNormals();
+                geometry.computeBoundingSphere();
+
                 var mesh = utils.meshFromGeometry(geometry);
 
                 //set additional mesh data
