@@ -106,22 +106,8 @@ function VertexToMesh() {
             //vertices are loaded 
             if (geometry.vertices.length > 0) {
 
-                //consruct mesh
-                var meshMaterial = new THREE.MeshPhongMaterial({ ambient: 0x222222, vertexColors: THREE.FaceColors, specular: 0x49D8FB, shininess: 140, perPixel: false, overdraw: true, side: THREE.DoubleSide });
-                var meshWireframe = new THREE.MeshBasicMaterial({ color: 0x111111, wireframe: true });
-                var multiMaterial = [meshMaterial, meshWireframe];
-
-                //normals calculation for correct lighting
-                geometry.mergeVertices();
-                geometry.computeCentroids();
-                geometry.computeVertexNormals();
-                geometry.computeFaceNormals();
-                geometry.computeBoundingSphere();               
-               
-
-                // geometry.__dirtyColors = true;
-                var mesh = THREE.SceneUtils.createMultiMaterialObject(geometry, multiMaterial);
-
+                var mesh = utils.meshFromGeometry(geometry);                        
+            
                 //set additional mesh data
                 mesh.name = object.ModelName;
                 mesh.facecount = geometry.faces.length;

@@ -82,8 +82,10 @@
         var meshWireframe = new THREE.MeshBasicMaterial({ color: 0x111111, vertexColors: THREE.FaceColors, specular: 0x49D8FB, shininess: 140, wireframe: true });
         var multiMaterial = [meshMaterial, meshWireframe];
 
+        geometry.mergeVertices();
+        geometry.computeCentroids();
         geometry.computeFaceNormals();
-        geometry.computeVertexNormals();
+        geometry.computeBoundingSphere();
                   
         var mesh = THREE.SceneUtils.createMultiMaterialObject(geometry, multiMaterial);
         return mesh;

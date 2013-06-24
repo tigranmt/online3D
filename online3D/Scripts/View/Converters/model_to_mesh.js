@@ -202,8 +202,7 @@ function BinaryStlFileLoader() {
 
                 var mesh = utils.meshFromGeometry(geometry);
 
-                geometry.mergeVertices();
-
+          
                 //set additional mesh data
                 mesh.name = fileName;
                 mesh.facecount = geometry.faces.length;
@@ -351,11 +350,6 @@ function AsciStlFileLoader ()
         var complete = function () {
             //vertices are loaded 
             if (geometry.vertices.length > 0) {
-
-                geometry.mergeVertices();
-                geometry.computeCentroids();
-                geometry.computeFaceNormals();
-                geometry.computeBoundingSphere();
 
                 var mesh = utils.meshFromGeometry(geometry);
 

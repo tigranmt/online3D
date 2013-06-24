@@ -119,12 +119,6 @@ function SessionToMeshes() {
 
                 var geometry = geometries[g];
 
-                geometry.mergeVertices();
-                geometry.computeCentroids();
-                geometry.computeVertexNormals();
-                geometry.computeFaceNormals();
-                geometry.computeBoundingSphere();
-
                 //construct mesh
                 var mesh = utils.meshFromGeometry(geometry);
 
