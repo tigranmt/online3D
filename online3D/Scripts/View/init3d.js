@@ -594,7 +594,7 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
     var _this = this;
 
     var childrenCount = _this.glScene.__objects.length;
-    
+
     var curVertexIndex = 0;
     var sessionImage;
 
@@ -603,10 +603,10 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
     for (var m = 0; m < childrenCount; m++) {
 
         var me = _this.glScene.__objects[m];
-       
+
         if (me.Format === "obj" && !(me instanceof THREE.Mesh) && me.children.length > 0)
             meshesToSend = meshesToSend.concat(me.children);
-        else if(me.Format === "stl")
+        else if (me.Format === "stl")
             meshesToSend.push(me);
     }
 
@@ -618,15 +618,15 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
 
         //upload of all models termianted, so let's send notifications via mail, if necessary 
         _this.sendEmails(sessionInfo);
-       
+
     }
 
     var isUploadDone = function () {
-        return (meshIndex >= childrenCount) ;
+        return (meshIndex >= childrenCount);
     }
 
 
-    var imageReady= function(resizedImage) {
+    var imageReady = function (resizedImage) {
 
         //get resized image
         sessionImage = resizedImage;
@@ -639,14 +639,14 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
 
         var mesh = meshesToSend[meshIndex];
 
-        
-        
+
+
         if (!mesh || !mesh.children) {
-            meshIndex++;                
+            meshIndex++;
             iterator();
             return;
         }
-        
+
         var geometryMesh = mesh.children[0];
 
         if (!geometryMesh) {
@@ -664,20 +664,24 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
         }
 
         var vertices = [];
-        
+
         //collect all vertices 
+        var colorsSplit = [];
         var faces = geometryMesh.geometry.faces;
-        for(var f=0; f<faces.length; f++) {
+        var geoVertices = geometryMesh.geometry.vertices;
+        for (var f = 0; f < faces.length; f++) {
             var face = faces[f];
-            vertices.push(geometryMesh.geometry.vertices[face.a]);
-            vertices.push(geometryMesh.geometry.vertices[face.b]);
-            vertices.push(geometryMesh.geometry.vertices[face.c]);
+            var vertexColor = geoVertices[face.a].vertexColor;
+
+            vertices.push(geoVertices[face.a]);
+            vertices.push(geoVertices[face.b]);
+            vertices.push(geoVertices[face.c]);
+
         }
 
-       
         var verticesCount = vertices.length;
 
-        var step = parseInt(_this.getPacketSize(verticesCount));       
+        var step = parseInt(_this.getPacketSize(verticesCount));
 
 
         if (curVertexIndex === 0) {
@@ -690,19 +694,20 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
         function currentModelSequence() {
 
             var verticesSplit = new Array();
-            var colorsSplit = new Array();
 
             while (curVertexIndex < verticesCount) {
                 var gv = vertices[curVertexIndex];
                 var shorten = utils.vertexToShorten(gv);
 
-                var vertex = "x:" + shorten.x + " " + "y:" + shorten.y + " " + "z:" + shorten.z;
 
-                if (gv.vertexColor !== undefined)
-                    colorsSplit.push(index + ":" + gv.vertexColor);
+                var vertex = "x:" + shorten.x + " " + "y:" + shorten.y + " " + "z:" + shorten.z;
+                var vertexColor = gv.vertexColor;
+                if (vertexColor)
+                    vertex += " c:" + vertexColor;
+
 
                 verticesSplit.push(vertex);
-               
+
                 curVertexIndex++;
 
                 /*In case of first vertex in the model just push it raise ajax. So we will check for authentication requeirement,
@@ -726,8 +731,7 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
                 ID: sessionInformation.link || unique,
                 Vertices: verticesSplit,
                 VertexCount: verticesCount,
-                Color: basicColor,
-                FaceColors: colorsSplit,
+                Color: basicColor,               
                 SessionName: sessionInfo.SessionName
             };
 
@@ -740,7 +744,7 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
             }
 
             var requestUrl = "SaveModel/";
-            if(sessionInformation.link)
+            if (sessionInformation.link)
                 requestUrl = "../SaveModel/";
 
             $.ajax({
@@ -771,15 +775,15 @@ init.prototype.sendModelsToServer = function (sessionInfo) {
                     else {
                         //load another model
 
-                     
-                         meshIndex++;
+
+                        meshIndex++;
 
 
                         curVertexIndex = 0;
                         _this.showUploadProgress(mesh.name, 100);
 
                         iterator();
-                       // uploadSingleModel(); //call to upload another model in collection, if any
+                        // uploadSingleModel(); //call to upload another model in collection, if any
                     }
                 },
                 error: function (data) {
@@ -886,7 +890,7 @@ init.prototype.LoadFromServer = function (unique) {
 
     var tempModel = {};
 
-   
+
     (function load() {
         $.ajax({
             url: '../GetModels/',
@@ -906,8 +910,6 @@ init.prototype.LoadFromServer = function (unique) {
                     tempModel.VertexCount = data.VertexCount;
                 if (tempModel.Color === undefined)
                     tempModel.Color = data.Color;
-                if (tempModel.FaceColors === undefined)
-                    tempModel.FaceColors = data.FaceColors;
                 if (tempModel.SessionName === undefined)
                     tempModel.SessionName = data.SessionName;
                 if (tempModel.User === undefined)
@@ -916,7 +918,7 @@ init.prototype.LoadFromServer = function (unique) {
                     tempModel.SavedOn = data.SavedOn;
 
                 //ONLY FOR THE FIRST MODEL
-                if(mindex == 0 && tempModel.Notes === undefined)  {
+                if (mindex == 0 && tempModel.Notes === undefined) {
                     tempModel.Notes = data.Notes
                 }
                 /**------**/
@@ -927,25 +929,31 @@ init.prototype.LoadFromServer = function (unique) {
                     mindex++;  //go to another model in chain, if any
                     packet = 0;  //packet becomes 0
                     tempModel = {}; //reset tempModel
-                       
-                     _this.showDownloadProgress(tempModel.ModelName, 100);
+
+                    _this.showDownloadProgress(tempModel.ModelName, 100);
                     load(); //call myself again
                 }
                 else if (data !== "alldone") {
-                    if(packet == 0) {
+                    if (packet == 0) {
                         _this.showDownloadProgress(tempModel.ModelName, 0);
                         //add session information label 
-                      
-                    }
-                    else{
-                       _this.showDownloadProgress(tempModel.ModelName, 100 / (tempModel.VertexCount / tempModel.Vertices.length));
-                    }
-                     
 
-                    var vertices = []; 
-                    for(var v = 0; v<data.Vertices.length;v++) {
+                    }
+                    else {
+                        _this.showDownloadProgress(tempModel.ModelName, 100 / (tempModel.VertexCount / tempModel.Vertices.length));
+                    }
+
+
+                    var vertices = [];
+                    for (var v = 0; v < data.Vertices.length; v++) {
                         var splitted = data.Vertices[v].split(/:| /);
-                        vertices.push(new THREE.Vector3(parseFloat(splitted[1]), parseFloat(splitted[3]), parseFloat(splitted[5])));
+                        var vertex = new THREE.Vector3(parseFloat(splitted[1]), parseFloat(splitted[3]), parseFloat(splitted[5]));
+
+                        if (splitted.length > 6) { //there is a color information                        
+                            vertex.vertexColor = splitted[7];
+                        }
+
+                        vertices.push(vertex);
                     }
 
                     tempModel.Vertices = tempModel.Vertices.concat(vertices); //concatenate vertices arrived to already available ones
@@ -954,9 +962,9 @@ init.prototype.LoadFromServer = function (unique) {
                 }
                 else {
                     //all done
-                    $("#flprogress").remove();   
+                    $("#flprogress").remove();
                     toastr.success('Got all models from the server. Now begin processing', 'Success !');
-                    
+
                     var loaderGif = $("#loader");
                     if (loaderGif !== undefined)
                         loaderGif.remove();

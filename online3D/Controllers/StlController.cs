@@ -178,8 +178,7 @@ namespace ModelViewer3D.Controllers
 
 
                 model.Vertices = SendCache.GetVertices(model);
-                model.ModelImage = SendCache.GetImageData(model);
-                model.FaceColors = SendCache.GetFaceColors(model);
+                model.ModelImage = SendCache.GetImageData(model);             
                 model.Notes = SendCache.GetNotes(model);
              
 
@@ -336,12 +335,6 @@ namespace ModelViewer3D.Controllers
                 }
                 tempModel.Vertices = model.Vertices.Skip(start).Take(end - start).ToList();
                 /***************************/
-
-
-               
-                //return colors in one shot
-                if(packetIndex == 0)
-                    tempModel.FaceColors = model.FaceColors;
 
                 //return notes only for first packet of the first model
                 if (modelIndex == 0 && packetIndex == 0)

@@ -88,10 +88,7 @@ namespace online3D.Models
 
                 if (!faceColorData.TryGetValue(key, out temp))
                     faceColorData[key] = new List<string>();
-                
-                if(mi.FaceColors!=null)
-                    faceColorData[key].AddRange(mi.FaceColors);
-
+           
                 if (!string.IsNullOrEmpty(mi.ModelImage))
                     modelImages[key] = mi.ModelImage;
 

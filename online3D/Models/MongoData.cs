@@ -19,7 +19,7 @@ namespace online3D.Models
     public class MongoDataAccess : IData
     {
 
-        private const char SEPARATOR = ' ';
+        private const char SEPARATOR = '$';
         private const char SEPARATOR_NOTES = '#';
 
         public MongoDataAccess()
@@ -57,18 +57,11 @@ namespace online3D.Models
             {
                 var deCompressed = Compressor.Decompress(bson["Vertices"].AsString).Split(new char[]{SEPARATOR}, StringSplitOptions.RemoveEmptyEntries);
                 var vertices = new List<string>();
-                for (int i = 0; i < deCompressed.Length; i += 3)
-                   vertices.Add(deCompressed[i] + SEPARATOR + deCompressed[i + 1] + SEPARATOR + deCompressed[i + 2]);
-                
+                for (int i = 0; i < deCompressed.Length; i ++)
+                    vertices.Add(deCompressed[i]);
+
                 mi.Vertices = vertices;
 
-
-                deCompressed = Compressor.Decompress(bson["FaceColors"].AsString).Split(new char[] { SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
-                var faceColors = new List<string>();
-                for (int i = 0; i < deCompressed.Length; i += 3)
-                    faceColors.Add(deCompressed[i]);
-
-                mi.FaceColors = faceColors;
 
 
                 var notesString = bson["Notes"].AsString.Split(new char[] { SEPARATOR_NOTES }, StringSplitOptions.RemoveEmptyEntries);
@@ -113,9 +106,6 @@ namespace online3D.Models
             var array = BsonArrayFromEnumerable(mi.Vertices);
             bson.Add("Vertices", array);
 
-            var faceColors = BsonArrayFromEnumerable(mi.FaceColors);
-            bson.Add("FaceColors", faceColors);
-
             var notes = BsonArrayFromEnumerableNotes(mi.Notes);
             bson.Add("Notes", notes);
 
@@ -138,9 +128,6 @@ namespace online3D.Models
 
             var array = BsonArrayFromEnumerable(mi.Vertices);
             bson["Vertices"] =  array;
-
-            var faceColors = BsonArrayFromEnumerable(mi.FaceColors);
-            bson["FaceColors"] =  faceColors;
 
             var notes = BsonArrayFromEnumerableNotes(mi.Notes);
             bson["Notes"] =  notes;

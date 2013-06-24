@@ -30,16 +30,8 @@ function VertexToMesh() {
         var geometry = new THREE.Geometry();
         var modelColor = object.Color;
         var vertices = object.Vertices;
-        var faceColors = object.FaceColors || "";
         var i = 0;
         var allVerticesCount = vertices.length;
-        var faceDic = {};
-        for (var faceIndex = 0; faceIndex < faceColors.length; faceIndex++) {
-            var split = faceColors[faceIndex].split(":");
-            faceDic[parseInt(split[0])] = split[1];
-        }
-
-        faceColors = undefined;
 
         //single step runner
         var readStep = function (iterator) {
@@ -61,22 +53,6 @@ function VertexToMesh() {
                     if (verticesCount == 3) {
                         var length = geometry.vertices.length;
                         var face = new THREE.Face3(length - 3, length - 2, length - 1, 1);
-                        var a = face.a;
-
-                        face.color.setStyle(faceDic[a]);
-                        if (face.color.getHex() === 0) {
-                            var b = face.b;
-                            face.color.setStyle(faceDic[b]);
-                            if (face.color.getHex() === 0) {
-                                var c = face.c;
-                                face.color.setStyle(faceDic[c]);
-
-                                if (face.color.getHex() === 0) {                                 
-                                    face.color.setHex(modelColor);
-                                }
-                            }
-                        }
-                       
 
                         geometry.faces.push(face);
                         verticesCount = 0;
@@ -106,8 +82,10 @@ function VertexToMesh() {
             //vertices are loaded 
             if (geometry.vertices.length > 0) {
 
-                var mesh = utils.meshFromGeometry(geometry);                        
-            
+                geometry.color = modelColor;
+                var mesh = utils.meshFromGeometry(geometry);
+
+
                 //set additional mesh data
                 mesh.name = object.ModelName;
                 mesh.facecount = geometry.faces.length;
@@ -122,6 +100,8 @@ function VertexToMesh() {
             }
         }
         // ------ 
+
+
 
 
         async.until(isLoadingDone, readStep, complete);

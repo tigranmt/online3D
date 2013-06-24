@@ -15,8 +15,7 @@ namespace online3D.Models
         public string ModelName{get;set;}
         public int    Size{get;set;}
         public string Format { get; set; }
-        public List<string> Vertices { get; set; }
-        public List<string> FaceColors { get; set; }
+        public List<string> Vertices { get; set; }        
         public int VertexCount { get; set; }
         public int Color { get; set; }
         public string User { get; set; }

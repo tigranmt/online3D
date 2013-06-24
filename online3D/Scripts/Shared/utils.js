@@ -86,6 +86,8 @@
         geometry.computeCentroids();
         geometry.computeFaceNormals();
         geometry.computeBoundingSphere();
+
+        _this.setColorsOnModel(geometry);
                   
         var mesh = THREE.SceneUtils.createMultiMaterialObject(geometry, multiMaterial);
         return mesh;
@@ -112,6 +114,30 @@
             return object3D;
         }
     }
+
+
+     /*  Colors faces of geometry according to the available information on colors of geometry vertices
+    *  @param {THREE.Geometry} geometry Colors geometry according to the information present in its vertices, if any     
+    */
+     _this.setColorsOnModel = function (geometry) {
+            var faces = geometry.faces;
+            var vertices = geometry.vertices;
+            for (var f = 0; f < faces.length; f++) {
+                var face = faces[f];
+                var vertexa = vertices[face.a];
+                var vertexb = vertices[face.b];
+                var vertexc = vertices[face.c];
+
+                if (vertexa.vertexColor && vertexb.vertexColor && vertexc.vertexColor) {
+                    face.color.set(vertexa.vertexColor);
+                }
+                else {
+                   face.color.set(geometry.color);
+                }
+            }
+
+            geometry.colorsNeedUpdate = true;
+        }
 
 
 });
