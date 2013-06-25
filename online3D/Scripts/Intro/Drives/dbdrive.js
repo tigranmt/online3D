@@ -62,6 +62,10 @@
             (function downloadSingle(){               
 
                 var file = files[curIndex];
+                if(!file) {                
+                    ready(filesChosen);
+                    return;
+                }
 
                 var readOptions = {blob  : true};
                 client.readFile("Public/" + file.name, readOptions, function (error, data) {
@@ -81,15 +85,12 @@
                     };
                     filesChosen.push(fileData); 
 
-                    //all files are loaded so call ready
-                    if(filesChosen.length === length) 
-                        ready(filesChosen);
-                    {
-                        if(curIndex <= length - 1) {
-                            curIndex++; 
-                            downloadSingle();
-                        }
+                    
+                    if(curIndex <= length - 1) {
+                        curIndex++; 
+                        downloadSingle();
                     }
+                    
                 });
                 
             })();

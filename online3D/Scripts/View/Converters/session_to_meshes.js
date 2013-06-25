@@ -10,7 +10,7 @@ function SessionToMeshes() {
 
 
         var isDone = false;
-        var sessionObj = data; 
+        var sessionObj = data;
 
         var currentModelIndex = 0;
         var currentVertexIndex = 0;
@@ -39,6 +39,9 @@ function SessionToMeshes() {
                     var ob = curMesh.vertices[i];
 
                     var vertex = new THREE.Vector3(ob.x, ob.y, ob.z);
+                    if (ob.c)
+                        vertex.vertexColor = ob.c;
+
                     curGeometry.vertices.push(vertex);
                 }
 
@@ -49,7 +52,7 @@ function SessionToMeshes() {
                 //var length = geometry.vertices.length;
                 var length = currentVertexIndex;
 
-           
+
                 var face = new THREE.Face3(length - 3, length - 2, length - 1, 1);
                 face.color.setHex(modelColor);
                 curGeometry.faces.push(face);
