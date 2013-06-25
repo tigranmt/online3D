@@ -100,7 +100,7 @@
 
             var value = strength;
             if (sculptureMorph) {
-                value = leftDownPointY - leftCurrentPointY;
+                value = leftCurrentPointY - leftDownPointY ;
                 value *= 0.08;
             }
 
