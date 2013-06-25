@@ -41,25 +41,26 @@
     _this.meshModelFromMesh = function (mesh) {
         var verticesShort = [];
         var facesArray = [];
-        var vertexCollection = mesh.children[0].geometry.vertices;
+        var geometry = mesh.children[0].geometry;
 
-        for(var i=0;i<vertexCollection.length;i++) {
-
-            var v = vertexCollection[i];
-            var vertex = _this.vertexToShorten(v);
-         
-
-            verticesShort.push(vertex);
-
-        }
-
-
-        var faces = mesh.children[0].geometry.faces;
+        var faces = geometry.faces;
         for (var i = 0; i < faces.length; i++) {
 
             var f = faces[i];
             facesArray.push(f);
 
+            var vertexa = geometry.vertices[f.a];
+            var vertexb = geometry.vertices[f.b];
+            var vertexc = geometry.vertices[f.c];
+
+            var va = _this.vertexToShorten(vertexa);
+            verticesShort.push(va);
+
+            var vb = _this.vertexToShorten(vertexb);
+            verticesShort.push(vb);
+
+            var vc = _this.vertexToShorten(vertexc);
+            verticesShort.push(vc);
         }
 
         return  {
@@ -102,8 +103,13 @@
                 var meshWireframe = new THREE.MeshBasicMaterial({ color: 0x111111, vertexColors: THREE.FaceColors, specular: 0x49D8FB, shininess: 140, wireframe: true });
                 var multiMaterial = [meshMaterial, meshWireframe];
 
+                geometry.mergeVertices();
+                geometry.computeCentroids();
                 geometry.computeFaceNormals();
-                geometry.computeVertexNormals();
+                geometry.computeBoundingSphere();
+
+                _this.setColorsOnModel(geometry);
+
                   
                 var mesh = THREE.SceneUtils.createMultiMaterialObject(geometry, multiMaterial);
                 

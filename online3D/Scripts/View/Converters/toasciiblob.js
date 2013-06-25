@@ -5,18 +5,21 @@ function ToAsciiBlob() {
     this.meshToAsciiBlob = function (mesh) {
         var newline = " \r\n";
         var stringData = "solid WRAP" + newline;
-        var faceindex = 0;
+      
         var geom = mesh.geometry;
-        for (var i = 0; i < geom.vertices.length; i += 3) {
-            var face = geom.faces[faceindex];
+        var faces = geom.faces;
+        for (var i = 0; i < faces.length; i++) {
+
+            var face = faces[i];
             var facenormal = face.normal;
+
             stringData += "facet normal " + facenormal.x + " " + facenormal.y + " " + facenormal.z + newline;
 
             stringData += "outer loop" + newline;
 
-            var v0 = geom.vertices[i];
-            var v1 = geom.vertices[i + 1];
-            var v2 = geom.vertices[i + 2];
+            var v0 = geom.vertices[face.a];
+            var v1 = geom.vertices[face.b];
+            var v2 = geom.vertices[face.c];
 
 
             stringData += "vertex " + v0.x + " " + v0.y + " " + v0.z + newline;
