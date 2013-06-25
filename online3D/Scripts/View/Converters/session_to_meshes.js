@@ -48,6 +48,8 @@ function SessionToMeshes() {
                 //add face of 3 vertices
                 //var length = geometry.vertices.length;
                 var length = currentVertexIndex;
+
+           
                 var face = new THREE.Face3(length - 3, length - 2, length - 1, 1);
                 face.color.setHex(modelColor);
                 curGeometry.faces.push(face);

@@ -6,6 +6,12 @@
     Tools/meshpencil.js
     Tools/notesmanager.js
 	Tools/sculpturing.js	
+	Converters/MTLLoader.js
+	Converters/OBJMTLLoader.js
+    Converters/model_to_mesh.js
+    Converters/vertex_to_mesh.js
+	Converters/toasciiblob.js
+	Converters/session_to_meshes.js
     threetrackballcontrols.js
     binary_reader.js
 	geometrydata.js
@@ -16,12 +22,7 @@
     screenshot.js
     startup_mesh.js
 	saveas.js	
-	Converters/MTLLoader.js
-	Converters/OBJMTLLoader.js
-    Converters/model_to_mesh.js
-    Converters/vertex_to_mesh.js
-	Converters/toasciiblob.js
-	Converters/session_to_meshes.js
+
 	
 	
     

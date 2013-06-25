@@ -50,9 +50,9 @@
         <div class="nav-collapse collapse navbar-responsive-collapse">
             <ul  class="nav">
                 <li class="dropdown">             
-                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">Access<b class="caret"></b></a>      
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">Access<b class="caret"></b>  <i class="icon-lock"></i></a>      
                     <ul class="dropdown-menu" id="access_ul" data-bind="foreach: access_menu">                     
-                       <li>
+                       <li>                          
                            <a data-bind="attr:{id:id}, text:text, click: function(e) { callback(); }, visible: itemVisible" href="#" ></a>
                        </li>
                     </ul>
@@ -61,7 +61,7 @@
 
             <ul  class="nav">
                 <li class="dropdown">             
-                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">Save<b class="caret"></b></a>      
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">Save<b class="caret"></b> <i class="icon-save"></i></a>      
                     <ul class="dropdown-menu" id="save_ul" data-bind="foreach: save_menu">                     
                        <li>
                            <a data-bind="attr:{id:id}, text:text, click: function(e) { callback(); }" href="#" ></a>
@@ -72,7 +72,7 @@
 
             <ul  class="nav">
                 <li class="dropdown">             
-                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">View<b class="caret"></b></a>      
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">View<b class="caret"></b><i class="icon-eye-open"></i></a>      
                     <ul class="dropdown-menu" id="view_ul" data-bind="foreach: view_menu">                     
                        <li>
                            <a data-bind="attr:{id:id}, text:text, click: function(e) { callback(); }" href="#" ></a>
@@ -83,7 +83,7 @@
 
              <ul  class="nav">
                 <li class="dropdown">             
-                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">Tools<b class="caret"></b></a>      
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">Tools<b class="caret"></b><i class="icon-cogs"></i></a>      
                     <ul class="dropdown-menu" id="tools_ul" data-bind="foreach: tools_menu">                     
                        <li>
                            <a data-bind="attr:{id:id}, text:text, click: function(e) { callback(); }" href="#" ></a>
