@@ -4,6 +4,8 @@
     MESH_PENCIL             : "Mesh pencil",
     NOTES_MANAGER           : "Notes manager",
     SCULPTURING             : "Sculpturing",
+    SELECTION               : "Selection",
+
 
     toolsarray: {},
 
@@ -82,6 +84,8 @@
             return new this.NotesManager();
         else if (toolName === this.SCULPTURING)
             return new this.Sculpturing();
+        else if(toolName === this.SELECTION)
+            return new this.SelectionManager();
     },
 
 

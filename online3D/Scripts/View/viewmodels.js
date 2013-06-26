@@ -132,6 +132,8 @@ var notesmodel = new (function () {
 
 
     _this.notesmanager = TOOLS.startAgent(TOOLS.NOTES_MANAGER);
+    _this.selector = TOOLS.startAgent(TOOLS.SELECTION);
+
     TOOLS.stopAgent(TOOLS.NOTES_MANAGER);
 
     $("#usernotes").on("shown", function (data) {

@@ -6,6 +6,7 @@
     Tools/meshpencil.js
     Tools/notesmanager.js
 	Tools/sculpturing.js	
+	Tools/selectionmanager.js
 	Converters/MTLLoader.js
 	Converters/OBJMTLLoader.js
     Converters/model_to_mesh.js
