@@ -131,8 +131,7 @@ var notesmodel = new (function () {
     _this.charactersToType = ko.observable(_this.note_text_limit);
 
 
-    _this.notesmanager = TOOLS.startAgent(TOOLS.NOTES_MANAGER);
-    _this.selector = TOOLS.startAgent(TOOLS.SELECTION);
+    _this.notesmanager = TOOLS.startAgent(TOOLS.NOTES_MANAGER);   
 
     TOOLS.stopAgent(TOOLS.NOTES_MANAGER);
 

@@ -267,20 +267,6 @@
     }
 
 
-    var setColorOnFace = function (geometry, face, color, onlyface) {
-
-        face.color.set(color);
-
-        /*do not need coloring of the vertices*/
-        if (onlyface === true)
-            return;
-
-        geometry.vertices[face.a].vertexColor = color;
-        geometry.vertices[face.b].vertexColor = color;
-        geometry.vertices[face.c].vertexColor = color;
-
-    };
-
 
 
     var selectTrianglesUnderMouse = function (event) {
@@ -291,7 +277,7 @@
             for (var n = 0; n < facesSelectedUnderMouse.length; n++) {
                 var face = facesSelectedUnderMouse[n];
                 if (face.originalColor)
-                    setColorOnFace(intersection.object.geometry, face, face.originalColor);
+                    TOOLS.setColorOnFace(intersection.object.geometry, face, face.originalColor);
             }
 
             var face = intersection.face;
@@ -301,7 +287,7 @@
             for (var n = 0; n < facesSelectedUnderMouse.length; n++) {
                 var face = facesSelectedUnderMouse[n];
 
-                setColorOnFace(intersection.object.geometry, facesSelectedUnderMouse[n], "#ffffff");
+                TOOLS.setColorOnFace(intersection.object.geometry, facesSelectedUnderMouse[n], "#ffffff");
             }
             intersection.object.geometry.colorsNeedUpdate = true;
         }

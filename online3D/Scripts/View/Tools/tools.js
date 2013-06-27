@@ -113,9 +113,19 @@
 
         //unproject to 3D surface
         var projector = new THREE.Projector();
-        projector.unprojectVector(viewDirection, this.camera);
+        return projector.unprojectVector(viewDirection, this.camera);
 
-        return viewDirection;
+    },
+
+    
+
+    unprojectMouse: function (event) {
+        var navbar = $("#navbar");
+        var navbarheight = navbar ? navbar.height() : 0;
+        var vector = new THREE.Vector3((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / (window.innerHeight + navbarheight)) * 2 + 1, 0.5);
+        var projector = new THREE.Projector();
+        projector.unprojectVector(vector,this.camera);
+        return vector;
     },
 
     getIntersectionFromMouseCoord: function (event) {
@@ -160,6 +170,30 @@
                   mesh.children.length == 2 &&
                     mesh.children[0].geometry);
     },
+
+    selectFaces: function (faces) {
+        for (var f = 0; f < faces.length; f++) {
+            var face = faces[f];
+
+        }
+    },
+
+
+    
+    setColorOnFace : function (geometry, face, color, onlyface) {
+
+        face.color.set(color);
+
+        /*do not need coloring of the vertices*/
+        if (onlyface === true)
+            return;
+
+        geometry.vertices[face.a].vertexColor = color;
+        geometry.vertices[face.b].vertexColor = color;
+        geometry.vertices[face.c].vertexColor = color;
+
+    },
+
 
     //add to scene a new method
     getSceneBoundingBox: function () {

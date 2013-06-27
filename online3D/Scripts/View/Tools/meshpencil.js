@@ -71,7 +71,7 @@
                 //iterate over ALL faces of the model and set selected color
                 var faces = intersection.object.geometry.faces;
                 for (var n = 0; n < faces.length; n++) {
-                    setColorOnFace(intersection.object.geometry, faces[n], _this.color, true);
+                    TOOLS.setColorOnFace(intersection.object.geometry, faces[n], _this.color, true);
                 }
 
                 intersection.object.geometry.colorsNeedUpdate = true;
@@ -110,19 +110,7 @@
     };
 
 
-    var setColorOnFace = function (geometry, face, color, onlyface) {
-
-        face.color.set(color);
-
-        /*do not need coloring of the vertices*/
-        if (onlyface === true)
-            return;
-
-        geometry.vertices[face.a].vertexColor = color;
-        geometry.vertices[face.b].vertexColor = color;
-        geometry.vertices[face.c].vertexColor = color;
-
-    };
+    
 
 
     var onMouseMove = function (event) {
@@ -135,10 +123,10 @@
         if (leftButtonPressed && !this.colorAllModel) {//left button
             var intersection = TOOLS.getIntersectionFromMouseCoord(event);
             if (intersection !== undefined) {
-                setColorOnFace(intersection.object.geometry, intersection.face, _this.color);
+                TOOLS.setColorOnFace(intersection.object.geometry, intersection.face, _this.color);
                 var neigbours = getNeighbours(intersection.object.geometry, intersection.face);
                 for (var n = 0; n < neigbours.length; n++)
-                    setColorOnFace(intersection.object.geometry, neigbours[n], _this.color);
+                    TOOLS.setColorOnFace(intersection.object.geometry, neigbours[n], _this.color);
                 intersection.object.geometry.colorsNeedUpdate = true;
             }
         }

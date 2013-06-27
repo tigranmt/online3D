@@ -281,8 +281,6 @@
 
       
 
-
-
         //subscribe to mouse click event
         $("#3DArea").click(function (e) {
             if (e.button === 0 && e.ctrlKey) //middle 
@@ -296,6 +294,10 @@
             }
 
         });
+
+        _this.selector = TOOLS.startAgent(TOOLS.SELECTION);
+
+
 
     }
 
