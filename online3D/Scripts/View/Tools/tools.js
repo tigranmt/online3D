@@ -99,7 +99,16 @@
     },
 
 
-    getViewDirection: function (event) {
+    
+    unproject : function(direction) {
+      
+        //unproject to 3D surface
+        var projector = new THREE.Projector();
+        return projector.unprojectVector(direction, this.camera);
+    },
+
+    getTopViewDirection: function (event) {
+
 
         var x = (event.clientX / window.innerWidth) * 2 - 1;
         var navbar = $("#navbar");
@@ -110,11 +119,22 @@
 
         var viewDirection = new THREE.Vector3();
         viewDirection.set(x, y, 1);
+        return this.unproject(viewDirection);
 
-        //unproject to 3D surface
-        var projector = new THREE.Projector();
-        return projector.unprojectVector(viewDirection, this.camera);
+    },
 
+    getViewDirection: function (event) {
+      
+        var topView = this.getTopViewDirection(event);
+
+        // Substract the vector representing the camera position
+        var sub = topView.subVectors(topView, this.camera.position);
+        return sub;
+      
+    },
+
+    getCameraPosition : function() {
+        return this.camera.position; 
     },
 
     
@@ -130,10 +150,7 @@
 
     getIntersectionFromMouseCoord: function (event) {
         var viewDirection = this.getViewDirection(event);
-        var cameraPosition = this.camera.position;
-
-        // Substract the vector representing the camera position
-        viewDirection = viewDirection.subVectors(viewDirection, cameraPosition);
+        
 
         //get all meshes from scene
         var objects = [];
@@ -147,7 +164,7 @@
         viewDirection.normalize();
 
 
-        var raycaster = new THREE.Raycaster(cameraPosition, viewDirection);
+        var raycaster = new THREE.Raycaster(this.camera.position, viewDirection);
         var intersects = raycaster.intersectObjects(objects);
         var point = new THREE.Vector3();
 
@@ -174,8 +191,10 @@
     selectFaces: function (faces) {
         for (var f = 0; f < faces.length; f++) {
             var face = faces[f];
-
+            face.originalColor = face.color; 
+            this.setColorOnFace(undefined, face, "#00FF00", true);
         }
+
     },
 
 

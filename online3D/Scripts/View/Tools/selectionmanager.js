@@ -111,18 +111,67 @@
     }
 
   
+    var drawTestLine = function (v0, v1, color) {
+
+
+        var c = color || "#000000";
+
+        var material = new THREE.LineBasicMaterial({
+            color: c
+        });
+
+
+        var geo = new THREE.Geometry();
+        geo.vertices.push(v0);
+        geo.vertices.push(v1);
+
+        TOOLS.addMesh(new THREE.Line(geo, material));
+    }
 
     var makeSelection = function (event, region) {
         var suitableForSelection = [];
         
-        var vectorView = TOOLS.getViewDirection(event); 
+        //var vectorView = TOOLS.getViewDirection(event);
+        //vectorView.normalize();
+       
         var plane = new THREE.Plane();
-        plane.setFromNormalAndCoplanarPoint(vectorView, region[0]);
+        // plane.setFromNormalAndCoplanarPoint(vectorView, region[0]);
+        plane.setFromCoplanarPoints(region[0], region[1], region[2]);
+
+        var cameraPosition = TOOLS.getCameraPosition();
+
+        drawTestLine(cameraPosition, plane.normal);
+      
+
+        //TEST CODE
+        //var p = new THREE.Mesh(new THREE.PlaneGeometry(30, 30), new THREE.MeshNormalMaterial());
+        //p.overdraw = true;
+        //TOOLS.addMesh(p);
+
+        //var angle = new THREE.Vector3(0, 0, 1).angleTo(plane.normal);
+        //p.rotation.set(angle, angle, angle);
+
+        //return; 
+
+        var geometries = [];
+        var progectedRegion = [];
+        for (var g = 0; g < region.length; g++) {
+            var pro = plane.projectPoint(region[g]);
+            progectedRegion.push(pro);
+        }
+     
+        for (var a = 0; a < progectedRegion.length; a++) {
+            var next = a + 1;
+            if (next == region.length)
+                next = 0;
+            drawTestLine(progectedRegion[a], progectedRegion[next], "#FF0000");
+        }
 
         TOOLS.forEachMesh(function (mesh) {
             var geo = mesh.children[0].geometry;
             var faces = geo.faces;
-            var vertices = geo.vertices; 
+            var vertices = geo.vertices;
+            var geometryNeedsUpdates = false; 
             for (var i = 0; i < faces.length; i++) {
                 var face = faces[i];
 
@@ -133,18 +182,27 @@
                 var vertexaP = plane.projectPoint(vertexa);
                 var vertexbP = plane.projectPoint(vertexb);
                 var vertexcP = plane.projectPoint(vertexc);
+    
+
+                drawTestLine(vertexaP, cameraPosition);
 
                 //var vertexaP = getProjectedPoint(plane, vertexa, vectorView);
                 //var vertexbP = getProjectedPoint(plane, vertexb, vectorView);
                 //var vertexcP = getProjectedPoint(plane, vertexc, vectorView);
 
+            
                 var aInside = isInsidePath(vertexaP.x, vertexaP.y, region);
                 var bInside = isInsidePath(vertexbP.x, vertexbP.y, region);
                 var cInside = isInsidePath(vertexcP.x, vertexcP.y, region);
 
                 if (aInside && bInside && cInside) {
                     suitableForSelection.push(face);
+                    geometryNeedsUpdates = true;
                 }
+            }
+
+            if (geometryNeedsUpdates) {
+                geometries.push(geo);
             }
             
         },
@@ -153,11 +211,16 @@
         });
 
         TOOLS.selectFaces(suitableForSelection);
+        for (var g = 0; g < geometries.length; g++) {
+            var geo = geometries[g];
+            geo.colorsNeedUpdate = true;
+        }
+
     }
 
     var isRegionClosed = function (region) {
         if (region.length < 2)
-            return;
+            return false;
 
         var lastPoint = region[region.length - 1];
         var firstPoint = region[0];
@@ -195,10 +258,9 @@
 
     var onMouseUp = function (event) {
 
-        return;
-
         if (event === undefined) return;
 
+        return;
         
        
         //if there is another tool in execution or is not LEFT button pressed, do not do anything 
