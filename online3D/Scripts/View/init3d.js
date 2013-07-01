@@ -228,6 +228,32 @@
     }
 
 
+    var extendMatrix4 = function () {
+
+        THREE.Matrix4.prototype.getColumnX = function() {
+            
+            var te = this.elements;
+            return new THREE.Vector3(te[0], te[1], te[2]);
+        };
+
+
+        THREE.Matrix4.prototype.getColumnY = function () {
+
+            var te = this.elements;
+            return new THREE.Vector3(te[4], te[5], te[6]);
+        };
+
+
+        THREE.Matrix4.prototype.getColumnZ = function () {
+
+            var te = this.elements;
+            return new THREE.Vector3(te[8], te[9], te[10]);
+        };
+
+    }
+    
+
+
     //init WebGL variables and scene
     this.initGL = function (container) {
 
@@ -238,14 +264,15 @@
             NEAR = 0.1, FAR = 1000;
 
 
-       
+        extendMatrix4();
 
         // create a WebGL renderer, camera       
         this.glRenderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
 
         
+        //this.glCamera = THREE.OrthographicCamera(-100, 100, 100, 100, -100, 100);
 
-        //create PerspectiveCamera
+       // create PerspectiveCamera
         this.glCamera = new THREE.PerspectiveCamera(
                                 VIEW_ANGLE,
                                 ASPECT,
@@ -253,7 +280,7 @@
                                 FAR);
 
       
-        this.glCamera.updateProjectionMatrix();
+        //this.glCamera.updateProjectionMatrix();
 
         this.glScene = new THREE.Scene(); //create scene            
         this.glScene.add(this.glCamera); // add the camera to the scene
