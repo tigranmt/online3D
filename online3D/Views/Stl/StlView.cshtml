@@ -111,6 +111,13 @@
     </div>
 </div>
 
+<div id="perspective_orthogrphic" class="btn-group btn-group-vertical " data-toggle="buttons-radio">
+    
+    <div id="inneractionsperspective_orthogrphic" data-bind="foreach: perspective_orthografic">
+        <button data-bind="click: function(e) { callback(); }, attr: { 'class': buttonClass}" ></button>     
+    </div>
+</div>
+
 <div id="progress" ></div>
 
 <div id="usernotes" class='usernotes' data-bind="event:{mouseleave:mouseLeave.bind($data)}">  

@@ -177,20 +177,25 @@ THREE.TrackballControls = function (object, domElement) {
 
             var factor = 1.0 + (_zoomEnd.y - _zoomStart.y) * _this.zoomSpeed;
 
-            if (factor !== 1.0 && factor > 0.0) {
+            if (this.object.inOrthographicMode === true) {
+                this.object.setZoom(8*factor);
+            }
+            else {
+                if (factor !== 1.0 && factor > 0.0) {
 
-                _eye.multiplyScalar(factor);
+                    _eye.multiplyScalar(factor);
 
-                if (_this.staticMoving) {
+                    if (_this.staticMoving) {
 
-                    _zoomStart.copy(_zoomEnd);
+                        _zoomStart.copy(_zoomEnd);
 
-                } else {
+                    } else {
 
-                    _zoomStart.y += (_zoomEnd.y - _zoomStart.y) * this.dynamicDampingFactor;
+                        _zoomStart.y += (_zoomEnd.y - _zoomStart.y) * this.dynamicDampingFactor;
+
+                    }
 
                 }
-
             }
 
         }

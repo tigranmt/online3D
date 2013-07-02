@@ -319,7 +319,7 @@
 
     var onMouseMove = function (event) {
 
-        console.log(event.button);
+   
 
         if (event.altKey || event.ctrlKey)
             return;

@@ -269,44 +269,52 @@
         // create a WebGL renderer, camera       
         this.glRenderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
 
-        
-        //this.glCamera = THREE.OrthographicCamera(-100, 100, 100, 100, -100, 100);
 
-       // create PerspectiveCamera
-        this.glCamera = new THREE.PerspectiveCamera(
-                                VIEW_ANGLE,
-                                ASPECT,
-                                NEAR,
-                                FAR);
+        //  this.glCamera = new THREE.OrthographicCamera(0, WIDTH, 0, 100, -100, 100);
+        this.glCamera = new THREE.CombinedCamera(WIDTH, HEIGHT, VIEW_ANGLE, NEAR, FAR, NEAR, FAR);
+        //  this.glCamera.toOrthographic();
 
-      
+        // create PerspectiveCamera
+        //        this.glCamera = new THREE.PerspectiveCamera(
+        //                                VIEW_ANGLE,
+        //                                ASPECT,
+        //                                NEAR,
+        //                                FAR);
+
+
         //this.glCamera.updateProjectionMatrix();
 
         this.glScene = new THREE.Scene(); //create scene            
         this.glScene.add(this.glCamera); // add the camera to the scene
 
 
-       
+
 
         //generate renderer
         this.glRenderer.setSize(WIDTH, HEIGHT);
         this.glRenderer.domElement.id = "canvas";
         container.append(this.glRenderer.domElement); // attach the render-supplied DOM element
 
-        $("#3DArea #canvas").css("position","absolute");
-        $("#3DArea #canvas").css("z-index","2");
-        $("#3DArea #canvas").css("top","45px");
-     
-        
+        $("#3DArea #canvas").css("position", "absolute");
+        $("#3DArea #canvas").css("z-index", "2");
+        $("#3DArea #canvas").css("top", "45px");
+
+
 
         $(window).resize(function () { //handle resize
-            _this.glCamera.aspect = window.innerWidth / window.innerHeight;
+            if (_this.glCamera instanceof THREE.CombinedCamera) {
+                _this.glCamera.cameraP.aspect = window.innerWidth / window.innerHeight;
+            }
+            else {
+                _this.glCamera.aspect = window.innerWidth / window.innerHeight;
+            }
+
             _this.glCamera.updateProjectionMatrix();
             _this.glRenderer.setSize(window.innerWidth, window.innerHeight);
 
         });
 
-      
+
 
         //subscribe to mouse click event
         $("#3DArea").click(function (e) {
@@ -314,8 +322,8 @@
             {
                 var pointClicked = TOOLS.getVertexFromMouseCoord(e);
                 if (pointClicked !== undefined) {
-                                          
-                    _this.sceneTracker.target = pointClicked;                              
+
+                    _this.sceneTracker.target = pointClicked;
                     _this.pointlight.position = _this.glCamera.position;
                 }
             }
@@ -1150,16 +1158,19 @@ init.prototype.showAxis = function() {
 
 
 init.prototype.hidePanels = function (all) {
-    $("#3DArea").css("visibility", "hidden");   
-    $("#basicPanel").css("visibility", "hidden");   
+    $("#3DArea").css("visibility", "hidden");
+    $("#basicPanel").css("visibility", "hidden");
+    $("#perspective_orthogrphic").css("visibility", "hidden");
     $("#expandfileInfo").css("visibility", "hidden");
+    
 
 }
 
 init.prototype.showPanels = function (all) {
 
-    $("#3DArea").css("visibility", "visible"); 
-    $("#basicPanel").css("visibility", "visible");    
+    $("#3DArea").css("visibility", "visible");
+    $("#basicPanel").css("visibility", "visible");
+    $("#perspective_orthogrphic").css("visibility", "visible");
     $("#expandfileInfo").css("visibility", "visible");
 }
 
@@ -1462,8 +1473,14 @@ init.prototype.solidView = function (meshname) {
     });
 }
 
+init.prototype.orthographicView = function () {
+    this.glCamera.toOrthographic();
+}
 
 
+init.prototype.perspectiveView = function () {
+    this.glCamera.toPerspective();
+}
 
 /*View models wireframe(triangles)*/
 init.prototype.wireframeView = function (meshname) {

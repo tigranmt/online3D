@@ -155,6 +155,16 @@ body
     z-index:400;
 }
 
+#perspective_orthogrphic 
+{
+    position: absolute;
+    bottom: 7%;
+    left: 80px;
+    box-shadow: 0 0 20px 0 #bbb;
+    visibility: hidden;
+    z-index:401;
+}
+
 
 
 .fileInfo 

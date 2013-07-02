@@ -1,10 +1,10 @@
 ﻿var TOOLS = TOOLS || {
 
-    POINT_TO_POINT_MEASURER : "Point to point Measurer",
-    MESH_PENCIL             : "Mesh pencil",
-    NOTES_MANAGER           : "Notes manager",
-    SCULPTURING             : "Sculpturing",
-    SELECTION               : "Selection",
+    POINT_TO_POINT_MEASURER: "Point to point Measurer",
+    MESH_PENCIL: "Mesh pencil",
+    NOTES_MANAGER: "Notes manager",
+    SCULPTURING: "Sculpturing",
+    SELECTION: "Selection",
 
 
     toolsarray: {},
@@ -84,7 +84,7 @@
             return new this.NotesManager();
         else if (toolName === this.SCULPTURING)
             return new this.Sculpturing();
-        else if(toolName === this.SELECTION)
+        else if (toolName === this.SELECTION)
             return new this.SelectionManager();
     },
 
@@ -99,9 +99,9 @@
     },
 
 
-    
-    unproject : function(direction) {
-      
+
+    unproject: function (direction) {
+
         //unproject to 3D surface
         var projector = new THREE.Projector();
         return projector.unprojectVector(direction, this.camera);
@@ -124,33 +124,33 @@
     },
 
     getViewDirection: function (event) {
-      
+
         var topView = this.getTopViewDirection(event);
 
         // Substract the vector representing the camera position
         var sub = topView.subVectors(topView, this.camera.position);
         return sub;
-      
+
     },
 
-    getCameraPosition : function() {
-        return this.camera.position; 
+    getCameraPosition: function () {
+        return this.camera.position;
     },
 
-    
+
 
     unprojectMouse: function (event) {
         var navbar = $("#navbar");
         var navbarheight = navbar ? navbar.height() : 0;
         var vector = new THREE.Vector3((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / (window.innerHeight + navbarheight)) * 2 + 1, 0.5);
         var projector = new THREE.Projector();
-        projector.unprojectVector(vector,this.camera);
+        projector.unprojectVector(vector, this.camera);
         return vector;
     },
 
     getIntersectionFromMouseCoord: function (event) {
-        var viewDirection = this.getViewDirection(event);
-        
+       // var viewDirection = this.getViewDirection(event);
+
 
         //get all meshes from scene
         var objects = [];
@@ -160,18 +160,19 @@
             }
         });
 
+        var x = (event.clientX / window.innerWidth) * 2 - 1;
+        var navbar = $("#navbar");
+        var navbarheight = navbar ? navbar.height() : 0;
+        var y = -((event.clientY - navbarheight) / window.innerHeight) * 2 + 1;
 
-        viewDirection.normalize();
 
-
-        var raycaster = new THREE.Raycaster(this.camera.position, viewDirection);
-        var intersects = raycaster.intersectObjects(objects);
-        var point = new THREE.Vector3();
-
+        var projector = new THREE.Projector();
+        var ray = projector.pickingRay(new THREE.Vector3(x, y, 0), this.camera);
+        intersects = ray.intersectObjects(objects);
         if (intersects.length > 0) {
-            //just return the first one
-            return intersects[0];
+              return intersects[0];
         }
+
     },
 
     //get THREE.Vector3 object from mouse coordinate
@@ -191,15 +192,15 @@
     selectFaces: function (faces) {
         for (var f = 0; f < faces.length; f++) {
             var face = faces[f];
-            face.originalColor = face.color; 
+            face.originalColor = face.color;
             this.setColorOnFace(undefined, face, "#00FF00", true);
         }
 
     },
 
 
-    
-    setColorOnFace : function (geometry, face, color, onlyface) {
+
+    setColorOnFace: function (geometry, face, color, onlyface) {
 
         face.color.set(color);
 

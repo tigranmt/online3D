@@ -37,6 +37,9 @@
     var basicPanel = $("#basicPanel")[0];
     ko.applyBindings(viewmodels, basicPanel); 
 
+    var perspective_orthogrphic = $("#perspective_orthogrphic")[0];
+    ko.applyBindings(viewmodels, perspective_orthogrphic); 
+
     var home_Menu = $("#home")[0];
     ko.applyBindings(viewmodels, home_Menu);
 
@@ -59,6 +62,15 @@
     /****** TOOLTIPS*****/
     for(var i=0;i<viewmodels.buttons.length;i++){
         var button = viewmodels.buttons[i];
+        $("#" + button.id).tooltip({
+            placement: 'right',
+            trigger: 'hover',
+            title : button.alt
+        });
+    }
+
+     for(var i=0;i<viewmodels.perspective_orthografic.length;i++){
+        var button = viewmodels.perspective_orthografic[i];
         $("#" + button.id).tooltip({
             placement: 'right',
             trigger: 'hover',

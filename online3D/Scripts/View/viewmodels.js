@@ -40,7 +40,8 @@ var viewmodels = new (function () {
                                 { id: "axisBtn", alt: "Show axis", src: "/Content/Images/axis.png", callback: function () { stlscene.graphics.showAxis(); } }];
 
 
-
+    _this.perspective_orthografic = [{ id: "viewPerspective", alt: "Perspective view", buttonClass: "btn icon-road icon-large active", callback: function () { stlscene.graphics.perspectiveView(); } },
+                                { id: "viewOrthographic", alt: "Orthographic view", buttonClass: "btn icon-th-large icon-large", callback: function () { stlscene.graphics.orthographicView(); } }];
 
     _this.gotoHome = function (event) {
 
