@@ -7,6 +7,7 @@
 
     var lastSegmentMesh;
     var region = [];
+   
 
     this.start = function () {
         console.log("No agent call for " + this.title + " expected");
@@ -19,7 +20,15 @@
        
         document.addEventListener('mouseup', onMouseUp, false);
         document.addEventListener('mousemove', onMouseMove, false);
+        document.addEventListener('keydown',  onKeyDown, false);
+
+     
     };
+
+
+    var clearSelections = function () {
+        TOOLS.clearSelection();
+    }
 
 
     this.stopAgent = function () {
@@ -27,6 +36,7 @@
 
         document.removeEventListener('mouseup', onMouseUp, false);
         document.removeEventListener('mousemove', onMouseMove, false);
+        document.removeEventListener('keydown', onKeyDown, false);
 
     };
 
@@ -37,16 +47,17 @@
 
     var surfaceSelection = function (fa) {
         var geodata = stlscene.graphics.geoData;
-        var selection = [fa];
+        var selection = [];
         var investigateon = [fa];
         var unique = {};
+        var trianglesLimit = 10000;
      
         var exclude = {};
 
         var angleTollerance = 0.5;
         var acceptableAngle =  Math.PI / 2 - angleTollerance;
 
-        while (investigateon.length > 0) {
+        while (investigateon.length > 0 && selection.length < trianglesLimit) {
             var temp = [];
 
             var exclude = {};
@@ -55,8 +66,7 @@
 
                 var face = investigateon[f]; //get face
 
-                var keyF = geodata.getFaceKey(face);
-               
+                var keyF = geodata.getFaceKey(face);               
              
                 var startFaceNormal = face.normal || GeoData.computeFaceNormal(face);
 
@@ -84,9 +94,7 @@
                         }
                         else {
                             exclude[keyFace] = "";
-                        }
-                      
-                     
+                        }                  
 
                         unique[keyFace] = "";
                     }
@@ -354,6 +362,18 @@
             }
         }
     };
+
+
+    var onKeyDown = function (event) {
+        switch (event.which) {
+
+            case 27: //Escape 
+                clearSelections();
+                break;
+
+        }
+
+    }
 
     var onMouseMove = function (event) {
         if (event === undefined) return;

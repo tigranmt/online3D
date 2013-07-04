@@ -9,6 +9,8 @@
 
     toolsarray: {},
 
+    selectionColor : "#00FF00",
+
     createUiForTool: function (tool) {
         $('body').append('<div id="divToolInfo" class="modal" style="left:25em; width:' + tool.uiWidth + 'px;box-shadow: 0 0 50px 0 #bbb;background: url(Images/bg.png) repeat  left;">' +
                              '<div class="modal-header">' +
@@ -192,9 +194,42 @@
     selectFaces: function (faces) {
         for (var f = 0; f < faces.length; f++) {
             var face = faces[f];
-            face.originalColor = face.color;
-            this.setColorOnFace(undefined, face, "#00FF00", true);
+
+            if (face.color instanceof THREE.Color) {
+                face.originalColor = new THREE.Color().copy(face.color);
+            }
+            else {
+                face.originalColor = face.color;
+            }
+
+            this.setColorOnFace(undefined, face, this.selectionColor, true);
         }
+
+    },
+
+
+    clearSelection: function () {
+        this.forEachMesh(function (mesh) {
+            var geo = mesh.children[0].geometry;
+            var faces = geo.faces;
+            for (var f = 0; f < faces.length; f++) {
+                var face = faces[f];
+                if (face.originalColor !== undefined) {
+                    if (face.originalColor instanceof THREE.Color) {
+                        face.color = new THREE.Color().copy(face.originalColor);
+                    }
+                    else {
+                        face.color = face.originalColor;
+                    }                  
+                }
+            }
+          
+            geo.colorsNeedUpdate = true;
+        
+        },
+   function (mesh) {
+       return this.isComposedMesh(mesh);
+   });
 
     },
 
