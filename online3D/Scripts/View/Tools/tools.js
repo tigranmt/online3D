@@ -195,6 +195,11 @@
         for (var f = 0; f < faces.length; f++) {
             var face = faces[f];
 
+            //if face is already selected
+            if (face.color.r == 0 && face.color.g === 1 && face.color.r === 0)
+                continue;
+
+            //---
             if (face.color instanceof THREE.Color) {
                 face.originalColor = new THREE.Color().copy(face.color);
             }

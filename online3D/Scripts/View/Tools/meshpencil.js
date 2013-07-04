@@ -2,6 +2,7 @@
 
     var _this = this;
     var leftButtonPressed = false;
+    var currentMeshName = "";
 
     this.color = "#00ffee"; //default selection color
     this.title = "Mesh pencil";
@@ -55,6 +56,7 @@
         document.removeEventListener('mousemove', onMouseMove, false);
         document.removeEventListener('mousedown', onMouseDown, true);
         document.removeEventListener('mouseup', onMouseUp, false);
+        currentMeshName = "";
     };
 
     var onMouseDown = function (event) {
@@ -62,7 +64,8 @@
             return;
 
         leftButtonPressed = event.button === 0;
-          
+  
+
         if (_this.colorAllModel && leftButtonPressed) {
 
             //find intersections
@@ -88,7 +91,8 @@
     var onMouseUp = function (event) {
 
      
-        leftButtonPressed = false;       
+        leftButtonPressed = false;
+        currentMeshName = "";
     };
 
    
@@ -97,9 +101,9 @@
       
         var neighbours = [];
    
-        var na = stlscene.graphics.geoData.getNeigbourFaces(geometry.vertices[face.a], 5);
-        var nb = stlscene.graphics.geoData.getNeigbourFaces(geometry.vertices[face.b], 5);
-        var nc = stlscene.graphics.geoData.getNeigbourFaces(geometry.vertices[face.c], 5);
+        var na = stlscene.graphics.geoData.getNeigbourFaces(currentMeshName, geometry.vertices[face.a], 5);
+        var nb = stlscene.graphics.geoData.getNeigbourFaces(currentMeshName, geometry.vertices[face.b], 5);
+        var nc = stlscene.graphics.geoData.getNeigbourFaces(currentMeshName, geometry.vertices[face.c], 5);
 
    
         neighbours = neighbours.concat(na);
@@ -123,6 +127,12 @@
         if (leftButtonPressed && !this.colorAllModel) {//left button
             var intersection = TOOLS.getIntersectionFromMouseCoord(event);
             if (intersection !== undefined) {
+
+
+                currentMeshName = intersection.object.name;
+                if (currentMeshName === "")
+                    currentMeshName = intersection.object.parent.name;
+
                 TOOLS.setColorOnFace(intersection.object.geometry, intersection.face, _this.color);
                 var neigbours = getNeighbours(intersection.object.geometry, intersection.face);
                 for (var n = 0; n < neigbours.length; n++)

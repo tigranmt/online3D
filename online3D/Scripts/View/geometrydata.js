@@ -5,11 +5,8 @@
     var precision = Math.pow(10, 4);
 
     _this.data = {
-        meshes: []
+        meshes: {}
     };
-
-
-    
 
 
     var keyfromVertex = function (v) {
@@ -24,14 +21,14 @@
         return [f.a, f.b, f.c].join('_');
     }
 
-    var neigboursOfVertices = function (vertices, excludefaces) {
+    var neigboursOfVertices = function (meshName, vertices, excludefaces) {
 
         var neighbourFaces = [];
         var ex = excludefaces || {};
         var unique = {};
 
         for (var v = 0; v < vertices.length; v++) {
-            var m = _this.data.meshes[0];
+            var m = _this.data.meshes[meshName];
             var vertex = vertices[v];
             var key = keyfromVertex(vertex);
 
@@ -66,7 +63,7 @@
         TOOLS.forEachMesh(function (mesh) {
 
             var singleMesh = {
-                meshname: mesh.name,
+                name: mesh.name,
                 vertex_to_face_map: {},
                 face_to_vertex_map: {}
             };
@@ -117,7 +114,7 @@
             }
 
 
-            _this.data.meshes.push(singleMesh);
+            _this.data.meshes[singleMesh.name] = singleMesh;
         });
 
     }
@@ -131,12 +128,12 @@
         return keyfromFace(face);
     }
 
-    _this.computeFaceNormal = function (face) {
+    _this.computeFaceNormal = function (meshName, face) {
 
         var normal = face.normal;
         if (!normal || (normal.x === 0 && normal.y === 0)) {
 
-            var vertices = _this.getVerticesOfFace(face);
+            var vertices = _this.getVerticesOfFace(meshName, face);
             var cb = new THREE.Vector3(), ab = new THREE.Vector3();
             var vA = vertices[0];
             var vB = vertices[1];
@@ -154,9 +151,9 @@
         return face.normal;
     }
 
-    _this.updateVertexInfo = function (meshIndex, originalVertex, newVertex) {
-        var meshI = meshIndex || 0;
-        var mesh = _this.data.meshes[meshI];
+    _this.updateVertexInfo = function (meshName, originalVertex, newVertex) {
+        
+        var mesh = _this.data.meshes[meshName];
 
         //vertex to face map update
         var keyOriginal = keyfromVertex(originalVertex);
@@ -182,7 +179,7 @@
 
   
 
-    _this.getNeigbourFaces = function (vertex, deepness) {
+    _this.getNeigbourFaces = function (meshName, vertex, deepness) {
 
         var totalNeighbours = [];
         var deep = deepness || 1;
@@ -199,7 +196,7 @@
 
 
         for (var i = 0; i < deep; i++) {
-            var neighbours = neigboursOfVertices(vertexCollection, excludeFaces);
+            var neighbours = neigboursOfVertices(meshName, vertexCollection, excludeFaces);
             totalNeighbours = totalNeighbours.concat(neighbours);
 
             if (deep > 1) {
@@ -209,7 +206,7 @@
 
                     excludeFaces[keyfromFace(face)] = "";
 
-                    var vertices = _this.getVerticesOfFace(face);
+                    var vertices = _this.getVerticesOfFace(meshName, face);
 
                     //concat UNIQUE vertices
                     for (var v = 0; v < vertices.length; v++) {
@@ -230,14 +227,14 @@
     }
 
 
-    _this.getVerticesOfFace = function (face) {
+    _this.getVerticesOfFace = function (meshName, face) {
 
         var key = keyfromFace(face);
-        var m = _this.data.meshes[0];
+        var m = _this.data.meshes[meshName];
         return m.face_to_vertex_map[key];
     }
 
-    _this.getEdgeVertices = function (facesArray) {
+    _this.getEdgeVertices = function (meshName, facesArray) {
 
 
        
@@ -251,7 +248,7 @@
             var length = facesArray.length;
             for (var f = 0; f < length; f++) {
                 var face = facesArray[f];
-                var faceVertices = _this.getVerticesOfFace(face);
+                var faceVertices = _this.getVerticesOfFace(meshName, face);
 
                 var v0 = faceVertices[0];
                 var v1 = faceVertices[1];
@@ -343,7 +340,7 @@
     }
 
 
-    _this.getVerticesOfFaces = function (facesArray) {
+    _this.getVerticesOfFaces = function (meshName, facesArray) {
         if (!facesArray || facesArray.length === 0) {
             console.log("Not valid array to get vertices from");
         }
@@ -353,7 +350,7 @@
             var length = facesArray.length;
             for (var f = 0; f < length; f++) {
                 var face = facesArray[f];
-                var faceVertices = _this.getVerticesOfFace(face);
+                var faceVertices = _this.getVerticesOfFace(meshName, face);
                 for (var v = 0; v < faceVertices.length; v++) {
                     var vertex = faceVertices[v];
                     var key = keyfromVertex(vertex);
@@ -376,9 +373,9 @@
 
 
 
-    _this.getVertexAvgNormal = function (vertex) {
+    _this.getVertexAvgNormal = function (meshName, vertex) {
 
-        var neighbours = _this.getNeigbourFaces(vertex);
+        var neighbours = _this.getNeigbourFaces(meshName, vertex);
         if (!neighbours || neighbours.length === 0)
             return;
 
@@ -388,7 +385,7 @@
         var twoLines = [new THREE.Vector3(), new THREE.Vector3()];
         for (var i = 0; i < neighbours.length; i++) {
             var face = neighbours[i];
-            var vertices = _this.getVerticesOfFace(face);
+            var vertices = _this.getVerticesOfFace(meshName, face);
             for (var v = 0; v < vertices.length; v++) {
                 var ve = vertices[v];
                 if (ve == vertex)
@@ -403,9 +400,9 @@
             }
 
 
-            var normal = _this.computeFaceNormal(face);
+            var normal = _this.computeFaceNormal(meshName, face);
             if (normal.x === 0 && normal.y === 0)
-                normal = geodata.computeFaceNormal(face);
+                normal = geodata.computeFaceNormal(meshName, face);
 
             var angle = twoLines[0].angleTo(twoLines[1]);
             var multiplied = normal.multiplyScalar(angle);

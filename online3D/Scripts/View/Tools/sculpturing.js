@@ -12,6 +12,8 @@
     var selsize = 20;
     var facesSelectedUnderMouse = {};
 
+    var currentMeshName = "";
+
     this.title = "Sculpture";
     this.text = "Choose a function to sculpt a model";
     this.htmlUI = "<div class='btn-group' data-toggle='buttons-radio'>" +
@@ -79,6 +81,8 @@
         document.removeEventListener('mousemove', onMouseMove, false);
         document.removeEventListener('mousedown', onMouseDown, true);
         document.removeEventListener('mouseup', onMouseUp, false);
+
+        currentMeshName = "";
     };
 
 
@@ -153,7 +157,7 @@
                 v.originaly = v.y;
                 v.originalz = v.z;
 
-                geodata.updateVertexInfo(0, original, v);
+                geodata.updateVertexInfo(currentMeshName, original, v);
             }
             else if (sculptureFlat) {
 
@@ -168,7 +172,7 @@
                 v.originaly = v.y;
                 v.originalz = v.z;
 
-                geodata.updateVertexInfo(0, original, v);
+                geodata.updateVertexInfo(currentMeshName, original, v);
             }
             else if (sculptureMorph) {
 
@@ -204,6 +208,9 @@
         var intersection = TOOLS.getIntersectionFromMouseCoord(event);
         if (intersection !== undefined) {
 
+            currentMeshName = intersection.object.name;
+            if (currentMeshName === "")
+                currentMeshName = intersection.object.parent.name;
 
             geometry = intersection.object.geometry;
 
@@ -214,7 +221,7 @@
             }
 
             //get all vertices of the just first face 
-            var vertices = geodata.getVerticesOfFace(firstFace);
+            var vertices = geodata.getVerticesOfFace(currentMeshName, firstFace);
             if (!vertices || vertices.length === 0) {
                 console.log("No vertices specified in GeoData for picked face");
                 return;
@@ -222,12 +229,12 @@
 
             //get just first vertex of availabel ones 
             var firstVertex = vertices[0];
-            selectionAverageNormal = geodata.getVertexAvgNormal(firstVertex);
+            selectionAverageNormal = geodata.getVertexAvgNormal(currentMeshName,firstVertex);
 
-            var neigbourFaces = geodata.getNeigbourFaces(firstVertex, selsize);
+            var neigbourFaces = geodata.getNeigbourFaces(currentMeshName, firstVertex, selsize);
 
-            var uniqueVertices = geodata.getVerticesOfFaces(neigbourFaces);
-            var edgeVertices = geodata.getEdgeVertices(neigbourFaces);
+            var uniqueVertices = geodata.getVerticesOfFaces(currentMeshName, neigbourFaces);
+            var edgeVertices = geodata.getEdgeVertices(currentMeshName, neigbourFaces);
             
 
             var length = uniqueVertices.length;
@@ -281,8 +288,8 @@
             }
 
             var face = intersection.face;
-            var vertices = geodata.getVerticesOfFace(face);
-            facesSelectedUnderMouse = geodata.getNeigbourFaces(vertices[0], selsize);
+            var vertices = geodata.getVerticesOfFace(currentMeshName, face);
+            facesSelectedUnderMouse = geodata.getNeigbourFaces(currentMeshName, vertices[0], selsize);
 
             for (var n = 0; n < facesSelectedUnderMouse.length; n++) {
                 var face = facesSelectedUnderMouse[n];
@@ -348,6 +355,7 @@
         leftButtonPressed = false;
         leftDownPointY = 0;
         leftCurrentPointY = 0;
+        currentMeshName = "";
     };
 
 

@@ -4,7 +4,7 @@
     var _this = this;
     var regionSelectionStarted = false;
    
-
+    var currentMeshName = "";
     var lastSegmentMesh;
     var region = [];
    
@@ -45,12 +45,12 @@
     };
 
 
-    var surfaceSelection = function (fa) {
+    var surfaceSelection = function (meshName, fa) {
         var geodata = stlscene.graphics.geoData;
         var selection = [];
         var investigateon = [fa];
         var unique = {};
-        var trianglesLimit = 10000;
+        var trianglesLimit = 15000;
      
         var exclude = {};
 
@@ -68,16 +68,16 @@
 
                 var keyF = geodata.getFaceKey(face);               
              
-                var startFaceNormal = face.normal || GeoData.computeFaceNormal(face);
+                var startFaceNormal = face.normal || geodata.computeFaceNormal(meshName, face);
 
-                var vertices = geodata.getVerticesOfFace(face); //get vertices of face
+                var vertices = geodata.getVerticesOfFace(meshName, face); //get vertices of face
 
                 if (vertices === undefined)
                     continue;
 
                 for (var v = 0; v < vertices.length; v++) {     //for each vertex get its neigbour faces
                     var vertex = vertices[v];
-                    var neighbours = geodata.getNeigbourFaces(vertex, 1);
+                    var neighbours = geodata.getNeigbourFaces(meshName, vertex, 1);
                     for (var n = 0; n < neighbours.length; n++) {
                         var neighbourFace = neighbours[n];
 
@@ -334,7 +334,11 @@
         if (intersection !== undefined) {
 
             regionSelectionStarted = false;
-            surfaceSelection(intersection.face);
+            var name = intersection.object.name; 
+            if(name === "") 
+                name = intersection.object.parent.name;
+
+            surfaceSelection(name, intersection.face);
         }
         else {
 
