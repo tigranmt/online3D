@@ -3,6 +3,7 @@
 
     var _this = this;
     var regionSelectionStarted = false;
+   
 
     var lastSegmentMesh;
     var region = [];
@@ -34,7 +35,73 @@
     };
 
 
-    var surfaceSelection = function (face) {
+    var surfaceSelection = function (fa) {
+        var geodata = stlscene.graphics.geoData;
+        var selection = [fa];
+        var investigateon = [fa];
+        var unique = {};
+     
+        var exclude = {};
+
+        var angleTollerance = 0.5;
+        var acceptableAngle =  Math.PI / 2 - angleTollerance;
+
+        while (investigateon.length > 0) {
+            var temp = [];
+
+            var exclude = {};
+
+            for(var f=0; f<investigateon.length; f++) { //iterate over collection 
+
+                var face = investigateon[f]; //get face
+
+                var keyF = geodata.getFaceKey(face);
+               
+             
+                var startFaceNormal = face.normal || GeoData.computeFaceNormal(face);
+
+                var vertices = geodata.getVerticesOfFace(face); //get vertices of face
+
+                if (vertices === undefined)
+                    continue;
+
+                for (var v = 0; v < vertices.length; v++) {     //for each vertex get its neigbour faces
+                    var vertex = vertices[v];
+                    var neighbours = geodata.getNeigbourFaces(vertex, 1);
+                    for (var n = 0; n < neighbours.length; n++) {
+                        var neighbourFace = neighbours[n];
+
+                        var keyFace = geodata.getFaceKey(neighbourFace);
+                        if (unique[keyFace] === "")
+                            continue;
+
+                        if (exclude[keyFace] === "")
+                            continue;
+
+                        if (neighbourFace.normal.angleTo(startFaceNormal) < acceptableAngle) {
+                            temp.push(neighbourFace);
+                            selection.push(neighbourFace);
+                        }
+                        else {
+                            exclude[keyFace] = "";
+                        }
+                      
+                     
+
+                        unique[keyFace] = "";
+                    }
+                }
+
+                unique[keyF] = "";
+            }
+
+            investigateon = []; //clear collection 
+            investigateon = investigateon.concat(temp); //add new neigbours, if any
+        }
+
+
+        TOOLS.selectFaces(selection);
+        TOOLS.updateAllGeometries(true); 
 
     }
 
@@ -131,40 +198,25 @@
     var makeSelection = function (event, region) {
         var suitableForSelection = [];
         
-        //var vectorView = TOOLS.getViewDirection(event);
-        //vectorView.normalize();
-       
-        var plane = new THREE.Plane();
-        // plane.setFromNormalAndCoplanarPoint(vectorView, region[0]);
-        plane.setFromCoplanarPoints(region[0], region[1], region[2]);
-
+        var vectorView = TOOLS.getViewDirection(event).normalize();
+        
         var cameraPosition = TOOLS.getCameraPosition();
+        var plane = new THREE.Plane();
+        plane.setFromNormalAndCoplanarPoint(vectorView, cameraPosition);
+        //plane.setFromCoplanarPoints(region[0], region[1], region[2]);
+
+      
 
         drawTestLine(cameraPosition, plane.normal);
       
 
-        //TEST CODE
-        //var p = new THREE.Mesh(new THREE.PlaneGeometry(30, 30), new THREE.MeshNormalMaterial());
-        //p.overdraw = true;
-        //TOOLS.addMesh(p);
-
-        //var angle = new THREE.Vector3(0, 0, 1).angleTo(plane.normal);
-        //p.rotation.set(angle, angle, angle);
-
-        //return; 
-
         var geometries = [];
-        var progectedRegion = [];
-        for (var g = 0; g < region.length; g++) {
-            var pro = plane.projectPoint(region[g]);
-            progectedRegion.push(pro);
-        }
-     
-        for (var a = 0; a < progectedRegion.length; a++) {
+      
+        for (var a = 0; a < region.length; a++) {
             var next = a + 1;
             if (next == region.length)
                 next = 0;
-            drawTestLine(progectedRegion[a], progectedRegion[next], "#FF0000");
+            drawTestLine(region[a], region[next], "#FF0000");
         }
 
         TOOLS.forEachMesh(function (mesh) {
@@ -211,10 +263,7 @@
         });
 
         TOOLS.selectFaces(suitableForSelection);
-        for (var g = 0; g < geometries.length; g++) {
-            var geo = geometries[g];
-            geo.colorsNeedUpdate = true;
-        }
+        TOOLS.updateAllGeometries();
 
     }
 
@@ -260,7 +309,7 @@
 
         if (event === undefined) return;
 
-        return;
+        
         
        
         //if there is another tool in execution or is not LEFT button pressed, do not do anything 
@@ -280,6 +329,11 @@
             surfaceSelection(intersection.face);
         }
         else {
+
+            //no region selection available
+            return;
+
+
             regionSelectionStarted = true;
             var pos = getCursorPosition3D(event);
             //conitnue constructing region

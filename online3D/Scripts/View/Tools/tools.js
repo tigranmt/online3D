@@ -199,6 +199,23 @@
     },
 
 
+    updateAllGeometries : function(updateColors, updateVertices) {
+      this.forEachMesh(function (mesh) {
+          var geo = mesh.children[0].geometry;
+
+          if(updateColors) {
+              geo.colorsNeedUpdate = true;
+          }
+
+          if (updateVertices) {
+              geo.verticesNeedUpdate = true;
+          }
+      },
+      function (mesh) {
+          return this.isComposedMesh(mesh);
+      });
+    },
+
 
     setColorOnFace: function (geometry, face, color, onlyface) {
 

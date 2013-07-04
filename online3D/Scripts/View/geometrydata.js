@@ -127,6 +127,10 @@
         return keyfromVertex(vertex);
     }
 
+    _this.getFaceKey = function (face) {
+        return keyfromFace(face);
+    }
+
     _this.computeFaceNormal = function (face) {
 
         var normal = face.normal;
@@ -412,49 +416,6 @@
         avgNormal.multiplyScalar(1.0 / neighbours.length);
         return avgNormal;
 
-        //    CoreTriangleCollection triangles = this.GetConnectedTrianglesReference(cmc);
-        //    Vector3 averageNormal = new Vector3(0, 0, 0);
-        //    int thisNr;
-        //    Vector3[] twoLines = new Vector3[2];
-        //    bool success;
-
-        //    foreach (CoreTriangle triangle in triangles)
-        //{
-        //            thisNr = triangle.GetVertexNr(this);
-        //    for (int i = 0; i < 3; ++i)
-        //    {
-        //        if (i != thisNr)
-        //        {
-        //            twoLines[1] = twoLines[0];
-        //            twoLines[0] = new Vector3(triangle._vertices[i].Coord, triangle._vertices[thisNr].Coord);
-        //        }
-        //    }
-        //    averageNormal += twoLines[0].AngleWith(twoLines[1]) * triangle.GetCoord().GetNormal(out success);
-        //}
-        //averageNormal.Scale(1.0f / (double)triangles.Count);
-        //return averageNormal;
-
-
-
-
-        //var neighbours = _this.getNeigbourFaces(vertex);
-        //if (!neighbours || neighbours.length === 0)
-        //    return;
-
-        //var avgNormal = new THREE.Vector3(0, 0, 0);
-
-        //for (var n = 0; n < neighbours.length; n++) {
-
-        //    var ne = neighbours[n];
-        //    var normal = _this.computeFaceNormal(ne);
-
-        //    avgNormal.addVectors(avgNormal, normal);
-
-        //}
-
-
-        //avgNormal.multiplyScalar(1.0 / neighbours.length);
-        //return avgNormal;
     }
 
 
