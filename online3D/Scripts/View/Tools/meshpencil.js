@@ -129,9 +129,9 @@
             if (intersection !== undefined) {
 
 
-                currentMeshName = intersection.object.name;
-                if (currentMeshName === "")
-                    currentMeshName = intersection.object.parent.name;
+                //currentMeshName = intersection.object.name;
+                //if (currentMeshName === "")
+                currentMeshName = intersection.object.parent.name;
 
                 TOOLS.setColorOnFace(intersection.object.geometry, intersection.face, _this.color);
                 var neigbours = getNeighbours(intersection.object.geometry, intersection.face);

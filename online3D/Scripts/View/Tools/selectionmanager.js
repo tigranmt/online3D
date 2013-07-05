@@ -334,9 +334,9 @@
         if (intersection !== undefined) {
 
             regionSelectionStarted = false;
-            var name = intersection.object.name; 
-            if(name === "") 
-                name = intersection.object.parent.name;
+            //var name = intersection.object.name; 
+            //if(name === "") 
+            var name = intersection.object.parent.name;
 
             surfaceSelection(name, intersection.face);
         }

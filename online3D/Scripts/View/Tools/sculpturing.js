@@ -208,8 +208,8 @@
         var intersection = TOOLS.getIntersectionFromMouseCoord(event);
         if (intersection !== undefined) {
 
-            currentMeshName = intersection.object.name;
-            if (currentMeshName === "")
+            //currentMeshName = intersection.object.name;
+            //if (currentMeshName === "")
                 currentMeshName = intersection.object.parent.name;
 
             geometry = intersection.object.geometry;
