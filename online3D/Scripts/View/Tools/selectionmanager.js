@@ -7,7 +7,7 @@
     var currentMeshName = "";
     var lastSegmentMesh;
     var region = [];
-   
+    var normalsVisible = false;
 
     this.start = function () {
         console.log("No agent call for " + this.title + " expected");
@@ -28,6 +28,101 @@
 
     var clearSelections = function () {
         TOOLS.clearSelection();
+    }
+
+
+    var deleteSelectedFaces = function () {
+       // TOOLS.deleteSelectedFaces();
+    }
+
+    var getFaceCenterOfGravity = function(face, vertices) {
+        
+        var v0 = vertices[face.a];
+        var v1 = vertices[face.b];
+        var v2 = vertices[face.c];
+
+        return new THREE.Vector3((v0.x + v1.x + v2.x) / 3, (v0.y + v1.y + v2.y) / 3, (v0.z + v1.z + v2.z) / 3);        
+    }
+
+    var showHideNormals = function () {
+        if (normalsVisible === false) {
+            var normalLength = 0.2;
+            var lineGeoFinal = new THREE.Geometry();
+            var material = new THREE.LineBasicMaterial({
+                color: 0x0000ff,
+            });
+
+
+
+            TOOLS.forEachMesh(function (mesh) {
+                var geo = mesh.children[0].geometry;
+                geo.computeFaceNormals();
+
+
+                var faces = geo.faces;             
+                var vertices = geo.vertices;
+               
+                var step = 81;
+                if (faces.length < 3) {
+                    step = 1;
+                }
+                else if (faces.length <= 81) {
+                    step = 3;
+                }
+
+                for (var i = 0; i < faces.length; i++) {
+
+                    if (i % step === 0)
+                        continue;
+
+                    var face = faces[i];
+
+                    var normal = face.normal;
+
+                    var start = getFaceCenterOfGravity(face, vertices);
+                   
+
+                    var end = new THREE.Vector3();
+                    end.copy(start);
+
+                    end.addVectors(normal, start);
+
+                    var lineGeo = new THREE.Geometry();
+                    lineGeo.vertices.push(start);
+                    lineGeo.vertices.push(end);
+
+                    THREE.GeometryUtils.merge(lineGeoFinal, lineGeo);
+
+
+                  
+
+                }
+
+
+            },
+             function (mesh) {
+                 return TOOLS.isComposedMesh(mesh);
+             });
+
+
+            var lineMesh = new THREE.Line(lineGeoFinal, material, THREE.LinePieces);
+            lineMesh.normals = true;
+
+            TOOLS.addMesh(lineMesh);
+            normalsVisible = true;
+        }
+        else {
+           
+           
+            TOOLS.forEachMesh(function (mesh) {
+                TOOLS.removeMesh(mesh);
+            }, function (mesh) {
+                return mesh.normals !== undefined;
+            });
+
+
+            normalsVisible = false;
+        }
     }
 
 
@@ -368,15 +463,24 @@
     };
 
 
-    var onKeyDown = function (event) {
-        switch (event.which) {
-
-            case 27: //Escape 
-                clearSelections();
-                break;
-
+    var keyDownHandler = {
+        27: function () { //ESC
+            clearSelections();
+        },
+        46: function () { //DELETE 
+            deleteSelectedFaces(); 
+        },
+        78: function () { //N
+            showHideNormals();
         }
 
+    }
+
+
+    var onKeyDown = function (event) {
+        var keycode = event.which;
+        var func = keyDownHandler[keycode];
+        if(func) func();
     }
 
     var onMouseMove = function (event) {

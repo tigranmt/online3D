@@ -212,6 +212,88 @@
 
     },
 
+    isFaceSelected: function (face) {
+        if (face.color instanceof THREE.Color) {
+            return (face.color.r === 0 && face.color.g === 1 && face.color.b === 0);
+        }
+        else {
+            return face.color === this.selectionColor;
+        }
+    },
+
+    getSelectedFaces: function () {
+        var selected = [];
+        this.forEachMesh(function (mesh) {
+            var geo = mesh.children[0].geometry;
+            var faces = geo.faces;
+            for (var f = 0; f < faces.length; f++) {
+                var face = faces[f];
+                if (this.isFaceSelected(face)) {
+                    selected.push(face); 
+                }
+
+            }
+
+           },
+           function (mesh) {
+               return this.isComposedMesh(mesh);
+           });
+
+        return selected;
+
+    },
+
+    deleteSelectedFaces: function () {
+
+        
+        this.forEachMesh(function (mesh) {
+            var iGeo = 0;
+            while (iGeo < 2) {
+                var color = mesh.modelColor;
+                var geo = mesh.children[iGeo].geometry;
+                var _this = this;
+
+              
+
+                var temp = geo.faces.filter(function (f) { return !_this.isFaceSelected(f); });
+                var vertices = [];
+                for (var f = 0; f < temp.length; f++) {
+                    var face = temp[f];
+                    var v0 = geo.vertices[face.a];
+                    var v1 = geo.vertices[face.b];
+                    var v2 = geo.vertices[face.c];
+
+                    vertices.push(v0);
+                    vertices.push(v1);
+                    vertices.push(v2);
+
+                    color = face.color;
+                }
+                geo.vertices = vertices;
+
+                //rebuild faces again 
+                geo.faces = [];
+                for (var v = 0; v < geo.vertices.length; v+=3) {
+
+                    var face = new THREE.Face3(v+2, v+1, v, 1);                 
+                    face.color.setHex(color);
+                    geo.faces.push(face);
+                }
+
+
+                this.updateSingleGeometry(geo, true, true);
+                iGeo++;
+            }
+        },
+        function (mesh) {
+            return this.isComposedMesh(mesh);
+        });
+
+
+      //  this.updateAllGeometries(true, true);
+
+ 
+    },
 
     clearSelection: function () {
         this.forEachMesh(function (mesh) {
@@ -232,12 +314,26 @@
             geo.colorsNeedUpdate = true;
         
         },
-   function (mesh) {
-       return this.isComposedMesh(mesh);
-   });
+       function (mesh) {
+           return this.isComposedMesh(mesh);
+       });
 
     },
 
+    updateSingleGeometry: function (geometry, updateColors, updateVertices) {
+
+        if (updateColors) {
+            geometry.colorsNeedUpdate = true;
+        }
+
+        if (updateVertices) {
+            geometry.verticesNeedUpdate = true;
+            geometry.mergeVertices();
+            geometry.computeCentroids();
+            geometry.computeFaceNormals();
+            geometry.computeBoundingSphere();
+        }
+    },
 
     updateAllGeometries : function(updateColors, updateVertices) {
       this.forEachMesh(function (mesh) {
