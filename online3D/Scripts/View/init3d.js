@@ -1023,7 +1023,7 @@ init.prototype.LoadFromServer = function (unique) {
 init.prototype.finalizeLoading = function (meshes) {
     this.loadMeshesInformation.apply(this);
     
-    this.geoData = new GeoData();
+    $.geoData = new GeoData();
     
 }
 

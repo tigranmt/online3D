@@ -4,8 +4,7 @@
     MESH_PENCIL: "Mesh pencil",
     NOTES_MANAGER: "Notes manager",
     SCULPTURING: "Sculpturing",
-    SELECTION: "Selection",
-
+    SELECTION: "Selection",   
 
     toolsarray: {},
 
@@ -247,51 +246,58 @@
 
         
         this.forEachMesh(function (mesh) {
-            var iGeo = 0;
-            while (iGeo < 2) {
-                var color = mesh.modelColor;
-                var geo = mesh.children[iGeo].geometry;
-                var _this = this;
 
-              
+            var geo = mesh.children[0].geometry;
+            var faces = geo.faces;
+            var vertices = geo.vertices;
 
-                var temp = geo.faces.filter(function (f) { return !_this.isFaceSelected(f); });
-                var vertices = [];
-                for (var f = 0; f < temp.length; f++) {
-                    var face = temp[f];
-                    var v0 = geo.vertices[face.a];
-                    var v1 = geo.vertices[face.b];
-                    var v2 = geo.vertices[face.c];
+            var newGeometry = new THREE.Geometry(); 
+            for (var f = 0; f < faces.length; f++) {
 
-                    vertices.push(v0);
-                    vertices.push(v1);
-                    vertices.push(v2);
+                var face = faces[f];
+                if (this.isFaceSelected(face))
+                    continue;
 
-                    color = face.color;
-                }
-                geo.vertices = vertices;
-
-                //rebuild faces again 
-                geo.faces = [];
-                for (var v = 0; v < geo.vertices.length; v+=3) {
-
-                    var face = new THREE.Face3(v+2, v+1, v, 1);                 
-                    face.color.setHex(color);
-                    geo.faces.push(face);
-                }
+                var va = new THREE.Vector3(vertices[face.a].x, vertices[face.a].y, vertices[face.a].z);
+                var vb = new THREE.Vector3(vertices[face.b].x, vertices[face.b].y, vertices[face.b].z);
+                var vc = new THREE.Vector3(vertices[face.c].x, vertices[face.c].y, vertices[face.c].z);
+                newGeometry.vertices.push(va);
+                newGeometry.vertices.push(vb);
+                newGeometry.vertices.push(vc);
 
 
-                this.updateSingleGeometry(geo, true, true);
-                iGeo++;
+                newGeometry.faces.push(new THREE.Face3(newGeometry.vertices.length - 3, newGeometry.vertices.length - 2, newGeometry.vertices.length - 1));
             }
+           
+
+            var temp = {
+                name: mesh.name,
+                color : geo.color || mesh.color,
+                Format : mesh.Format
+            };
+
+       
+            this.removeMesh(mesh);
+
+
+            var newMesh = utils.meshFromGeometry(newGeometry);
+            mesh.name = temp.name;
+            mesh.facecount = newGeometry.faces.length;
+            mesh.verticescount = newGeometry.vertices.length;
+            mesh.filesize = 0;
+            mesh.color = temp.color;
+            mesh.Format = temp.Format;
+
+
+            this.addMesh(newMesh);
+          
         },
         function (mesh) {
             return this.isComposedMesh(mesh);
         });
 
 
-      //  this.updateAllGeometries(true, true);
-
+        utils.sceneGeometryChanged();
  
     },
 

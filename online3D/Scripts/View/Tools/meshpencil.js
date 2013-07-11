@@ -101,9 +101,9 @@
       
         var neighbours = [];
    
-        var na = stlscene.graphics.geoData.getNeigbourFaces(currentMeshName, geometry.vertices[face.a], 5);
-        var nb = stlscene.graphics.geoData.getNeigbourFaces(currentMeshName, geometry.vertices[face.b], 5);
-        var nc = stlscene.graphics.geoData.getNeigbourFaces(currentMeshName, geometry.vertices[face.c], 5);
+        var na = $.geoData.getNeigbourFaces(currentMeshName, geometry.vertices[face.a], 5);
+        var nb = $.geoData.getNeigbourFaces(currentMeshName, geometry.vertices[face.b], 5);
+        var nc = $.geoData.getNeigbourFaces(currentMeshName, geometry.vertices[face.c], 5);
 
    
         neighbours = neighbours.concat(na);

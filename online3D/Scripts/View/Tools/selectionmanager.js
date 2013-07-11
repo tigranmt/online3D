@@ -141,7 +141,7 @@
 
 
     var surfaceSelection = function (meshName, fa) {
-        var geodata = stlscene.graphics.geoData;
+        var geodata = $.geoData;
         var selection = [];
         var investigateon = [fa];
         var unique = {};

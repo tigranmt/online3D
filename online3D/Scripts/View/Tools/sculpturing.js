@@ -1,7 +1,7 @@
 ﻿TOOLS.Sculpturing = function () {
 
     var _this = this;
-    var geodata = stlscene.graphics.geoData;
+    var geodata = $.geoData;
     var geometry;
     var leftButtonPressed = false;
     var sculptureAdd = true, sculptureFlat = false, sculptureMorph = false;

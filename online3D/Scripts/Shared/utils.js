@@ -20,6 +20,11 @@
 
 
 
+    _this.sceneGeometryChanged = function () {
+
+        $.geoData.rebuild();
+    }
+
 
     /*  Truncates vertex coordinates to #.00 precision
     * 
