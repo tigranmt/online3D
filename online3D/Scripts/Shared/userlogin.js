@@ -307,12 +307,17 @@ var userAccess = new (function(){
                                     "<div class='controls'>" + 
                                         "<input type='password' id='inputPassword' placeholder='Password'>" + 
                                     "</div>" + 
-                                "</div>" + 
+                                "</div>" +
+
+                            "<i class='icon-lock' style='font-size:12em;  position: absolute;  top: 1%; right: 10%; color:darkred'></i>" +
+
                             "</div>" + 
                             "<div class='modal-footer'>" +
                                 "<button id='closeSignInButton' class='btn' data-dismiss='modal' aria-hidden='true'>Close</button>" + 
                                 "<button id='signInButton' class='btn btn-primary'>Sign in</button>"+
-                            "</div>" + 
+                            "</div>" +
+
+                          
                         "</div>");
        
 
