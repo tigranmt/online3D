@@ -281,9 +281,14 @@ var userAccess = new (function(){
            _this.UpdateUI();
      }
 
-     _this.logOut = function() {
+     _this.logOut = function () {
+
+         var requestUrl = '../Account/LogOut';
+         if (sessionInformation.link)
+             requestUrl = '../../Account/LogOut';
+
             $.ajax({                     
-            url: '../Account/LogOut',                     
+            url: requestUrl,
             type: 'POST',
             success: function (data) {
                 toastr.success('Loged out.','Success');     
@@ -350,8 +355,14 @@ var userAccess = new (function(){
                     UserName: userName,
                     Password: $("#signForm #inputPassword")[0].value,
                 };
+
+                var requestUrl = "../Account/LogOn";
+                if (sessionInformation.link)
+                    requestUrl = '../../Account/LogOn';
+
+
                 $.ajax({
-                    url: "../Account/LogOn",
+                    url: requestUrl,
                     type: "POST",
                     contentType: "application/json",
                     data: JSON.stringify(loginInfo),
