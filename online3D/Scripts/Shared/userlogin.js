@@ -322,7 +322,7 @@ var userAccess = new (function(){
                                     "</div>" + 
                                 "</div>" +
 
-                            "<i class='icon-lock' style='font-size:12em;  position: absolute;  top: 1%; right: 10%; color:darkred'></i>" +
+                            "<i class='icon-lock' style='font-size:12em;  position: absolute;  top: 1%; right: 10%; color:#4B0055'></i>" +
 
                             "</div>" + 
                             "<div class='modal-footer'>" +
