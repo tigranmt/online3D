@@ -1,6 +1,14 @@
 ###Online3D: web 3D view and share platform  
 ========
 
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=4wCygMZIJL8" 
+      target="_blank"><img src="http://img.youtube.com/vi/4wCygMZIJL8/0.jpg" 
+            alt="IMAGE ALT TEXT HERE" width="400" height="300" border="10" />
+</a>
+
+
+
 ####What is it for ? 
 
 The platform idea is to provide comprehensive set of functionalities for sharing and validating 3D files 
@@ -48,11 +56,6 @@ infrastructure. At this moment it's in betta, so I hadn't a chance to study it:
 
 + Possibility to select faces, show normals, delete faces ... and more.
 
-
-<iframe>
-  <embed src="http://www.youtube.com/v/RY8IlPX-Xys?version=3&amp;hl=en_US" type="application/x-shockwave-flash" 
-     width="640" height="360" allowscriptaccess="always" allowfullscreen="true">
-</frame>
 
 
 ####What formats does support Online3D. 
