@@ -17,7 +17,7 @@ namespace online3D.Models
         internal static Dictionary<string, List<string>> vertexData = new Dictionary<string, List<string>>();
 
         /// <summary>
-        /// Face colors per key 
+        /// Face colors per key
         /// </summary>
         internal static Dictionary<string, List<string>> faceColorData = new Dictionary<string, List<string>>();
 

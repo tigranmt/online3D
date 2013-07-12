@@ -1006,6 +1006,10 @@ init.prototype.LoadFromServer = function (unique) {
                     if (loaderGif !== undefined)
                         loaderGif.remove();
 
+
+                    //set the current session information unique link
+                    sessionInformation.link = unique;
+
                     _this.loadMeshesFromServer(models); //load models to scene
                     models = []; //reset collection of the models
 

@@ -92,6 +92,8 @@ function VertexToMesh() {
                 mesh.verticescount = geometry.vertices.length;
                 mesh.filesize = object.Size;
                 mesh.color = modelColor;
+                mesh.Format = object.Format;
+
                 _scene.add(mesh); //add to scene
 
 

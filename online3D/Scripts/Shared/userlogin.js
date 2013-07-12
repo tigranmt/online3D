@@ -53,10 +53,15 @@ var userAccess = new (function(){
          var name = url.split('/');
          var code = name[name.length-1];
         
-        var model = {ID: '../Stl/DeleteSession/' + code};
+
+        var requestUrl = '../Stl/DeleteSession/';
+        if (sessionInformation.link)
+            requestUrl = '../../Stl/DeleteSession/';
+
+        var model = { ID: requestUrl + code };
          $.ajax({       
             type: "POST",
-            url: '../Stl/DeleteSession',
+            url: requestUrl,
             contentType: "application/json",                  
             processData: false,
             cache : false,              
@@ -112,8 +117,16 @@ var userAccess = new (function(){
 
          
         }
-        $.ajax({                     
-            url: '../Stl/GetSavedModels/',
+
+
+        var requestUrl = '../Stl/GetSavedModels/';
+        if (sessionInformation.link)
+            requestUrl = "../../Stl/GetSavedModels/'";
+
+        $.ajax({
+
+
+            url: requestUrl,
             success: function (data) {
                
 
