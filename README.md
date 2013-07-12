@@ -48,7 +48,6 @@ infrastructure. At this moment it's in betta, so I hadn't a chance to study it:
 
 + Possibility to select faces, show normals, delete faces ... and more.
 
-{{ video:youtube src="http://www.youtube.com/watch?v=4wCygMZIJL8&feature=youtu.be" }}
 
 
 
