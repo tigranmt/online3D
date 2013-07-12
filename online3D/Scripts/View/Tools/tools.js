@@ -250,13 +250,16 @@
             var geo = mesh.children[0].geometry;
             var faces = geo.faces;
             var vertices = geo.vertices;
+            var thereIsSelectionOnModel = false;
 
             var newGeometry = new THREE.Geometry(); 
             for (var f = 0; f < faces.length; f++) {
 
                 var face = faces[f];
-                if (this.isFaceSelected(face))
+                if (this.isFaceSelected(face)) {
+                    thereIsSelectionOnModel = true;
                     continue;
+                }
 
                 var va = new THREE.Vector3(vertices[face.a].x, vertices[face.a].y, vertices[face.a].z);
                 var vb = new THREE.Vector3(vertices[face.b].x, vertices[face.b].y, vertices[face.b].z);
@@ -270,26 +273,31 @@
             }
            
 
-            var temp = {
-                name: mesh.name,
-                color : geo.color || mesh.color,
-                Format : mesh.Format
-            };
+            if (thereIsSelectionOnModel)
+            {
 
-       
-            this.removeMesh(mesh);
-
-
-            var newMesh = utils.meshFromGeometry(newGeometry);
-            mesh.name = temp.name;
-            mesh.facecount = newGeometry.faces.length;
-            mesh.verticescount = newGeometry.vertices.length;
-            mesh.filesize = 0;
-            mesh.color = temp.color;
-            mesh.Format = temp.Format;
+                var temp = {
+                    name: mesh.name,
+                    color: geo.color || mesh.color,
+                    Format: mesh.Format
+                };
 
 
-            this.addMesh(newMesh);
+
+                this.removeMesh(mesh);
+
+                newGeometry.color = temp.color;
+                var newMesh = utils.meshFromGeometry(newGeometry);
+                newMesh.name = temp.name;
+                newMesh.facecount = newGeometry.faces.length;
+                newMesh.verticescount = newGeometry.vertices.length;
+                newMesh.filesize = 0;
+                newMesh.color = temp.color;
+                newMesh.Format = temp.Format;
+
+
+                this.addMesh(newMesh);
+            }
           
         },
         function (mesh) {

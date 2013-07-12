@@ -200,6 +200,9 @@ function BinaryStlFileLoader() {
 
             if (geometry.vertices.length > 0) {
 
+
+                geometry.color = modelColor;
+
                 var mesh = utils.meshFromGeometry(geometry);
 
           
@@ -350,6 +353,8 @@ function AsciStlFileLoader ()
         var complete = function () {
             //vertices are loaded 
             if (geometry.vertices.length > 0) {
+
+                geometry.color = modelColor;
 
                 var mesh = utils.meshFromGeometry(geometry);
 

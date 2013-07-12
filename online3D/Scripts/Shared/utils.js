@@ -23,6 +23,7 @@
     _this.sceneGeometryChanged = function () {
 
         $.geoData.rebuild();
+        stlscene.graphics.loadMeshesInformation();
     }
 
 

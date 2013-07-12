@@ -271,7 +271,7 @@
 
 
         //  this.glCamera = new THREE.OrthographicCamera(0, WIDTH, 0, 100, -100, 100);
-        this.glCamera = new THREE.CombinedCamera(WIDTH, HEIGHT, VIEW_ANGLE, NEAR, FAR, NEAR, FAR);
+        this.glCamera = new THREE.CombinedCamera(WIDTH, HEIGHT, VIEW_ANGLE, NEAR, FAR, NEAR, 3*FAR);
         //  this.glCamera.toOrthographic();
 
         // create PerspectiveCamera
@@ -1474,11 +1474,13 @@ init.prototype.solidView = function (meshname) {
 }
 
 init.prototype.orthographicView = function () {
+    this.glCamera.setZoom(1);
     this.glCamera.toOrthographic();
 }
 
 
 init.prototype.perspectiveView = function () {
+    this.glCamera.setZoom(1);
     this.glCamera.toPerspective();
 }
 

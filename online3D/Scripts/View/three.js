@@ -31120,7 +31120,7 @@ THREE.CombinedCamera.prototype.setFov = function( fov ) {
 THREE.CombinedCamera.prototype.updateProjectionMatrix = function() {
 
 	if ( this.inPerspectiveMode ) {
-
+	   
 		this.toPerspective();
 
 	} else {

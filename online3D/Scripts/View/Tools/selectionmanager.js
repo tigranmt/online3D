@@ -8,6 +8,7 @@
     var lastSegmentMesh;
     var region = [];
     var normalsVisible = false;
+    var thereIsSomethingSelected = false;
 
     this.start = function () {
         console.log("No agent call for " + this.title + " expected");
@@ -27,12 +28,18 @@
 
 
     var clearSelections = function () {
+
         TOOLS.clearSelection();
+        thereIsSomethingSelected = false;
     }
 
 
     var deleteSelectedFaces = function () {
-       // TOOLS.deleteSelectedFaces();
+
+        if (thereIsSomethingSelected) {
+            TOOLS.deleteSelectedFaces();
+            thereIsSomethingSelected = false;
+        }
     }
 
     var getFaceCenterOfGravity = function(face, vertices) {
@@ -202,6 +209,8 @@
             investigateon = investigateon.concat(temp); //add new neigbours, if any
         }
 
+
+        thereIsSomethingSelected = (selection.length > 0);
 
         TOOLS.selectFaces(selection);
         TOOLS.updateAllGeometries(true); 
@@ -416,7 +425,7 @@
         
        
         //if there is another tool in execution or is not LEFT button pressed, do not do anything 
-        if (event.button !== 0 || TOOLS.current !== undefined) {
+        if (event.button !== 0 || event.ctrlKey || TOOLS.current !== undefined) {
             resetCurrentDrawing();
             return;
         };
