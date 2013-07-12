@@ -32,7 +32,7 @@ infrastructure. At this moment it's in betta, so I hadn't a chance to study it:
 + Client side user's model loading and visualization: why send something to the server, 
   if the user only whants to display it? 
 
-+ No limits for data upload and load size
++ No limits for data upload and load size (in theory)
 
 + Smooth integration with DropBox. Don't like built-in server support ? Put your models in DropBox "Public" folder, 
   and load them directly from the application. 
@@ -44,6 +44,11 @@ infrastructure. At this moment it's in betta, so I hadn't a chance to study it:
 + Automated email notifications to specified email addresses after session upload, so the user
   will need only to click a link in recieved mail in order to revise models. 
 
++ Basic scultupriing modes: add, flat, morph
+
++ Possibility to select faces, show normals, delete faces ... and more.
+
+
 
 
 ####What formats does support Online3D. 
@@ -53,11 +58,9 @@ For now the only supported format is [STL format](http://en.wikipedia.org/wiki/S
 
 ####So what next  ? 
 
-- Custom session support format ".online3d". Don't you want to use built-in server support, or like a free stuff ? 
-  It's ok to save entire session (models, annotations, coloring) into single JSON file and upload to your DropBox account.
-  From Online3D just choose that file and all information will be reloaded directly into your browser. 
+- Sectioning of the model 
 
-- More formats: PLY, OBJ (with texturing support) 
+- Measurement more advanced tools 
 
 - And much much more....
 
