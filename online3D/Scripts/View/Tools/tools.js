@@ -283,7 +283,6 @@
                 };
 
 
-
                 this.removeMesh(mesh);
 
                 newGeometry.color = temp.color;

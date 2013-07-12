@@ -421,7 +421,9 @@
 
         if (event === undefined) return;
 
-        
+
+        //do not accept clisk that are not directly made on CANVAS itself
+        if (event.srcElement.id !== "canvas") return; 
         
        
         //if there is another tool in execution or is not LEFT button pressed, do not do anything 
@@ -487,6 +489,10 @@
 
 
     var onKeyDown = function (event) {
+
+        //do not accept clisk that are not directly made on body of document itself
+        if (event.srcElement.id !== "body") return;
+
         var keycode = event.which;
         var func = keyDownHandler[keycode];
         if(func) func();
