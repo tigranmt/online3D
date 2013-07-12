@@ -53,7 +53,18 @@ infrastructure. At this moment it's in betta, so I hadn't a chance to study it:
 
 ####What formats does support Online3D. 
 
-For now the only supported format is [STL format](http://en.wikipedia.org/wiki/STL_(file_format)
+For now the only supported format is [STL format](http://en.wikipedia.org/wiki/STL_(file_format) and OBJ format.
+
+<object width="640" height="360"><param name="movie" 
+value="http://www.youtube.com/v/RY8IlPX-Xys?version=3&amp;hl=en_US">
+      <param name="allowFullScreen" value="true">
+      <param name="allowscriptaccess" value="always">
+      <embed src="http://www.youtube.com/v/RY8IlPX-Xys?version=3&amp;hl=en_US" type="application/x-shockwave-flash" 
+         width="640" height="360" allowscriptaccess="always" allowfullscreen="true">
+</object>
+
+
+
 
 
 ####So what next  ? 
