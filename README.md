@@ -49,10 +49,10 @@ infrastructure. At this moment it's in betta, so I hadn't a chance to study it:
 + Possibility to select faces, show normals, delete faces ... and more.
 
 
-
+<iframe>
   <embed src="http://www.youtube.com/v/RY8IlPX-Xys?version=3&amp;hl=en_US" type="application/x-shockwave-flash" 
      width="640" height="360" allowscriptaccess="always" allowfullscreen="true">
-
+</frame>
 
 
 ####What formats does support Online3D. 
@@ -68,7 +68,7 @@ For now the only supported format is [STL format](http://en.wikipedia.org/wiki/S
 
 - Sectioning of the model 
 
-- Measurement more advanced tools 
+- More advanced tools for measurment
 
 - And much much more....
 
