@@ -13,6 +13,7 @@
     Converters/vertex_to_mesh.js
 	Converters/toasciiblob.js
 	Converters/session_to_meshes.js
+	Converters/ascloader.js
     threetrackballcontrols.js
     binary_reader.js
 	geometrydata.js

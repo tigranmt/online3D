@@ -29,8 +29,8 @@
             
             //request session name
             TOOLS.forEachMesh(function (mesh) {               
-                    var meshModel = utils.meshModelFromMesh(mesh);
-                    sessionManifest.Meshes.push(meshModel);
+                 var meshModel = utils.meshModelFromMesh(mesh);
+                 sessionManifest.Meshes.push(meshModel);
             },
 
             function (mesh) {

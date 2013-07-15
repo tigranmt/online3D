@@ -12,12 +12,13 @@
         "STL": "/Stl/StlView",
         "ONLINE3D": "/Stl/StlView",
         "OBJ": "/Stl/StlView",
+        "ASC": "/Stl/StlView"
     }
 
 
 
     //list of supported extensions
-    var supportedExtensions = ["STL", window.APP_NAME.toUpperCase(), "OBJ"];
+    var supportedExtensions = ["STL", window.APP_NAME.toUpperCase(), "OBJ", "ASC"];
 
     //for now always ok
     function extensionIsOk(files) {

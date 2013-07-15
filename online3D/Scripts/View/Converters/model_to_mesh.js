@@ -34,6 +34,9 @@ function ModelToMesh(type) {
             if (isAscii) return "plyAscii";
             else return "plyBinary";
         }
+        else if (MODEL_TYPE === "ASC") {
+            return "ascAscii";
+        }
     }
 
     this.loadModelAsync = function (scene, _fileData, fileName, fileSize, progressCallback, finishCallback) {
@@ -57,6 +60,9 @@ function ModelToMesh(type) {
             case "objAscii":
                 modelLoader = new ObjFileLoader(); 
                 break;
+
+            case "ascAscii":
+                modelLoader = new AscLoader();
         }     
 
        

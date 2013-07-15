@@ -68,7 +68,9 @@
                 face_to_vertex_map: {}
             };
 
-            var geometry = mesh.children[0].geometry;
+            var geometry = TOOLS.getGeometry(mesh);
+
+
             var faces = geometry.faces;
             var vertices = geometry.vertices;
             for (var f = 0; f < faces.length; f++) {

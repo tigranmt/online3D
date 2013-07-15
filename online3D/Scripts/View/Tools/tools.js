@@ -184,10 +184,22 @@
             return inter.point;
     },
 
+
+
+    getGeometry : function(mesh) {
+    
+        if (mesh.geometry && mesh.geometry.length > 1) {
+            return mesh.geometry[0];
+        }
+        else {
+            return mesh.geometry;
+        }
+    },
+
     isComposedMesh: function (mesh) {
-        return (mesh && mesh.children &&
+        return (mesh && ((mesh.children &&
                   mesh.children.length == 2 &&
-                    mesh.children[0].geometry);
+                    mesh.children[0].geometry) || mesh.Format === "asc"));
     },
 
     selectFaces: function (faces) {
@@ -431,6 +443,9 @@
                 var mo = this.scene.__objects[i];
                 if (mo.Format === "obj") {
                     meshes = mo.children.slice(0);
+                }
+                else if (mo.Format === "asc") {
+                    meshes.push(mo);
                 }
                 else {
                     meshes.push(mo);

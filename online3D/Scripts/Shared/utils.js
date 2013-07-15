@@ -84,6 +84,21 @@
     }
 
 
+    /*  Gets THREE.ParticleSystem
+  *  @param {THREE.Geometry} geometry Creates THREE.Mesh object with predefined material types for specified THREE.Geometry     
+  */
+    _this.particleSystemFromGeometry = function (geometry) {
+
+        var pMaterial = new THREE.ParticleBasicMaterial({ color: 0x00FFFF, size: 0.2 });
+
+        geometry.computeCentroids();
+        geometry.computeFaceNormals();
+        geometry.computeBoundingSphere();
+
+        var particleSystem = new THREE.ParticleSystem(geometry, pMaterial);
+      
+        return particleSystem;
+    }
 
 
     /*  Gets session info object from  provided parameters
