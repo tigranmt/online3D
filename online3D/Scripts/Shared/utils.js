@@ -89,7 +89,7 @@
   */
     _this.particleSystemFromGeometry = function (geometry) {
 
-        var pMaterial = new THREE.ParticleBasicMaterial({ color: 0x00FFFF, size: 0.2 });
+        var pMaterial = new THREE.ParticleBasicMaterial({ color: 0x111111, size: 0.2 });
 
         geometry.computeCentroids();
         geometry.computeFaceNormals();
