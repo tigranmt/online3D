@@ -4,6 +4,7 @@
     MESH_PENCIL: "Mesh pencil",
     NOTES_MANAGER: "Notes manager",
     SCULPTURING: "Sculpturing",
+    BOOLEAN    : "Boolean",
     SELECTION: "Selection",   
 
     toolsarray: {},
@@ -87,6 +88,8 @@
             return new this.Sculpturing();
         else if (toolName === this.SELECTION)
             return new this.SelectionManager();
+        else if (toolName === this.BOOLEAN)
+            return new this.Boolean();
     },
 
 
