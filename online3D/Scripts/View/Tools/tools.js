@@ -188,8 +188,8 @@
 
     getGeometry : function(mesh) {
     
-        if (mesh.geometry && mesh.geometry.length > 1) {
-            return mesh.geometry[0];
+        if (mesh.children && mesh.children.length > 1) {
+            return mesh.children[0].geometry;
         }
         else {
             return mesh.geometry;
