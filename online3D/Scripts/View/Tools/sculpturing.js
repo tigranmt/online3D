@@ -33,12 +33,7 @@
     var selectionAverageNormal = new THREE.Vector3();
 
     // The shortest distance from the EDGE vertex of the current selection 
-    var selectionNearestEdgeDistance = 10000;
-
-    this.isCanvasClicked = function (event) {
-        var elementName = (event.srcElement) ? event.srcElement.localName.toLowerCase() : event.originalTarget.localName.toLowerCase();
-        return elementName === "canvas";
-    }
+    var selectionNearestEdgeDistance = 10000;  
 
 
     this.start = function () {
@@ -302,7 +297,7 @@
 
 
     var onMouseDown = function (event) {
-        if (!_this.isCanvasClicked(event))
+        if (!utils.isElementClicked(event, "canvas"))
             return;
 
         leftButtonPressed = event.button === 0;

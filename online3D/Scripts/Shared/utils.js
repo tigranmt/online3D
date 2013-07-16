@@ -84,6 +84,11 @@
     }
 
 
+    _this.isElementClicked = function (event, elementName) {
+        var elementName = (event.srcElement) ? event.srcElement.localName.toLowerCase() : event.originalTarget.localName.toLowerCase();
+        return elementName === elementName;
+    }
+
     /*  Gets THREE.ParticleSystem
   *  @param {THREE.Geometry} geometry Creates THREE.Mesh object with predefined material types for specified THREE.Geometry     
   */

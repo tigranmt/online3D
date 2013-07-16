@@ -21,11 +21,7 @@
     this.uiWidth = 300;
 
 
-    this.isCanvasClicked = function (event) {
-        var elementName = (event.srcElement)? event.srcElement.localName.toLowerCase() : event.originalTarget.localName.toLowerCase() ;
-        return elementName === "canvas";
-    }
-
+   
 
     this.start = function () {
         console.log("Start mesh pencil");
@@ -60,7 +56,7 @@
     };
 
     var onMouseDown = function (event) {
-        if (!_this.isCanvasClicked(event)) 
+        if (!utils.isElementClicked(event, "canvas")) 
             return;
 
         leftButtonPressed = event.button === 0;
