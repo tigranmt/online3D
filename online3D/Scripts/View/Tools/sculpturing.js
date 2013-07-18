@@ -2,7 +2,7 @@
 
     var _this = this;
     var geodata = $.geoData;
-    var geometry;
+    var geometry, geometryUnderMouse;
     var leftButtonPressed = false;
     var sculptureAdd = true, sculptureFlat = false, sculptureMorph = false;
 
@@ -269,29 +269,44 @@
     }
 
 
+    var resetColorOnTrianglesSelectedUnderMouse = function () {
 
+        if (facesSelectedUnderMouse.length === 0 || !geometryUnderMouse)
+            return;
+
+        for (var n = 0; n < facesSelectedUnderMouse.length; n++) {
+            var face = facesSelectedUnderMouse[n];
+            if (face.originalColor)
+                TOOLS.setColorOnFace(geometryUnderMouse, face, face.originalColor);
+        }
+
+        facesSelectedUnderMouse.length = 0;
+        geometryUnderMouse.colorsNeedUpdate = true;
+    }
 
     var selectTrianglesUnderMouse = function (event) {
 
+        resetColorOnTrianglesSelectedUnderMouse();
         var intersection = TOOLS.getIntersectionFromMouseCoord(event);
         if (intersection !== undefined) {
 
-            for (var n = 0; n < facesSelectedUnderMouse.length; n++) {
-                var face = facesSelectedUnderMouse[n];
-                if (face.originalColor)
-                    TOOLS.setColorOnFace(intersection.object.geometry, face, face.originalColor);
-            }
 
+            var meshName = intersection.object.parent.name;
             var face = intersection.face;
-            var vertices = geodata.getVerticesOfFace(currentMeshName, face);
-            facesSelectedUnderMouse = geodata.getNeigbourFaces(currentMeshName, vertices[0], selsize);
+
+            geometryUnderMouse = intersection.object.geometry;
+
+            var vertices = geodata.getVerticesOfFace(meshName, face);
+            facesSelectedUnderMouse = geodata.getNeigbourFaces(meshName, vertices[0], selsize);
 
             for (var n = 0; n < facesSelectedUnderMouse.length; n++) {
-                var face = facesSelectedUnderMouse[n];
+                var f = facesSelectedUnderMouse[n];
+                if (!f.originalColor)
+                    f.originalColor = new THREE.Color().copy(f.color);
 
-                TOOLS.setColorOnFace(intersection.object.geometry, facesSelectedUnderMouse[n], "#ffffff");
+                TOOLS.setColorOnFace(geometryUnderMouse, f, "#ffffff");
             }
-            intersection.object.geometry.colorsNeedUpdate = true;
+            geometryUnderMouse.colorsNeedUpdate = true;
         }
     }
 
@@ -335,7 +350,7 @@
             }
         }
         else {
-            // selectTrianglesUnderMouse(event);
+             selectTrianglesUnderMouse(event);
         }
     };
 
