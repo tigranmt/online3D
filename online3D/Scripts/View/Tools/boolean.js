@@ -41,9 +41,22 @@
                      "<button id='intersect' class='btn'>Intersect</button>" +
                    "</div>";
 
+      
+        html += "<i id='spinnerBoolean' class='icon-spinner icon-spin icon-2x' style='left: 10px; top: 5px; position: relative; visibility:hidden '></i>";
+
         return html;
     })();
 
+
+    var showSpinner = function (callme) {
+        $("#spinnerBoolean").css("visibility", "visible");
+       
+        setTimeout(callme, 10);
+    }
+
+    var hideSpinner = function () {
+        $("#spinnerBoolean").css("visibility", "hidden");
+    }
 
     //Populates faceVertexUvs array, needs for boolean operation
     var prepareGeometryForBoolean = function (geometry) {
@@ -64,9 +77,14 @@
         }
 
     }
+
+
     
     //PREPARE BSP MODELS FOR BOOLEAN OPERATION
     var startBoolean = function () {
+
+
+
         var firstName = $('#firstModel').find(":selected").text();
         var secondName = $('#secondModel').find(":selected").text();
 
@@ -120,7 +138,9 @@
         newMesh.Format = "stl";
 
         TOOLS.addMesh(newMesh);
-        utils.sceneGeometryChanged();   
+        utils.sceneGeometryChanged();
+
+        hideSpinner();
     }
    
 
@@ -128,8 +148,10 @@
     var substruct = function () {
 
         var meshCouple = startBoolean();
-        if (!meshCouple || meshCouple.length !== 2)
+        if (!meshCouple || meshCouple.length !== 2) {
+            hideSpinner();
             return;
+        }
 
         var substructBSP = meshCouple[0].subtract(meshCouple[1]); //SUBSTRUCT    
         substructBSP.name = meshCouple[0].name + "-" + meshCouple[1].name;
@@ -142,8 +164,10 @@
     //UNION
     var union = function () {
         var meshCouple = startBoolean();
-        if (!meshCouple || meshCouple.length !== 2)
+        if (!meshCouple || meshCouple.length !== 2) {
+            hideSpinner();
             return;
+        }
 
         var unionBSP = meshCouple[0].union(meshCouple[1]); //UNION    
 
@@ -155,8 +179,10 @@
     //INTERSECTION
     var intersect = function () {
         var meshCouple = startBoolean();
-        if (!meshCouple || meshCouple.length !== 2)
+        if (!meshCouple || meshCouple.length !== 2) {
+            hideSpinner();
             return;
+        }
 
         var intersectBSP = meshCouple[0].intersect(meshCouple[1]); //INTERSECT    
         
@@ -177,16 +203,17 @@
         TOOLS.current = _this;
 
         $("#substruct").on('click', function (event) {
-            substruct(); 
+            showSpinner(substruct);
+            
         });
 
 
         $("#union").on('click', function (event) {
-            union();
+            showSpinner(union);            
         });
 
         $("#intersect").on('click', function (event) {
-            intersect();         
+            showSpinner(intersect);            
         });
     };
 
