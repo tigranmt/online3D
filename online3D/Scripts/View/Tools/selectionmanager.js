@@ -314,21 +314,27 @@
         
         var cameraPosition = TOOLS.getCameraPosition();
         var plane = new THREE.Plane();
-        plane.setFromNormalAndCoplanarPoint(vectorView, cameraPosition);
-        //plane.setFromCoplanarPoints(region[0], region[1], region[2]);
 
-      
+
+
+        //plane.setFromNormalAndCoplanarPoint(vectorView, vectorView);
+        plane.setFromCoplanarPoints(region[0], region[1], region[2]);
 
         drawTestLine(cameraPosition, plane.normal);
       
 
         var geometries = [];
       
+
+        var projectRegion = []; 
         for (var a = 0; a < region.length; a++) {
             var next = a + 1;
             if (next == region.length)
                 next = 0;
-            drawTestLine(region[a], region[next], "#FF0000");
+            //var va = plane.projectPoint(region[a]);
+            //var vnext = plane.orthoPoint(region[next]);
+            //drawTestLine(va, vnext, "#FF0000");
+            projectRegion.push(plane.coplanarPoint(region[a]));
         }
 
         TOOLS.forEachMesh(function (mesh) {
@@ -355,9 +361,13 @@
                 //var vertexcP = getProjectedPoint(plane, vertexc, vectorView);
 
             
-                var aInside = isInsidePath(vertexaP.x, vertexaP.y, region);
-                var bInside = isInsidePath(vertexbP.x, vertexbP.y, region);
-                var cInside = isInsidePath(vertexcP.x, vertexcP.y, region);
+                //var aInside = isInsidePath(vertexaP.x, vertexaP.y, region);
+                //var bInside = isInsidePath(vertexbP.x, vertexbP.y, region);
+                //var cInside = isInsidePath(vertexcP.x, vertexcP.y, region);
+
+                var aInside = isInsidePath(vertexaP.x, vertexaP.y, projectRegion);
+                var bInside = isInsidePath(vertexbP.x, vertexbP.y, projectRegion);
+                var cInside = isInsidePath(vertexcP.x, vertexcP.y, projectRegion);
 
                 if (aInside && bInside && cInside) {
                     suitableForSelection.push(face);
@@ -419,11 +429,14 @@
 
     var onMouseUp = function (event) {
 
+
         if (event === undefined) return;
 
 
         //do not accept clisk that are not directly made on CANVAS itself
-        if (event.srcElement.id !== "canvas") return; 
+
+        if (!utils.isElementClicked(event, "canvas"))
+            return;
         
        
         //if there is another tool in execution or is not LEFT button pressed, do not do anything 
@@ -491,7 +504,8 @@
     var onKeyDown = function (event) {
 
         //do not accept clisk that are not directly made on body of document itself
-        if (event.srcElement.id !== "body") return;
+        if (!utils.isElementClicked(event, "body"))
+            return;       
 
         var keycode = event.which;
         var func = keyDownHandler[keycode];
