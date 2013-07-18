@@ -12,7 +12,7 @@
     selectionColor : "#00FF00",
 
     createUiForTool: function (tool) {
-        $('body').append('<div id="divToolInfo" class="modal" style="left:25em; width:' + tool.uiWidth + 'px;box-shadow: 0 0 50px 0 #bbb;background: url(Images/bg.png) repeat  left;">' +
+        $('body').append('<div id="divToolInfo" class="modal" style="left:27em; width:' + tool.uiWidth + 'px;box-shadow: 0 0 50px 0 #bbb;background: url(Images/bg.png) repeat  left;">' +
                              '<div class="modal-header">' +
                                 '<button id="closebutton" type="button" class="btn-danger" style="position:absolute;left:' + (tool.uiWidth - 40) + 'px;" data-dismiss="modal" aria-hidden="true">&times;</button>' +
                                 '<h3>' + tool.title + '</h3>' +
@@ -150,6 +150,18 @@
         var projector = new THREE.Projector();
         projector.unprojectVector(vector, this.camera);
         return vector;
+    },
+
+    getModelsByName : function (modelName) {
+
+        var result = []; 
+        this.forEachMesh(function (mesh) {
+            if (mesh.name === modelName) {
+                result.push(mesh);
+            }
+        });
+
+        return result;
     },
 
     getIntersectionFromMouseCoord: function (event) {

@@ -43,6 +43,9 @@
     var home_Menu = $("#home")[0];
     ko.applyBindings(viewmodels, home_Menu);
 
+    var infolist = $("#infoList")[0];
+    ko.applyBindings(viewmodels, infolist); 
+
     window.APP_NAME = "Online3D";
    
 

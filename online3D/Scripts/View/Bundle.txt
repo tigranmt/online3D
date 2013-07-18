@@ -25,6 +25,7 @@
     screenshot.js
     startup_mesh.js
 	saveas.js	
+	ThreeCSG.js
 
 	
 	

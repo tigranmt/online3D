@@ -362,10 +362,11 @@ init.prototype.setupSceneTracking = function () {
 init.prototype.loadMeshesInformation = function () {
 
     var _count = this.glScene.__objects.length;
-    var infoViewModels = new Array();
+   
     var imIndex = 0;
     var _this = this;
 
+    viewmodels.modelsInformation.removeAll(); //reset ko.observableArray array
 
     //collect all meshes information into the view array
     TOOLS.forEachMesh(function (mesh) {
@@ -413,19 +414,12 @@ init.prototype.loadMeshesInformation = function () {
                 element.css({ "width": transparency + "%" });
             };
 
-            self.getModelByName = function (modelName) {
-                var count = _this.glScene.__objects.length;
-                for (var i = 0; i < count; i++) {
-                    var mesh = _this.glScene.__objects[i];
-                    if (mesh !== undefined && mesh.name === modelName)
-                        return mesh;
-                }
-            };
+          
 
 
             self.mouseWheel = function (event) {
 
-                var mesh = self.getModelByName(self.fileName);
+                var mesh = TOOLS.getModelsByName(self.fileName);
                 if (mesh !== undefined) {
                     var mat = mesh.children[0].material;
                     var opacity = mat.opacity;
@@ -455,7 +449,7 @@ init.prototype.loadMeshesInformation = function () {
           
 
             self.updateTransparency = function () {
-                var mesh = self.getModelByName(self.fileName);
+                var mesh = TOOLS.getModelsByName(self.fileName);
                 if (mesh !== undefined) {
                     var mat = mesh.children[0].material;
                     var percent = mat.opacity * 100;
@@ -484,19 +478,9 @@ init.prototype.loadMeshesInformation = function () {
         };
 
         //push in view array
-        infoViewModels.push(new modelInfo());
+        viewmodels.modelsInformation.push(new modelInfo());
         imIndex++;
-    });
-
-    //ctor object
-    var infos = new (function (infos) {
-        this.modelsInformation = infos;
-
-    })(infoViewModels);
-
-    var infolist = $("#infoList")[0];
-    ko.applyBindings(infos, infolist); //bind to element   
-
+    });  
    
 }
 

@@ -47,7 +47,7 @@
     }
 
 
-
+  
     /*  Converts THREE.js mesh geometry object to data model object
     *   @param {THREE.Mesh} mesh Mesh object
     */
@@ -98,6 +98,7 @@
 
         geometry.computeCentroids();
         geometry.computeFaceNormals();
+        geometry.computeVertexNormals();
         geometry.computeBoundingSphere();
 
         var particleSystem = new THREE.ParticleSystem(geometry, pMaterial);
@@ -114,10 +115,14 @@
         var meshWireframe = new THREE.MeshBasicMaterial({ color: 0x111111, vertexColors: THREE.FaceColors, specular: 0x49D8FB, shininess: 140, wireframe: true });
         var multiMaterial = [meshMaterial, meshWireframe];
 
+       
+
         geometry.mergeVertices();
         geometry.computeCentroids();
         geometry.computeFaceNormals();
+        geometry.computeVertexNormals();
         geometry.computeBoundingSphere();
+
 
         _this.setColorsOnModel(geometry);
 
@@ -137,7 +142,11 @@
                 geometry.mergeVertices();
                 geometry.computeCentroids();
                 geometry.computeFaceNormals();
+                geometry.computeVertexNormals();
                 geometry.computeBoundingSphere();
+
+
+              
 
                 _this.setColorsOnModel(geometry);
 
