@@ -17,6 +17,9 @@
 
 
     this.start = function () {
+
+
+
         console.log("Start sculpturing");
       
         TOOLS.current = _this;
