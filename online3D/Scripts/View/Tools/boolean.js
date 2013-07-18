@@ -18,7 +18,7 @@
 
     this.start = function () {
 
-
+        /**Subscribing to the mai bollean buttons action**/
 
         console.log("Start sculpturing");
       
