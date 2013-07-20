@@ -161,6 +161,7 @@
     <Content Include="font\fontawesome-webfont.svg" />
     <Content Include="mailtemplate.html" />
     <Content Include="Scripts\Shared\Bundle.txt" />
+    <Content Include="Scripts\Shared\dropbox.js" />
     <Content Include="Scripts\Shared\sessioninfo.js" />
     <Content Include="Scripts\Shared\utils.js" />
     <Content Include="Scripts\View\Bundle.txt" />

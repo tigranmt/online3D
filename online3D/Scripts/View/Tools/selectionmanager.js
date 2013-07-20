@@ -56,7 +56,7 @@
             var normalLength = 0.2;
             var lineGeoFinal = new THREE.Geometry();
             var material = new THREE.LineBasicMaterial({
-                color: 0x0000ff,
+                color: 0x0000ff
             });
 
 
