@@ -60,7 +60,8 @@ infrastructure. At this moment it's in betta, so I hadn't a chance to study it:
 
 ####What formats does support Online3D. 
 
-For now the only supported format is [STL format](http://en.wikipedia.org/wiki/STL_(file_format) and [OBJ format](http://en.wikipedia.org/wiki/Wavefront_.obj_file)
+Supported formats are: [STL](http://en.wikipedia.org/wiki/STL_(file_format), [OBJ](http://en.wikipedia.org/wiki/Wavefront_.obj_file)
+and ASC
 
 
 
