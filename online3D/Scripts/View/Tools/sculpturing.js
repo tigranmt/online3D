@@ -286,6 +286,8 @@
 
     var selectTrianglesUnderMouse = function (event) {
 
+        return;
+
         resetColorOnTrianglesSelectedUnderMouse();
         var intersection = TOOLS.getIntersectionFromMouseCoord(event);
         if (intersection !== undefined) {

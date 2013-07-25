@@ -2,6 +2,63 @@
     var _this = this;
 
 
+    var fragmentShader  = "precision mediump float; " + 
+    "uniform vec3 color, centerPicking;" +  
+    "uniform float radiusSquared; " + 
+    "varying vec3 vVertex, vNormal;" + 
+    "const vec3 colorBackface = vec3(0.81, 0.71, 0.23);" + 
+    "const vec3 vecLight = vec3(0.06189844605901729, 0.12379689211803457, 0.9903751369442766);" + 
+    "const float shininess = 100.0;" + 
+    "void main()" + 
+    "{" + 
+        "vec3 normal;" + 
+        "vec3 fragColor;" + 
+        "if(gl_FrontFacing)" + 
+        "{" + 
+           " normal = vNormal;" + 
+            "fragColor = color;" + 
+        "}" + 
+        "else" + 
+        "{" + 
+            "normal = -vNormal;" + 
+            "fragColor = colorBackface;" + 
+        "}" + 
+        "float dotLN = dot(normal, vecLight);" + 
+        "vec3 vecR = normalize(2.0 * dotLN * normal - vecLight);" + 
+        "float dotRVpow = pow(dot(vecR, vecLight), shininess);" + 
+        "vec3 ambiant = fragColor * 0.5;" + 
+        "vec3 diffuse = fragColor * 0.5 * max(0.0, dotLN);" + 
+        "vec3 specular = fragColor * 0.8 * max(0.0, dotRVpow);" + 
+        "fragColor = ambiant + diffuse + specular;" + 
+        "vec3 vecDistance = vVertex - centerPicking;" + 
+        "float dotSquared = dot(vecDistance, vecDistance);" + 
+        "if(dotSquared < radiusSquared * 1.06 && dotSquared > radiusSquared * 0.94)" + 
+            "fragColor *= 0.5;" + 
+        "else if(dotSquared < radiusSquared)" + 
+            "fragColor *= 1.1;" + 
+        "gl_FragColor = vec4(fragColor, 1.0);"+ 
+    "}";
+
+
+    var vertexShader = "attribute vec3 vertex, normal; " +
+            "uniform mat4 mvMat, mvpMat;" +
+            "uniform mat3 nMat;" +
+            "varying vec3 vVertex, vNormal;" +
+            "varying vec2 vTexCoord;" +
+            "void main()" +
+            "{" +
+                "vec4 vertex4 = vec4(vertex, 1.0);" +
+                "vNormal = nMat * normal;" +
+                "vVertex = vec3(mvMat * vertex4);" +
+                "gl_Position = mvpMat * vertex4;" +
+            "}";
+
+
+    //var uniforms = {
+    //    color: { type: 'vec3', value: new THREE.Vector3(0, 0, 0) },
+    //    centerPicking: { type: 'vec3', value: new THREE.Vector3(0, 0, 0) },
+    //    radiusSquared: { type: 'f', value: 1.0 } 
+    //};
 
 
     /*  Gets the current date time in dd/mm/yyyy @ hh:mm:ss
@@ -107,11 +164,21 @@
     }
 
 
+    
+
+
     /*  Gets session info object from  provided parameters
     *  @param {THREE.Geometry} geometry Creates THREE.Mesh object with predefined material types for specified THREE.Geometry     
     */
     _this.meshFromGeometry = function (geometry) {
         var meshMaterial = new THREE.MeshPhongMaterial({ ambient: 0x222222, vertexColors: THREE.FaceColors, specular: 0x49D8FB, shininess: 140, perPixel: false, overdraw: true, side: THREE.DoubleSide });
+
+        //var meshMaterial = new THREE.ShaderMaterial({
+        //    fragmentShader: fragmentShader,
+        //    //vertexShader: vertexShader,
+        //    uniforms: uniforms,
+        //    lights: true
+        //});
         var meshWireframe = new THREE.MeshBasicMaterial({ color: 0x111111, vertexColors: THREE.FaceColors, specular: 0x49D8FB, shininess: 140, wireframe: true });
         var multiMaterial = [meshMaterial, meshWireframe];
 
