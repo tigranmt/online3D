@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>AspNetHaack</id>
+    <version>0.0.1</version>
+    <title>AspNetHaack</title>
+    <authors>Phil Haack</authors>
+    <owners>Phil Haack</owners>
+    <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
+    <projectUrl>https://github.com/Haacked/CodeHaacks</projectUrl>
+    <iconUrl>http://haacked.com/images/Inspector-120x120.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A collection of extensions to core ASP.NET including a way to suppress login page redirects caused by the forms authentication module</description>
+    <summary>A collection of extensions to core ASP.NET including a way to suppress login page redirects caused by the forms authentication module</summary>
+    <tags>aspnetmvc asp.net aspnet asp.net-mvc membership formsauth forms-authentication webapi</tags>
+    <dependencies>
+      <dependency id="WebActivator" version="1.4.4" />
+    </dependencies>
+  </metadata>
+</package>

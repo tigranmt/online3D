@@ -142,8 +142,8 @@
 
 
     _this.isElementClicked = function (event, elementName) {
-        var elementName = (event.srcElement) ? event.srcElement.localName.toLowerCase() : event.originalTarget.localName.toLowerCase();
-        return elementName === elementName;
+        var sourceName = (event.srcElement) ? event.srcElement.localName.toLowerCase() : event.originalTarget.localName.toLowerCase();
+        return sourceName === elementName;
     }
 
     /*  Gets THREE.ParticleSystem
