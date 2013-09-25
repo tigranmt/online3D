@@ -50,7 +50,8 @@ TOOLS.PointToPointMeasurer = function () {
         var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
         sphere.position = vertex;
        
-        var scale = getPointScale(event, vertex);      
+        var scale = getPointScale(event, vertex);
+        scale = Math.max(0.3, scale);
 
         console.log("Scale value: " + scale);
         
