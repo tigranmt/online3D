@@ -1,4 +1,4 @@
-###Online3D: web 3D view and share platform  
+Online3D: web 3D view and share platform  
 ========
 
 
@@ -9,7 +9,7 @@
 
 
 
-####What is it for ? 
+What is it for ? 
 
 The platform idea is to provide comprehensive set of functionalities for sharing and validating 3D files 
 between users. With the aggressive advancement of 3D technology like 3D printing, modelling, sculpturing and 
@@ -17,7 +17,7 @@ successive sharing to a final user for preventive validation, we need simple and
 clients, which aren't often engineers, can easily revise models. 
 
 
-####The are other solutions are available online. What is different here ? What is it good for ? 
+The are other solutions are available online. What is different here ? What is it good for ? 
 
 Yes, there are several platforms available now in the market like: 
 
@@ -35,7 +35,7 @@ infrastructure. At this moment it's in betta, so I hadn't a chance to study it:
 [GrabCad Workbench](http://grabcad.com/workbench)
 
 
-####Online3D provides 
+Online3D provides 
 
 + Client side user's model loading and visualization: why send something to the server, 
   if the user only whants to display it? 
@@ -58,7 +58,7 @@ infrastructure. At this moment it's in betta, so I hadn't a chance to study it:
 
 
 
-####What formats does support Online3D. 
+What formats does support Online3D. 
 
 Supported formats are: [STL](http://en.wikipedia.org/wiki/STL_(file_format), [OBJ](http://en.wikipedia.org/wiki/Wavefront_.obj_file)
 and ASC
@@ -68,7 +68,7 @@ and ASC
 
 
 
-####So what next  ? 
+So what next  ? 
 
 - Sectioning of the model 
 
